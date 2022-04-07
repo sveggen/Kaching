@@ -9,5 +9,6 @@ namespace Kaching.Data
             : base(options)
         {
         }
+
     }
 }

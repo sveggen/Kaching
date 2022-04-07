@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Kaching.Models.Expense>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Expenses</h1>
+
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                Paid by
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                €@Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person.PersonId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                <p>
+                  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)">
+                    @item.Description.Length Characters
+                  </button>
+                </p>
+                <div class="collapse" id="collapse@(item.ExpenseId)">
+                  <div class="card card-body">
+                    @Html.DisplayFor(modelItem => item.Description) 
+                  </div>
+                </div>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
+                <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
+                <a asp-action="Details" asp-route-id="@item.ExpenseId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ExpenseId">Delete</a>
+      
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
