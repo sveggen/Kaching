@@ -1,12 +1,15 @@
 ﻿#nullable disable
 using Kaching.Data;
 using Kaching.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Controllers
 {
+
+    [Authorize]
     public class ExpensesController : Controller
     {
         private readonly DataContext _context;

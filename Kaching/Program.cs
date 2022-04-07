@@ -9,6 +9,7 @@ var userConnectionString = builder.Configuration.GetConnectionString("Identity")
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(userConnectionString));
 
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
