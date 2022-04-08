@@ -4,7 +4,9 @@
     {
         public int PersonId { get; set; }
 
-        public int ConnectedUserId { get; set; }
+        public string ConnectedUserId { get; set; }
+
+        public string ConnectedUserName { get; set; }
 
     }
 }

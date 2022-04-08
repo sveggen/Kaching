@@ -16,6 +16,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<IPersonStore, PersonStore>();
 
 // Add other db services to the container.
 var connectionString = builder.Configuration.GetConnectionString("Kaching");

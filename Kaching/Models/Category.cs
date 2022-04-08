@@ -1,9 +1,7 @@
 ﻿namespace Kaching.Models
 {
-    public class Category
+    public enum Category
     {
-        public int CategoryId { get; set; }
-
-        public string Name { get; set; } = string.Empty;
+        Groceries, Furnishing, Rent, Utilities, Internet, Misc
     }
 }

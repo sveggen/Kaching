@@ -7,8 +7,6 @@
 
 <h1>Expenses</h1>
 
-
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -37,10 +35,10 @@
                 €@Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Person.PersonId)
+                @Html.DisplayFor(modelItem => item.Person.ConnectedUserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
+                @Html.DisplayFor(modelItem => item.Category)
             </td>
             <td>
                 <p>

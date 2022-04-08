@@ -2,6 +2,7 @@
 using Kaching.Data;
 using Kaching.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,21 @@ namespace Kaching.Controllers
     public class ExpensesController : Controller
     {
         private readonly DataContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ExpensesController(DataContext context)
+        public ExpensesController(
+            DataContext context,
+            UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: Expenses
         public async Task<IActionResult> Index()
         {
-            var dataContext = _context.Expense.Include(e => e.Category).Include(e => e.Person);
+            var dataContext = _context.Expense.Include(e => e.Person);
             return View(await dataContext.ToListAsync());
         }
 
@@ -35,7 +41,6 @@ namespace Kaching.Controllers
             }
 
             var expense = await _context.Expense
-                .Include(e => e.Category)
                 .Include(e => e.Person)
                 .FirstOrDefaultAsync(m => m.ExpenseId == id);
             if (expense == null)
@@ -49,7 +54,7 @@ namespace Kaching.Controllers
         // GET: Expenses/Create
         public IActionResult Create()
         {
-            RenderSelectList();
+            RenderSelectListDefault();
             return View();
         }
 
@@ -58,7 +63,7 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ExpenseId,Price,PersonId,CategoryId,Description")] Expense expense)
+        public async Task<IActionResult> Create([Bind("ExpenseId,Price,PersonId,Category,Description")] Expense expense)
         {
             _context.Add(expense);
             await _context.SaveChangesAsync();
@@ -93,7 +98,7 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,PersonId,CategoryId,Description")] Expense expense)
+        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,PersonId,Category,Description")] Expense expense)
         {
             if (id != expense.ExpenseId)
             {
@@ -133,7 +138,6 @@ namespace Kaching.Controllers
             }
 
             var expense = await _context.Expense
-                .Include(e => e.Category)
                 .Include(e => e.Person)
                 .FirstOrDefaultAsync(m => m.ExpenseId == id);
             if (expense == null)
@@ -162,14 +166,31 @@ namespace Kaching.Controllers
 
         private void RenderSelectList(Expense expense)
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", expense.CategoryId);
-            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "PersonId", expense.PersonId);
+            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", expense.PersonId);
         }
 
         private void RenderSelectList()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
-            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "PersonId");
+            //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
+            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName");
+        }
+
+        private void RenderSelectListDefault()
+        {
+            //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
+            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", GetPersonByUserName().PersonId);
+        }
+
+        private string GetCurrentUserName()
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            return currentUser.Identity.Name;
+        }
+
+        private Person GetPersonByUserName()
+        {
+            return _context.Person
+            .FirstOrDefault(p => p.ConnectedUserName == GetCurrentUserName());
         }
     }
 }

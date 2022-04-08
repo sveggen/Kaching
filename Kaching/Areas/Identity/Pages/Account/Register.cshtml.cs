@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Kaching.Data;
+using Kaching.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -22,13 +24,16 @@ namespace Kaching.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        // Custom - Person hook
+        private readonly IPersonStore _personStore;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IPersonStore personStore)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -36,6 +41,8 @@ namespace Kaching.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            // Custom - Person hook
+            _personStore = personStore;
         }
 
         /// <summary>
@@ -131,6 +138,12 @@ namespace Kaching.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
+
+                    // Custom - Person hook
+                    var userName = await _userManager.GetUserNameAsync(user);
+                    var person = new Person { ConnectedUserId = userId, ConnectedUserName = userName };
+                    _personStore.CreateNewPerson(person);
+
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
