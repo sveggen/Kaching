@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <h1>Expenses</h1>
 
 <p>
@@ -42,15 +43,21 @@
             </td>
             <td>
                 <p>
-                  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)">
-                    @item.Description.Length Characters
-                  </button>
+                    @if (item.Description.Length > 0) {
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)">
+                            <i class="bi-chat-left-text"></i>
+                        </button>
+                        <div class="collapse" id="collapse@(item.ExpenseId)">
+                          <div class="card card-body">
+                            @Html.DisplayFor(modelItem => item.Description) 
+                          </div>
+                        </div>
+                    } else {
+                         <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)" disabled>
+                            <i class="bi-chat-left"></i>
+                        </button>
+                    }
                 </p>
-                <div class="collapse" id="collapse@(item.ExpenseId)">
-                  <div class="card card-body">
-                    @Html.DisplayFor(modelItem => item.Description) 
-                  </div>
-                </div>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |

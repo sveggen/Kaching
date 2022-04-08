@@ -177,8 +177,9 @@ namespace Kaching.Controllers
 
         private void RenderSelectListDefault()
         {
+            var selectedUsername = GetPersonByUserName().PersonId;
             //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
-            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", GetPersonByUserName().PersonId);
+            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", selectedUsername);
         }
 
         private string GetCurrentUserName()
