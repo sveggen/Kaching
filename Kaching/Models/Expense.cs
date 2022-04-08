@@ -20,7 +20,7 @@ namespace Kaching.Models
 
         public Category? Category { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
 
        // public EventOccurence 
 

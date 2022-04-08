@@ -65,10 +65,12 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ExpenseId,Price,PersonId,Category,Description")] Expense expense)
         {
-            _context.Add(expense);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-
+            if (ModelState.IsValid)
+            {
+                _context.Add(expense);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
             RenderSelectList(expense);
             return View(expense);
 
@@ -105,8 +107,8 @@ namespace Kaching.Controllers
                 return NotFound();
             }
 
-           // if (ModelState.IsValid)
-            //{
+            if (ModelState.IsValid)
+            {
                 try
                 {
                     _context.Update(expense);
@@ -124,7 +126,7 @@ namespace Kaching.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-           // }
+            }
             RenderSelectList(expense);
             return View(expense);
         }

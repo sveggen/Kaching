@@ -11,11 +11,34 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table table-hover">
+ 
+<div class="card">
+    <div class="card-header">
+        2022
+  </div>
+  <div class="card-body">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+    <a class="nav-link" href="#">May</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">April</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">March</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">February</a>
+  </li>
+</ul>
+<table class="table table-hover table-striped">
     <thead>
         <tr>
+                        <th>
+                Date
+            </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Cost
             </th>
             <th>
                 Paid by
@@ -24,14 +47,17 @@
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Comments
             </th>
-            <th></th>
+              <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                10.10.22
+            </td>
             <td>
                 €@Html.DisplayFor(modelItem => item.Price)
             </td>
@@ -43,15 +69,11 @@
             </td>
             <td>
                 <p>
-                    @if (item.Description.Length > 0) {
-                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)">
-                            <i class="bi-chat-left-text"></i>
+                    @if (!String.IsNullOrEmpty(item.Description)) {
+ 
+                        <button type="button" class="btn btn-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="@Html.DisplayFor(modelItem => item.Description)">
+                          <i class="bi-chat-left-text"></i>
                         </button>
-                        <div class="collapse" id="collapse@(item.ExpenseId)">
-                          <div class="card card-body">
-                            @Html.DisplayFor(modelItem => item.Description) 
-                          </div>
-                        </div>
                     } else {
                          <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)" disabled>
                             <i class="bi-chat-left"></i>
@@ -59,6 +81,7 @@
                     }
                 </p>
             </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
                 <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
@@ -68,5 +91,42 @@
             </td>
         </tr>
 }
+<tr class="table-info">
+      <td>
+          <strong>SUM:</strong>
+      </td>
+       <td>
+          €1000
+      </td>
+       <td>
+<button type="button" class="btn btn-sm btn-dark" data-bs-toggle="popover" title="Who owes what?" data-bs-content="[User 1] owes [User 2] €19128">Toggle settlement</button>
+      </td> 
+      <td>
+      </td> 
+      <td>
+      </td> 
+      <td>
+      </td> 
+</tr>
+
     </tbody>
+
 </table>
+<nav aria-label="...">
+  <ul class="pagination justify-content-center">
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item active" aria-current="page">
+      <a class="page-link" href="#">2</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
+
+  </div>
+  </div>
