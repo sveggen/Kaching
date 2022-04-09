@@ -39,6 +39,9 @@ namespace Kaching.Controllers
                 .Include(e => e.Person)
                 .Where(p => p.Created.Month == id)
                 .ToListAsync();
+
+            ViewBag.Sum = expensesByMonth.Sum(i => i.Price);
+
             return View(expensesByMonth);
         }
 
@@ -83,9 +86,6 @@ namespace Kaching.Controllers
             }
             RenderSelectList(expense);
             return View(expense);
-
-
-
         }
 
         // GET: Expenses/Edit/5
