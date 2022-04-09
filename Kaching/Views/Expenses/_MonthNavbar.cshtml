@@ -1,0 +1,25 @@
+﻿@using System.Globalization
+
+@{
+    var dateTime = DateTime.Now;
+    var currentMonthNumber = dateTime.Month;
+}
+
+<ul class="nav nav-tabs">
+@for (int i = 0; i <= 12; i++) 
+{
+    var monthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[i];
+    var monthNumber = i + 1;
+    @if (4 == monthNumber)
+        {
+           <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">@monthName</a>
+          </li>
+        } else {
+         <li class="nav-item">
+            <a class="nav-link" href="/Expenses/Index/@monthNumber">@monthName</a>
+        </li>
+        }
+    }
+
+</ul>

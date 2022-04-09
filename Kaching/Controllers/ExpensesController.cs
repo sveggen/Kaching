@@ -15,6 +15,7 @@ namespace Kaching.Controllers
     {
         private readonly DataContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private int currentMonthNumber;
 
         public ExpensesController(
             DataContext context,
@@ -22,14 +23,23 @@ namespace Kaching.Controllers
         {
             _context = context;
             _userManager = userManager;
+            currentMonthNumber = DateTime.Now.Month;
 
         }
 
-        // GET: Expenses
-        public async Task<IActionResult> Index()
+        // GET: Expenses/3
+        public async Task<IActionResult> Index(int? id)
         {
-            var dataContext = _context.Expense.Include(e => e.Person);
-            return View(await dataContext.ToListAsync());
+            if (id == null)
+            {
+                id = DateTime.Now.Month;
+            }
+
+            var expensesByMonth = await _context.Expense
+                .Include(e => e.Person)
+                .Where(p => p.Created.Month == id)
+                .ToListAsync();
+            return View(expensesByMonth);
         }
 
         // GET: Expenses/Details/5

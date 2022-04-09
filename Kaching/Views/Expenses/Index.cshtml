@@ -11,26 +11,13 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
- 
+
 <div class="card">
     <div class="card-header">
         2022
   </div>
   <div class="card-body">
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-    <a class="nav-link" href="#">May</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">April</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">March</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">February</a>
-  </li>
-</ul>
+<partial name="/Views/Expenses/_MonthNavbar.cshtml" />
 <table class="table table-hover table-striped">
     <thead>
         <tr>
@@ -130,3 +117,19 @@
 
   </div>
   </div>
+
+<button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="..." class="rounded me-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <small>11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
