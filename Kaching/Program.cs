@@ -1,4 +1,5 @@
 using Kaching.Data;
+using Kaching.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IPersonStore, PersonStore>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
 // Add other db services to the container.
 var connectionString = builder.Configuration.GetConnectionString("Kaching");

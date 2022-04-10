@@ -1,11 +1,13 @@
 ﻿#nullable disable
 using Kaching.Data;
 using Kaching.Models;
+using Kaching.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Kaching.Controllers
 {
@@ -15,32 +17,33 @@ namespace Kaching.Controllers
     {
         private readonly DataContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IExpenseRepository _expenseRepository;
         private int currentMonthNumber;
 
         public ExpensesController(
             DataContext context,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IExpenseRepository expenseRepository)
         {
             _context = context;
             _userManager = userManager;
             currentMonthNumber = DateTime.Now.Month;
+            _expenseRepository = expenseRepository;
 
         }
 
         // GET: Expenses/3
         public async Task<IActionResult> Index(int? id)
         {
-            if (id == null)
+
+            int inputId = currentMonthNumber;
+
+            if (id != null)
             {
-                id = DateTime.Now.Month;
+                inputId = id.Value;
             }
 
-            var expensesByMonth = await _context.Expense
-                .Include(e => e.Person)
-                .Where(p => p.Created.Month == id)
-                .ToListAsync();
-
-            ViewBag.Sum = expensesByMonth.Sum(i => i.Price);
+            var expensesByMonth = await _expenseRepository.GetExpenses(inputId);
 
             return View(expensesByMonth);
         }
@@ -53,9 +56,9 @@ namespace Kaching.Controllers
                 return NotFound();
             }
 
-            var expense = await _context.Expense
-                .Include(e => e.Person)
-                .FirstOrDefaultAsync(m => m.ExpenseId == id);
+            int valueId = id.Value;
+
+            var expense = _expenseRepository.GetExpenseById(valueId);
             if (expense == null)
             {
                 return NotFound();
@@ -80,8 +83,9 @@ namespace Kaching.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(expense);
-                await _context.SaveChangesAsync();
+
+                _expenseRepository.InsertExpense(expense);
+                await _expenseRepository.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
             RenderSelectList(expense);

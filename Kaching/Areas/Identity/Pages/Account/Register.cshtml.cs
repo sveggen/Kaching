@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using Kaching.Data;
+using Kaching.Repositories;
 using Kaching.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +25,7 @@ namespace Kaching.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         // Custom - Person hook
-        private readonly IPersonStore _personStore;
+        private readonly IPersonRepository _personRepository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -33,7 +33,7 @@ namespace Kaching.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IPersonStore personStore)
+            IPersonRepository personRepository)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -42,7 +42,7 @@ namespace Kaching.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             // Custom - Person hook
-            _personStore = personStore;
+            _personRepository = personRepository;
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Kaching.Areas.Identity.Pages.Account
                     // Custom - Person hook
                     var userName = await _userManager.GetUserNameAsync(user);
                     var person = new Person { ConnectedUserId = userId, ConnectedUserName = userName };
-                    _personStore.CreateNewPerson(person);
+                    _personRepository.CreateNewPerson(person);
 
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

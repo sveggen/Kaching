@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="col-md-3">
+    <div class="list-group" id="list-tab" role="tablist">
+        <a asp-action="Index" is-active-route asp-controller="Expenses/I class="list-group-item list-group-item-action" id="list-home-list"><i class="fas fa-chart-line"></i>&nbsp;Index</a>
+        <a asp-action="Details" is-active-route asp-controller="ExpensesController" class="list-group-item list-group-item-action" id="list-home-list"><i class="fas fa-users"></i>&nbsp;Details</a>
+    </div>
+</div>
 
 <h1>Expenses</h1>
 
@@ -86,6 +92,7 @@
           €@ViewBag.Sum
       </td>
        <td>
+
 <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="popover" title="Who owes what?" data-bs-content="[User 1] owes [User 2] €19128">Toggle settlement</button>
       </td> 
       <td>
