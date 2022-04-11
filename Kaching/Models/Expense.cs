@@ -27,6 +27,8 @@ namespace Kaching.Models
 
         public PaymentType? PaymentType { get; set; }
 
+        public PaymentStatus? PaymentStatus { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Created { get; set; }
 

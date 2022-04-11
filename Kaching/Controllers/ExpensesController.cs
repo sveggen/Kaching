@@ -58,7 +58,7 @@ namespace Kaching.Controllers
 
             int valueId = id.Value;
 
-            var expense = _expenseRepository.GetExpenseById(valueId);
+            var expense = await _expenseRepository.GetExpenseById(valueId);
             if (expense == null)
             {
                 return NotFound();
@@ -79,11 +79,11 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ExpenseId,Price,PersonId,Category,Description")] Expense expense)
+        public async Task<IActionResult> Create([Bind("ExpenseId,Price,PersonId," +
+            "Category,Description,PaymentType,PaymentStatus")] Expense expense)
         {
             if (ModelState.IsValid)
             {
-
                 _expenseRepository.InsertExpense(expense);
                 await _expenseRepository.SaveAsync();
                 return RedirectToAction(nameof(Index));
@@ -114,7 +114,8 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,PersonId,Category,Description")] Expense expense)
+        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,PersonId," +
+            "Category,Description, PaymentType, PaymentStatus")] Expense expense)
         {
             if (id != expense.ExpenseId)
             {

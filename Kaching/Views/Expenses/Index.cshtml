@@ -24,7 +24,7 @@
   </div>
   <div class="card-body">
 <partial name="/Views/Expenses/_MonthNavbar.cshtml" />
-<table class="table table-hover table-striped">
+<table class="table table-hover table-striped table-bordered">
     <thead>
         <tr>
                         <th>
@@ -41,6 +41,9 @@
             </th>
             <th>
                 Comments
+            </th>
+              <th>
+                Payment Status
             </th>
               <th></th>
         </tr>
@@ -74,6 +77,9 @@
                     }
                 </p>
             </td>
+              <td>
+                @Html.DisplayFor(modelItem => item.PaymentStatus)
+            </td>
 
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
@@ -101,6 +107,9 @@
       </td> 
       <td>
       </td> 
+      <td>
+      </td> 
+
 </tr>
 
     </tbody>
