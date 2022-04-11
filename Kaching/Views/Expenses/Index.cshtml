@@ -78,7 +78,11 @@
                 </p>
             </td>
               <td>
-                @Html.DisplayFor(modelItem => item.PaymentStatus)
+                @if(item.PaymentStatus == 0) {
+                    <i class="bi bi-check-lg"></i>
+                } else {
+                    <i class="bi bi-x-lg"></i>
+                }
             </td>
 
             <td>
