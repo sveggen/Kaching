@@ -25,6 +25,10 @@ namespace Kaching.Models
 
        // public EventOccurence 
 
+        public int? PayerId { get; set; }
+
+        public Payer? Payer { get; set; }
+
         public PaymentType? PaymentType { get; set; }
 
         public PaymentStatus? PaymentStatus { get; set; }
