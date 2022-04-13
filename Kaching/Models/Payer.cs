@@ -9,5 +9,7 @@
         public int PersonId { get; set; }
 
         public Person? Person { get; set; }
+
+        public Expense? Expense { get; set; }
     }
 }

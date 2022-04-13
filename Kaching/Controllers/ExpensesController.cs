@@ -18,7 +18,7 @@ namespace Kaching.Controllers
         private readonly DataContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IExpenseRepository _expenseRepository;
-        private int currentMonthNumber;
+        private readonly int currentMonthNumber;
 
         public ExpensesController(
             DataContext context,
@@ -79,11 +79,21 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ExpenseId,Price,PersonId," +
-            "Category,Description,PaymentType,PaymentStatus")] Expense expense)
+        public async Task<IActionResult> Create([Bind("ExpenseId,Price,Category," +
+            "Description,PaymentType,Payer,PayerId,Payer.PaymentStatus,Payer.PersonId")] Expense expense)
         {
+
             if (ModelState.IsValid)
             {
+                var currentPerson = GetPersonByUserName();
+                expense.Person = currentPerson;
+
+                // build Payer table
+                _context.Payer.Add(expense.Payer);
+                await _context.SaveChangesAsync();
+
+
+                // build Expense table
                 _expenseRepository.InsertExpense(expense);
                 await _expenseRepository.SaveAsync();
                 return RedirectToAction(nameof(Index));

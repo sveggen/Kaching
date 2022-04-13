@@ -5,13 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="col-md-3">
-    <div class="list-group" id="list-tab" role="tablist">
-        <a asp-action="Index" is-active-route asp-controller="Expenses/I class="list-group-item list-group-item-action" id="list-home-list"><i class="fas fa-chart-line"></i>&nbsp;Index</a>
-        <a asp-action="Details" is-active-route asp-controller="ExpensesController" class="list-group-item list-group-item-action" id="list-home-list"><i class="fas fa-users"></i>&nbsp;Details</a>
-    </div>
-</div>
-
 <h1>Expenses</h1>
 
 <p>
@@ -21,119 +14,120 @@
 <div class="card">
     <div class="card-header">
         2022
-  </div>
-  <div class="card-body">
-<partial name="/Views/Expenses/_MonthNavbar.cshtml" />
-<table class="table table-hover table-striped table-bordered">
-    <thead>
-        <tr>
-                        <th>
-                Date
-            </th>
-            <th>
-                Cost
-            </th>
-            <th>
-                Paid by
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                Comments
-            </th>
-              <th>
-                Paid
-            </th>
-              <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                10.10.22
-            </td>
-            <td>
-                €@Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Person.ConnectedUserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                <p>
-                    @if (!String.IsNullOrEmpty(item.Description)) {
- 
-                        <button type="button" class="btn btn-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="@Html.DisplayFor(modelItem => item.Description)">
-                          <i class="bi-chat-left-text"></i>
-                        </button>
-                    } else {
-                         <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)" disabled>
-                            <i class="bi-chat-left"></i>
-                        </button>
-                    }
-                </p>
-            </td>
-              <td>
-                @if(item.PaymentStatus == 0) {
-                    <i class="bi bi-check-lg" style="color:green"></i>
-                } else {
-                    <i class="bi bi-x-lg" style="color:red"></i>
+    </div>
+    <div class="card-body">
+        <partial name="/Views/Expenses/_MonthNavbar.cshtml" />
+        <table class="table table-hover table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Cost
+                    </th>
+                    <th>
+                        Paid by
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        Comments
+                    </th>
+                    <th>
+                        Paid
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            10.10.22
+                        </td>
+                        <td>
+                            €@Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Person.ConnectedUserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            <p>
+                                @if (!String.IsNullOrEmpty(item.Description))
+                                {
+
+                                    <button type="button" class="btn btn-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="@Html.DisplayFor(modelItem => item.Description)">
+                                        <i class="bi-chat-left-text"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)" disabled>
+                                        <i class="bi-chat-left"></i>
+                                    </button>
+                                }
+                            </p>
+                        </td>
+                        <td>
+                            @if (item.Payer.PaymentStatus == 0)
+                            {
+                                <i class="bi bi-check-lg" style="color:green"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-lg" style="color:red"></i>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
+                            <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
+                            <a asp-action="Details" asp-route-id="@item.ExpenseId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ExpenseId">Delete</a>
+
+                        </td>
+                    </tr>
                 }
-            </td>
-
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
-                <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
-                <a asp-action="Details" asp-route-id="@item.ExpenseId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ExpenseId">Delete</a>
-      
-            </td>
-        </tr>
-}
-<tr class="table-info">
-      <td>
-          <strong>SUM:</strong>
-      </td>
-       <td>
-          €@ViewBag.Sum
-      </td>
-       <td>
-
-<button type="button" class="btn btn-sm btn-dark" data-bs-toggle="popover" title="Who owes what?" data-bs-content="[User 1] owes [User 2] €19128">Toggle settlement</button>
-      </td> 
-      <td>
-      </td> 
-      <td>
-      </td> 
-      <td>
-      </td> 
-      <td>
-      </td> 
-
-</tr>
-
-    </tbody>
-
-</table>
-<nav aria-label="...">
-  <ul class="pagination justify-content-center">
-    <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item active" aria-current="page">
-      <a class="page-link" href="#">2</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#">Next</a>
-    </li>
-  </ul>
-</nav>
-
-  </div>
-  </div>
+                <tr class="table-info">
+                    <td>
+                        <strong>SUM:</strong>
+                    </td>
+                    <td>
+                        €@ViewBag.Sum
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="popover" title="Who owes what?" data-bs-content="[User 1] owes [User 2] €19128">Toggle settlement</button>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav aria-label="...">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

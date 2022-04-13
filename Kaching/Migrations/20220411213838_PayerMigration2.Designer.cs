@@ -4,6 +4,7 @@ using Kaching.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaching.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220411213838_PayerMigration2")]
+    partial class PayerMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,9 +62,7 @@ namespace Kaching.Migrations
 
                     b.HasKey("ExpenseId");
 
-                    b.HasIndex("PayerId")
-                        .IsUnique()
-                        .HasFilter("[PayerId] IS NOT NULL");
+                    b.HasIndex("PayerId");
 
                     b.HasIndex("PersonId");
 
@@ -114,8 +114,8 @@ namespace Kaching.Migrations
             modelBuilder.Entity("Kaching.Models.Expense", b =>
                 {
                     b.HasOne("Kaching.Models.Payer", "Payer")
-                        .WithOne("Expense")
-                        .HasForeignKey("Kaching.Models.Expense", "PayerId");
+                        .WithMany()
+                        .HasForeignKey("PayerId");
 
                     b.HasOne("Kaching.Models.Person", "Person")
                         .WithMany()
@@ -137,11 +137,6 @@ namespace Kaching.Migrations
                         .IsRequired();
 
                     b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("Kaching.Models.Payer", b =>
-                {
-                    b.Navigation("Expense");
                 });
 #pragma warning restore 612, 618
         }

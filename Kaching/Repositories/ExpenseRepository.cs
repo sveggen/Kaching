@@ -24,6 +24,7 @@ namespace Kaching.Repositories
         {
             return await _context.Expense
                 .Include(e => e.Person)
+                .Include(e => e.Payer)
                 .FirstOrDefaultAsync(m => m.ExpenseId == expenseId);
         }
 
@@ -31,6 +32,7 @@ namespace Kaching.Repositories
         {
             return await _context.Expense
                 .Include(e => e.Person)
+                .Include(e => e.Payer)
                 .Where(p => p.Created.Month == monthNumber)
                 .ToListAsync();
         }

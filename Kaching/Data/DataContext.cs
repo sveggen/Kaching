@@ -27,5 +27,7 @@ namespace Kaching.Data
 
         public DbSet<Person> Person { get; set; }
 
+        public DbSet<Payer> Payer { get; set; }
+
     }
 }
