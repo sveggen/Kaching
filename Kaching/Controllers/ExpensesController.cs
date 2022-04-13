@@ -1,4 +1,5 @@
 ﻿#nullable disable
+using System.Globalization;
 using Kaching.Data;
 using Kaching.Models;
 using Kaching.Repositories;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Kaching.Controllers
 {
@@ -16,34 +16,41 @@ namespace Kaching.Controllers
     public class ExpensesController : Controller
     {
         private readonly DataContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly IExpenseRepository _expenseRepository;
-        private readonly int currentMonthNumber;
+        private readonly int _currentMonthNumber;
 
         public ExpensesController(
             DataContext context,
-            UserManager<IdentityUser> userManager,
             IExpenseRepository expenseRepository)
         {
             _context = context;
-            _userManager = userManager;
-            currentMonthNumber = DateTime.Now.Month;
+            _currentMonthNumber = DateTime.Now.Month;
             _expenseRepository = expenseRepository;
 
         }
 
-        // GET: Expenses/3
-        public async Task<IActionResult> Index(int? id)
+        // GET: /
+        // GET: Expenses/March
+        [Route("")]
+        [Route("Expenses/{month?}")]
+        public async Task<IActionResult> Index(string? month)
         {
+            string monthName;
+            int monthNumber;
 
-            int inputId = currentMonthNumber;
-
-            if (id != null)
+            if (month != null)
             {
-                inputId = id.Value;
+                monthName = month;
+                monthNumber = DateTime.ParseExact(monthName, "MMMM", CultureInfo.CurrentCulture).Month;
+            }
+            else
+            {
+                monthNumber = _currentMonthNumber;
             }
 
-            var expensesByMonth = await _expenseRepository.GetExpenses(inputId);
+            var expensesByMonth = await _expenseRepository.GetExpenses(monthNumber);
+
+            ViewData["MonthExpenseSum"] = _expenseRepository.GetExpenseSum(monthNumber);
 
             return View(expensesByMonth);
         }
@@ -82,7 +89,6 @@ namespace Kaching.Controllers
         public async Task<IActionResult> Create([Bind("ExpenseId,Price,Category," +
             "Description,PaymentType,Payer,PayerId,Payer.PaymentStatus,Payer.PersonId")] Expense expense)
         {
-
             if (ModelState.IsValid)
             {
                 var currentPerson = GetPersonByUserName();
@@ -91,7 +97,6 @@ namespace Kaching.Controllers
                 // build Payer table
                 _context.Payer.Add(expense.Payer);
                 await _context.SaveChangesAsync();
-
 
                 // build Expense table
                 _expenseRepository.InsertExpense(expense);

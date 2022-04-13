@@ -13,11 +13,11 @@
     @if (4 == monthNumber)
         {
            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">@monthName</a>
+               <a class="nav-link active" aria-current="page" href="/"><strong>@monthName</strong></a>
           </li>
         } else {
          <li class="nav-item">
-            <a class="nav-link" href="/Expenses/Index/@monthNumber">@monthName</a>
+            <a class="nav-link" href="/Expenses/@monthName">@monthName</a>
         </li>
         }
     }

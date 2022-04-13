@@ -6,6 +6,8 @@ namespace Kaching.Repositories
     {
         public Task<List<Expense>> GetExpenses(int monthNumber);
 
+        public decimal GetExpenseSum(int monthNumber);
+
         public Task<Expense> GetExpenseById(int expenseId);
 
         public void InsertExpense(Expense expense);

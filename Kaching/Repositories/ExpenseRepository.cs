@@ -37,6 +37,15 @@ namespace Kaching.Repositories
                 .ToListAsync();
         }
 
+        public  decimal GetExpenseSum(int monthNumber)
+        {
+            return  _context.Expense
+                .Include(e => e.Person)
+                .Include(e => e.Payer)
+                .Where(p => p.Created.Month == monthNumber)
+                .Sum(i => i.Price);
+        }
+
         public void InsertExpense(Expense expense)
         {
             _context.Add(expense);
