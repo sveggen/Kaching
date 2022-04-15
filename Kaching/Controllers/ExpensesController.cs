@@ -1,5 +1,6 @@
 ﻿#nullable disable
 using System.Globalization;
+using System.Threading.Tasks.Dataflow;
 using Kaching.Data;
 using Kaching.Models;
 using Kaching.Repositories;
@@ -52,6 +53,7 @@ namespace Kaching.Controllers
 
             ViewData["MonthExpenseSum"] = _expenseRepository.GetExpenseSum(monthNumber);
 
+
             return View(expensesByMonth);
         }
 
@@ -75,6 +77,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/Create
+        [Route("Expenses/Create")]
         public IActionResult Create()
         {
             RenderSelectListDefault();
@@ -84,19 +87,15 @@ namespace Kaching.Controllers
         // POST: Expenses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Expenses/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ExpenseId,Price,Category," +
-            "Description,PaymentType,Payer,PayerId,Payer.PaymentStatus,Payer.PersonId")] Expense expense)
+            "Description,BuyerId,PaymentStatus,PaymentType")] Expense expense)
         {
             if (ModelState.IsValid)
             {
                 var currentPerson = GetPersonByUserName();
-                expense.Person = currentPerson;
-
-                // build Payer table
-                _context.Payer.Add(expense.Payer);
-                await _context.SaveChangesAsync();
+                expense.Creator = currentPerson;
 
                 // build Expense table
                 _expenseRepository.InsertExpense(expense);
@@ -108,6 +107,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/Edit/5
+        [Route("Expenses/Edit/{id?}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -127,10 +127,10 @@ namespace Kaching.Controllers
         // POST: Expenses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,PersonId," +
-            "Category,Description, PaymentType, PaymentStatus")] Expense expense)
+        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,CreatorId,Category," +
+            "Description,BuyerId,PaymentStatus,PaymentType")] Expense expense)
         {
             if (id != expense.ExpenseId)
             {
@@ -170,7 +170,7 @@ namespace Kaching.Controllers
             }
 
             var expense = await _context.Expense
-                .Include(e => e.Person)
+                .Include(e => e.Creator)
                 .FirstOrDefaultAsync(m => m.ExpenseId == id);
             if (expense == null)
             {
@@ -197,8 +197,8 @@ namespace Kaching.Controllers
         }
 
         private void RenderSelectList(Expense expense)
-        {
-            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", expense.PersonId);
+        {   
+            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", expense.BuyerId);
         }
 
         private void RenderSelectList()

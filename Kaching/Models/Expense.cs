@@ -10,23 +10,21 @@ namespace Kaching.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
-        // Other person owe. 
-        //public decimal OtherPersonOwe { get; set; } = Price / 2;
+        public int CreatorId { get; set; }
 
-        // Paid by
-        public int PersonId { get; set; }
-
-        public Person? Person { get; set; }
+        public Person? Creator { get; set; }
 
         public Category? Category { get; set; }
 
         public string? Description { get; set; } = string.Empty;
 
-       // public EventOccurence 
+        // public EventOccurence 
 
-        public int? PayerId { get; set; }
+        public int BuyerId { get; set; }
 
-        public Payer? Payer { get; set; }
+        public Person? Buyer { get; set; }
+
+        public PaymentStatus? PaymentStatus { get; set; }
 
         public PaymentType? PaymentType { get; set; }
 

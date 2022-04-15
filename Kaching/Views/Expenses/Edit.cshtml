@@ -36,12 +36,12 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Payment Status</label>
-                <select asp-for="Payer.PaymentStatus" class ="form-control" asp-items="Html.GetEnumSelectList<PaymentStatus>()">
+                <select asp-for="PaymentStatus" class ="form-control" asp-items="Html.GetEnumSelectList<PaymentStatus>()">
                 </select>
             </div>
             <div class="form-group">
                 <label class="control-label required">Paid by</label>
-                <select asp-for="Payer.PersonId" class ="form-control" asp-items="ViewBag.PersonId"></select>
+                <select asp-for="BuyerId" class ="form-control" asp-items="ViewBag.PersonId"></select>
             </div>            
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label> <i> - Not Required</i>

@@ -23,16 +23,16 @@ namespace Kaching.Repositories
         public async Task<Expense> GetExpenseById(int expenseId)
         {
             return await _context.Expense
-                .Include(e => e.Person)
-                .Include(e => e.Payer)
+                .Include(e => e.Creator)
+                .Include(b => b.Buyer)
                 .FirstOrDefaultAsync(m => m.ExpenseId == expenseId);
         }
 
         public async Task<List<Expense>> GetExpenses(int monthNumber)
         {
             return await _context.Expense
-                .Include(e => e.Person)
-                .Include(e => e.Payer)
+                .Include(e => e.Creator)
+                .Include(b => b.Buyer)
                 .Where(p => p.Created.Month == monthNumber)
                 .ToListAsync();
         }
@@ -40,8 +40,8 @@ namespace Kaching.Repositories
         public  decimal GetExpenseSum(int monthNumber)
         {
             return  _context.Expense
-                .Include(e => e.Person)
-                .Include(e => e.Payer)
+                .Include(e => e.Creator)
+                .Include(b => b.Buyer)
                 .Where(p => p.Created.Month == monthNumber)
                 .Sum(i => i.Price);
         }

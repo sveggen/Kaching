@@ -8,5 +8,9 @@
 
         public string ConnectedUserName { get; set; }
 
+        public List<Expense>? ExpensesCreated { get; set; }
+
+        public List<Expense>? ExpensesPaid { get; set; }
+
     }
 }

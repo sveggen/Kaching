@@ -1,6 +1,7 @@
 using Kaching.Data;
 using Kaching.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();

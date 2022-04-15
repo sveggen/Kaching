@@ -4,6 +4,7 @@ using Kaching.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaching.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220414200513_RemovePayer2")]
+    partial class RemovePayer2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,9 +43,6 @@ namespace Kaching.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -51,6 +50,9 @@ namespace Kaching.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -65,7 +67,7 @@ namespace Kaching.Migrations
 
                     b.HasIndex("BuyerId");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("PersonId");
 
                     b.ToTable("Expense");
                 });
@@ -96,18 +98,18 @@ namespace Kaching.Migrations
                     b.HasOne("Kaching.Models.Person", "Buyer")
                         .WithMany("ExpensesPaid")
                         .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Models.Person", "Creator")
+                    b.HasOne("Kaching.Models.Person", "Person")
                         .WithMany("ExpensesCreated")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Buyer");
 
-                    b.Navigation("Creator");
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Kaching.Models.Person", b =>

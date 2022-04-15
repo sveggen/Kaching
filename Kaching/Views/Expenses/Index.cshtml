@@ -52,7 +52,7 @@
                             €@Html.DisplayFor(modelItem => item.Price)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Person.ConnectedUserName)
+                            @Html.DisplayFor(modelItem => item.Buyer.ConnectedUserName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Category)
@@ -75,7 +75,7 @@
                             </p>
                         </td>
                         <td>
-                            @if (item.Payer.PaymentStatus == 0)
+                            @if (item.PaymentStatus == 0)
                             {
                                 <i class="bi bi-check-lg" style="color:green"></i>
                             }
@@ -98,7 +98,7 @@
                         <strong>SUM:</strong>
                     </td>
                     <td>
-                        <strong>€@ViewData["MonthExpenseSum"]</
+                        <strong>€@ViewData["MonthExpenseSum"]</strong>
                     </td>
                     <td>
                         <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="popover" title="Who owes what?" data-bs-content="[User 1] owes [User 2] €19128">Toggle settlement</button>
