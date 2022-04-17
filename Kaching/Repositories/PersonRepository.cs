@@ -1,5 +1,7 @@
 ﻿using Kaching.Models;
 using Kaching.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Kaching.Repositories
 {
@@ -23,6 +25,12 @@ namespace Kaching.Repositories
         {
              return _context.Person
                 .FirstOrDefault(p => p.ConnectedUserId == userId);
+        }
+
+        public List<Person> GetAllPersons()
+        {
+            return _context.Person
+                .ToList();
         }
 
         private void DeletePerson(Person person)
@@ -65,6 +73,12 @@ namespace Kaching.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public Person? GetPersonByUserName(string userName)
+        {
+            return _context.Person
+                .FirstOrDefault(p => p.ConnectedUserName == userName);
         }
     }
 }

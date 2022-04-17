@@ -20,3 +20,14 @@ var toastElList = [].slice.call(document.querySelectorAll('.toast'))
 var toastList = toastElList.map(function (toastEl) {
     return new bootstrap.Toast(toastEl, option)
 })
+
+
+function getRandomCat() {
+    url = "https://cataas.com/cat"
+
+    fetch(url)
+        .then(function (response) {
+            console.log(response)
+        })
+}
+    

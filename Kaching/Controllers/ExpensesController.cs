@@ -1,11 +1,8 @@
 ﻿#nullable disable
 using System.Globalization;
-using System.Threading.Tasks.Dataflow;
-using Kaching.Data;
 using Kaching.Models;
 using Kaching.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,17 +13,17 @@ namespace Kaching.Controllers
     [Authorize]
     public class ExpensesController : Controller
     {
-        private readonly DataContext _context;
         private readonly IExpenseRepository _expenseRepository;
+        private readonly IPersonRepository _personRepository;
         private readonly int _currentMonthNumber;
 
         public ExpensesController(
-            DataContext context,
-            IExpenseRepository expenseRepository)
+            IExpenseRepository expenseRepository,
+            IPersonRepository personRepository)
         {
-            _context = context;
             _currentMonthNumber = DateTime.Now.Month;
             _expenseRepository = expenseRepository;
+            _personRepository = personRepository;
 
         }
 
@@ -50,14 +47,24 @@ namespace Kaching.Controllers
             }
 
             var expensesByMonth = await _expenseRepository.GetExpenses(monthNumber);
+            var persons = _personRepository.GetAllPersons();
 
+            Dictionary<string, decimal> sumOfPersonExpenses = new Dictionary<string, decimal>();
+
+            foreach (var person in persons)
+            {
+                var expenseSum = _expenseRepository.GetSumOfPersonExpenses(person.PersonId, monthNumber);
+                sumOfPersonExpenses.Add(person.ConnectedUserName, expenseSum);
+            }
+
+            ViewData["SumOfPersonExpenses"] = sumOfPersonExpenses;
             ViewData["MonthExpenseSum"] = _expenseRepository.GetExpenseSum(monthNumber);
-
 
             return View(expensesByMonth);
         }
 
         // GET: Expenses/Details/5
+        [Route("Expenses/Details/{id?}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -94,7 +101,8 @@ namespace Kaching.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentPerson = GetPersonByUserName();
+                var currentPerson =
+                    _personRepository.GetPersonByUserName(GetCurrentUserName());
                 expense.Creator = currentPerson;
 
                 // build Expense table
@@ -107,15 +115,15 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/Edit/5
-        [Route("Expenses/Edit/{id?}")]
-        public async Task<IActionResult> Edit(int? id)
+        [Route("Expenses/Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var expense = await _context.Expense.FindAsync(id);
+            var expense = await _expenseRepository.GetExpenseById(id);
             if (expense == null)
             {
                 return NotFound();
@@ -141,12 +149,12 @@ namespace Kaching.Controllers
             {
                 try
                 {
-                    _context.Update(expense);
-                    await _context.SaveChangesAsync();
+                    _expenseRepository.UpdateExpense(expense);
+                    await _expenseRepository.SaveAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ExpenseExists(expense.ExpenseId))
+                    if (!_expenseRepository.GetExpenseExistence(expense.ExpenseId))
                     {
                         return NotFound();
                     }
@@ -162,16 +170,16 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Route("Expenses/Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var expense = await _context.Expense
-                .Include(e => e.Creator)
-                .FirstOrDefaultAsync(m => m.ExpenseId == id);
+            var expense = await _expenseRepository.GetExpenseById(id);
+
             if (expense == null)
             {
                 return NotFound();
@@ -181,49 +189,36 @@ namespace Kaching.Controllers
         }
 
         // POST: Expenses/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Expenses/Delete/{id?}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var expense = await _context.Expense.FindAsync(id);
-            _context.Expense.Remove(expense);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var expense = await _expenseRepository.GetExpenseById(id);
 
-        private bool ExpenseExists(int id)
-        {
-            return _context.Expense.Any(e => e.ExpenseId == id);
+            _expenseRepository.DeleteExpense(expense);
+            await _expenseRepository.SaveAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         private void RenderSelectList(Expense expense)
         {   
-            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", expense.BuyerId);
-        }
-
-        private void RenderSelectList()
-        {
-            //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
-            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName");
+            ViewData["PersonId"] = new SelectList(_personRepository.GetAllPersons(),
+                "PersonId", "ConnectedUserName", expense.BuyerId);
         }
 
         private void RenderSelectListDefault()
         {
-            var selectedUsername = GetPersonByUserName().PersonId;
+            var selectedUsername = _personRepository.GetPersonByUserName(GetCurrentUserName()).PersonId;
             //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
-            ViewData["PersonId"] = new SelectList(_context.Person, "PersonId", "ConnectedUserName", selectedUsername);
+            ViewData["PersonId"] = new SelectList(_personRepository.GetAllPersons(),
+                "PersonId", "ConnectedUserName", selectedUsername);
         }
 
         private string GetCurrentUserName()
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             return currentUser.Identity.Name;
-        }
-
-        private Person GetPersonByUserName()
-        {
-            return _context.Person
-            .FirstOrDefault(p => p.ConnectedUserName == GetCurrentUserName());
         }
     }
 }

@@ -37,13 +37,33 @@ namespace Kaching.Repositories
                 .ToListAsync();
         }
 
-        public  decimal GetExpenseSum(int monthNumber)
+        public decimal GetExpenseSum(int monthNumber)
         {
             return  _context.Expense
                 .Include(e => e.Creator)
                 .Include(b => b.Buyer)
                 .Where(p => p.Created.Month == monthNumber)
                 .Sum(i => i.Price);
+        }
+
+        public async Task<List<Expense>> GetPersonExpenses(int personId, int monthNumber)
+        {
+            return await _context.Expense
+                .Include(e => e.Creator)
+                .Include(b => b.Buyer)
+                .Where(p => p.Created.Month == monthNumber)
+                .Where(e => e.BuyerId == personId)
+                .ToListAsync();
+        }
+
+        public decimal GetSumOfPersonExpenses(int personId, int monthNumber)
+        {
+            return _context.Expense
+                .Include(e => e.Creator)
+                .Include(b => b.Buyer)
+                .Where(p => p.Created.Month == monthNumber)
+                .Where(e => e.BuyerId == personId)
+                .Sum(e => e.Price);
         }
 
         public void InsertExpense(Expense expense)
@@ -59,6 +79,11 @@ namespace Kaching.Repositories
         public void UpdateExpense(Expense expense)
         {
             _context.Update(expense);
+        }
+
+        public bool GetExpenseExistence(int id)
+        {
+            return _context.Expense.Any(e => e.ExpenseId == id);
         }
 
         private bool disposed = false;
@@ -85,5 +110,6 @@ namespace Kaching.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
     }
 }
