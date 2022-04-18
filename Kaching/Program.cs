@@ -1,4 +1,5 @@
 using Kaching.Data;
+using Kaching.Models;
 using Kaching.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
