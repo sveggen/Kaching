@@ -21,13 +21,8 @@ var toastList = toastElList.map(function (toastEl) {
     return new bootstrap.Toast(toastEl, option)
 })
 
-
-function getRandomCat() {
-    url = "https://cataas.com/cat"
-
-    fetch(url)
-        .then(function (response) {
-            console.log(response)
-        })
-}
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+})
     

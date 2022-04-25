@@ -1,0 +1,65 @@
+﻿
+@model Kaching.ViewModels.ExpenseIndexViewModel
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Settlement
+</button>
+                        
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Expenditures as per: @Model.CurrentDate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                                    
+                                    
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Paid</th>
+                        <th scope="col">Owes</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    
+                    
+                    @foreach (var item in Model.Persons)
+                        {
+                            <tr>
+                            <td>@item.ConnectedUserName</td>
+
+                            <td>€@item.SumOfExpenses</td>
+                            
+                                @if (@item.OwesOwed >= 0)
+                                {
+                                    <td><p class="text-success">€0</p></td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td><p class="text-danger">€@Decimal.Negate(@item.OwesOwed)</p></td>
+                                    <td> <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" 
+                                                 data-bs-html="true" title="Send <em>early</em> payment reminder">
+                                        <i class="bi bi-envelope"></i>
+                                    </button></td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Settle Month</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

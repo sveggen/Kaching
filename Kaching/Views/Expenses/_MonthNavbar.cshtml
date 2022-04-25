@@ -1,16 +1,20 @@
 ﻿@using System.Globalization
+@model Kaching.ViewModels.ExpenseIndexViewModel
 
 @{
-    var dateTime = DateTime.Now;
-    var currentMonthNumber = dateTime.Month;
+    var currentMonthNumber = Model.MonthNumber;
 }
+
+
+
 
 <ul class="nav nav-tabs">
     @for (int i = 0; i <= 12; i++) 
     {
         var monthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[i];
         var monthNumber = i + 1;
-        @if (4 == monthNumber)
+
+        @if (currentMonthNumber == monthNumber)
         {
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/"><strong>@monthName</strong></a>

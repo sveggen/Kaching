@@ -1,7 +1,9 @@
 ﻿#nullable disable
 using System.Globalization;
+using AutoMapper;
 using Kaching.Models;
 using Kaching.Repositories;
+using Kaching.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,31 +17,42 @@ namespace Kaching.Controllers
     {
         private readonly IExpenseRepository _expenseRepository;
         private readonly IPersonRepository _personRepository;
+        private readonly IMapper _mapper;
         private readonly int _currentMonthNumber;
 
         public ExpensesController(
             IExpenseRepository expenseRepository,
-            IPersonRepository personRepository)
+            IPersonRepository personRepository,
+            IMapper mapper)
         {
             _currentMonthNumber = DateTime.Now.Month;
             _expenseRepository = expenseRepository;
             _personRepository = personRepository;
+            _mapper = mapper;
 
         }
 
         // GET: /
+        // GET: Expenses
         // GET: Expenses/March
         [Route("")]
         [Route("Expenses/{month?}")]
-        public async Task<IActionResult> Index(string? month)
+        public async Task<IActionResult> Index(string? month)   
         {
             string monthName;
             int monthNumber;
 
             if (month != null)
             {
-                monthName = month;
-                monthNumber = DateTime.ParseExact(monthName, "MMMM", CultureInfo.CurrentCulture).Month;
+                try
+                {
+                    monthName = month;
+                    monthNumber = DateTime.ParseExact(monthName, "MMMM", CultureInfo.CurrentCulture).Month;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return NotFound();
+                }
             }
             else
             {
@@ -48,19 +61,36 @@ namespace Kaching.Controllers
 
             var expensesByMonth = await _expenseRepository.GetExpenses(monthNumber);
             var persons = _personRepository.GetAllPersons();
+            var sum = _expenseRepository.GetExpenseSum(monthNumber);
 
-            Dictionary<string, decimal> sumOfPersonExpenses = new Dictionary<string, decimal>();
+            // Total amount / nr. of persons
+            var share = sum / persons.Count;
 
-            foreach (var person in persons)
+            var personViewModelList = _mapper.Map<List<PersonViewModel>>(persons);
+
+            int index = 0;
+            foreach (var person in personViewModelList)
             {
-                var expenseSum = _expenseRepository.GetSumOfPersonExpenses(person.PersonId, monthNumber);
-                sumOfPersonExpenses.Add(person.ConnectedUserName, expenseSum);
+                var sumPersonExpenses = _expenseRepository.GetSumOfPersonExpenses(person.PersonId, monthNumber);
+                personViewModelList[index].SumOfExpenses = sumPersonExpenses;
+                // For each person: amount paid - share = owes/owed
+                personViewModelList[index].OwesOwed = personViewModelList[index].SumOfExpenses - share;
+
+                index++;
             }
 
-            ViewData["SumOfPersonExpenses"] = sumOfPersonExpenses;
-            ViewData["MonthExpenseSum"] = _expenseRepository.GetExpenseSum(monthNumber);
 
-            return View(expensesByMonth);
+            var expenseIndexModel = new ExpenseIndexViewModel
+            {
+                Sum = sum,
+                MonthNumber = monthNumber,
+                Year = 2022,
+                Expenses = _mapper.Map<List<ExpenseViewModel>>(expensesByMonth),
+                Persons = personViewModelList,
+                CurrentDate = DateOnly.FromDateTime(DateTime.Now).ToString("dddd, dd. MMMM")
+            };
+
+            return View(expenseIndexModel);
         }
 
         // GET: Expenses/Details/5
@@ -80,7 +110,7 @@ namespace Kaching.Controllers
                 return NotFound();
             }
 
-            return View(expense);
+            return View(_mapper.Map<ExpenseViewModel>(expense));
         }
 
         // GET: Expenses/Create
@@ -97,8 +127,10 @@ namespace Kaching.Controllers
         [HttpPost("Expenses/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ExpenseId,Price,Category," +
-            "Description,BuyerId,PaymentStatus,PaymentType")] Expense expense)
+            "Description,BuyerId,PaymentStatus,PaymentType")] ExpenseViewModel expenseViewModel)
         {
+            var expense = _mapper.Map<Expense>(expenseViewModel);
+
             if (ModelState.IsValid)
             {
                 var currentPerson =
@@ -111,25 +143,23 @@ namespace Kaching.Controllers
                 return RedirectToAction(nameof(Index));
             }
             RenderSelectList(expense);
-            return View(expense);
+            return View(expenseViewModel);
         }
 
         // GET: Expenses/Edit/5
         [Route("Expenses/Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
+            try
+            {
+                var expense = await _expenseRepository.GetExpenseById(id);
+                RenderSelectList(expense);
+                return View(_mapper.Map<ExpenseViewModel>(expense));
+            }
+            catch (Exception)
             {
                 return NotFound();
             }
-
-            var expense = await _expenseRepository.GetExpenseById(id);
-            if (expense == null)
-            {
-                return NotFound();
-            }
-            RenderSelectList(expense);
-            return View(expense);
         }
 
         // POST: Expenses/Edit/5
@@ -137,9 +167,11 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,CreatorId,Category," +
-            "Description,BuyerId,PaymentStatus,PaymentType")] Expense expense)
+        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,CreatorId,Category," + 
+                            "Description,BuyerId,PaymentStatus,PaymentType,Created")] ExpenseViewModel expenseViewModel)
         {
+            var expense = _mapper.Map<Expense>(expenseViewModel);
+
             if (id != expense.ExpenseId)
             {
                 return NotFound();
@@ -147,6 +179,7 @@ namespace Kaching.Controllers
 
             if (ModelState.IsValid)
             {
+
                 try
                 {
                     _expenseRepository.UpdateExpense(expense);
@@ -166,7 +199,7 @@ namespace Kaching.Controllers
                 return RedirectToAction(nameof(Index));
             }
             RenderSelectList(expense);
-            return View(expense);
+            return View(expenseViewModel);
         }
 
         // GET: Expenses/Delete/5
@@ -185,7 +218,7 @@ namespace Kaching.Controllers
                 return NotFound();
             }
 
-            return View(expense);
+            return View(_mapper.Map<ExpenseViewModel>(expense));
         }
 
         // POST: Expenses/Delete/5
@@ -201,6 +234,23 @@ namespace Kaching.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // POST: Expenses/Pay/5
+        [HttpPost("Expenses/Pay"), ActionName("Pay")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PaymentConfirmed(int ExpenseId)
+        {
+            var expense = await _expenseRepository.GetExpenseById(ExpenseId);
+
+            var currentUsername = GetCurrentUserName();
+            var currentPerson = _personRepository.GetPersonByUserName(currentUsername);
+            expense.BuyerId = currentPerson.PersonId;
+
+            _expenseRepository.UpdateExpense(expense);
+            await _expenseRepository.SaveAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private void RenderSelectList(Expense expense)
         {   
             ViewData["PersonId"] = new SelectList(_personRepository.GetAllPersons(),
@@ -210,7 +260,6 @@ namespace Kaching.Controllers
         private void RenderSelectListDefault()
         {
             var selectedUsername = _personRepository.GetPersonByUserName(GetCurrentUserName()).PersonId;
-            //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
             ViewData["PersonId"] = new SelectList(_personRepository.GetAllPersons(),
                 "PersonId", "ConnectedUserName", selectedUsername);
         }
