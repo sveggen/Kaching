@@ -80,5 +80,11 @@ namespace Kaching.Repositories
             return _context.Person
                 .FirstOrDefault(p => p.ConnectedUserName == userName);
         }
+
+        public Person? GetPersonByPersonId(int personId)
+        {
+            return _context.Person
+                .FirstOrDefault(p => p.PersonId == personId);
+        }
     }
 }

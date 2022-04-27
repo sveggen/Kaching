@@ -1,34 +1,24 @@
 ﻿#nullable disable
 using System.Globalization;
 using AutoMapper;
-using Kaching.Models;
-using Kaching.Repositories;
+using Kaching.Services;
 using Kaching.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Controllers
 {
 
-    [Authorize]
     public class ExpensesController : Controller
     {
-        private readonly IExpenseRepository _expenseRepository;
-        private readonly IPersonRepository _personRepository;
-        private readonly IMapper _mapper;
+        private readonly IExpenseService _expenseService;
         private readonly int _currentMonthNumber;
 
         public ExpensesController(
-            IExpenseRepository expenseRepository,
-            IPersonRepository personRepository,
-            IMapper mapper)
+            IExpenseService expenseService)
         {
             _currentMonthNumber = DateTime.Now.Month;
-            _expenseRepository = expenseRepository;
-            _personRepository = personRepository;
-            _mapper = mapper;
+            _expenseService = expenseService;
 
         }
 
@@ -59,44 +49,16 @@ namespace Kaching.Controllers
                 monthNumber = _currentMonthNumber;
             }
 
-            var expensesByMonth = await _expenseRepository.GetExpenses(monthNumber);
-            var persons = _personRepository.GetAllPersons();
-            var sum = _expenseRepository.GetExpenseSum(monthNumber);
+            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber);
 
-            // Total amount / nr. of persons
-            var share = sum / persons.Count;
-
-            var personViewModelList = _mapper.Map<List<PersonViewModel>>(persons);
-
-            int index = 0;
-            foreach (var person in personViewModelList)
-            {
-                var sumPersonExpenses = _expenseRepository.GetSumOfPersonExpenses(person.PersonId, monthNumber);
-                personViewModelList[index].SumOfExpenses = sumPersonExpenses;
-                // For each person: amount paid - share = owes/owed
-                personViewModelList[index].OwesOwed = personViewModelList[index].SumOfExpenses - share;
-
-                index++;
-            }
-
-
-            var expenseIndexModel = new ExpenseIndexViewModel
-            {
-                Sum = sum,
-                MonthNumber = monthNumber,
-                Year = 2022,
-                Expenses = _mapper.Map<List<ExpenseViewModel>>(expensesByMonth),
-                Persons = personViewModelList,
-                CurrentDate = DateOnly.FromDateTime(DateTime.Now).ToString("dddd, dd. MMMM")
-            };
-
-            return View(expenseIndexModel);
+            return View(viewModel);
         }
 
         // GET: Expenses/Details/5
         [Route("Expenses/Details/{id?}")]
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -104,13 +66,13 @@ namespace Kaching.Controllers
 
             int valueId = id.Value;
 
-            var expense = await _expenseRepository.GetExpenseById(valueId);
-            if (expense == null)
+            var expenseVM = await _expenseService.GetExpense(valueId);
+            if (expenseVM == null)
             {
                 return NotFound();
             }
 
-            return View(_mapper.Map<ExpenseViewModel>(expense));
+            return View(expenseVM);
         }
 
         // GET: Expenses/Create
@@ -129,20 +91,18 @@ namespace Kaching.Controllers
         public async Task<IActionResult> Create([Bind("ExpenseId,Price,Category," +
             "Description,BuyerId,PaymentStatus,PaymentType")] ExpenseViewModel expenseViewModel)
         {
-            var expense = _mapper.Map<Expense>(expenseViewModel);
-
             if (ModelState.IsValid)
             {
                 var currentPerson =
-                    _personRepository.GetPersonByUserName(GetCurrentUserName());
-                expense.Creator = currentPerson;
+                    _expenseService.GetPersonByUsername(GetCurrentUserName());
+                expenseViewModel.Creator = currentPerson;
 
                 // build Expense table
-                _expenseRepository.InsertExpense(expense);
-                await _expenseRepository.SaveAsync();
+                await _expenseService.CreateExpense(expenseViewModel);
+
                 return RedirectToAction(nameof(Index));
             }
-            RenderSelectList(expense);
+            RenderSelectList(expenseViewModel);
             return View(expenseViewModel);
         }
 
@@ -152,10 +112,10 @@ namespace Kaching.Controllers
         {
             try
             {
-                var expense = await _expenseRepository.GetExpenseById(id);
-                RenderSelectList(expense);
-                return View(_mapper.Map<ExpenseViewModel>(expense));
-            }
+                var expenseVM = await _expenseService.GetExpense(id);
+                RenderSelectList(expenseVM);
+                return View(expenseVM);
+            }   
             catch (Exception)
             {
                 return NotFound();
@@ -170,9 +130,8 @@ namespace Kaching.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,CreatorId,Category," + 
                             "Description,BuyerId,PaymentStatus,PaymentType,Created")] ExpenseViewModel expenseViewModel)
         {
-            var expense = _mapper.Map<Expense>(expenseViewModel);
 
-            if (id != expense.ExpenseId)
+            if (id != expenseViewModel.ExpenseId)
             {
                 return NotFound();
             }
@@ -180,25 +139,10 @@ namespace Kaching.Controllers
             if (ModelState.IsValid)
             {
 
-                try
-                {
-                    _expenseRepository.UpdateExpense(expense);
-                    await _expenseRepository.SaveAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_expenseRepository.GetExpenseExistence(expense.ExpenseId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _expenseService.UpdateExpense(expenseViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            RenderSelectList(expense);
+            RenderSelectList(expenseViewModel);
             return View(expenseViewModel);
         }
 
@@ -211,14 +155,14 @@ namespace Kaching.Controllers
                 return NotFound();
             }
 
-            var expense = await _expenseRepository.GetExpenseById(id);
+            var expenseVM = await _expenseService.GetExpense(id);
 
-            if (expense == null)
+            if (expenseVM == null)
             {
                 return NotFound();
             }
 
-            return View(_mapper.Map<ExpenseViewModel>(expense));
+            return View(expenseVM);
         }
 
         // POST: Expenses/Delete/5
@@ -226,41 +170,22 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var expense = await _expenseRepository.GetExpenseById(id);
 
-            _expenseRepository.DeleteExpense(expense);
-            await _expenseRepository.SaveAsync();
+            await _expenseService.DeleteExpense(id);
 
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Expenses/Pay/5
-        [HttpPost("Expenses/Pay"), ActionName("Pay")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PaymentConfirmed(int ExpenseId)
-        {
-            var expense = await _expenseRepository.GetExpenseById(ExpenseId);
-
-            var currentUsername = GetCurrentUserName();
-            var currentPerson = _personRepository.GetPersonByUserName(currentUsername);
-            expense.BuyerId = currentPerson.PersonId;
-
-            _expenseRepository.UpdateExpense(expense);
-            await _expenseRepository.SaveAsync();
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        private void RenderSelectList(Expense expense)
+        private void RenderSelectList(ExpenseViewModel expenseVM)
         {   
-            ViewData["PersonId"] = new SelectList(_personRepository.GetAllPersons(),
-                "PersonId", "ConnectedUserName", expense.BuyerId);
+            ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
+                "PersonId", "ConnectedUserName", expenseVM.BuyerId);
         }
 
         private void RenderSelectListDefault()
         {
-            var selectedUsername = _personRepository.GetPersonByUserName(GetCurrentUserName()).PersonId;
-            ViewData["PersonId"] = new SelectList(_personRepository.GetAllPersons(),
+            var selectedUsername = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+            ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
                 "PersonId", "ConnectedUserName", selectedUsername);
         }
 

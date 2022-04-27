@@ -8,6 +8,8 @@ namespace Kaching.Repositories
 
         public Person? GetPersonByUserId(string userId);
 
+        public Person? GetPersonByPersonId(int personId);
+
         public Person? GetPersonByUserName(string userName);
 
         public List<Person> GetAllPersons();

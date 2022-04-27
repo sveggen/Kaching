@@ -1,6 +1,7 @@
 using Kaching.Data;
 using Kaching.Models;
 using Kaching.Repositories;
+using Kaching.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,16 @@ builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
+
+builder.Services
+    .AddFluentEmail(builder.Configuration["Mailgun:Sender"])
+    .AddMailGunSender(
+        builder.Configuration["Mailgun:Domain"],
+        builder.Configuration["Mailgun:API"],
+        FluentEmail.Mailgun.MailGunRegion.USA);
 
 // Add other db services to the container.
 var connectionString = builder.Configuration.GetConnectionString("Kaching");
