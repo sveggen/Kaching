@@ -3,7 +3,7 @@ using Kaching.Models;
 
 namespace Kaching.ViewModels
 {
-    public class ExpenseViewModel
+    public class ExpenseEventsViewModel
     {
         public int ExpenseId { get; set; }
 
@@ -12,22 +12,21 @@ namespace Kaching.ViewModels
 
         public int CreatorId { get; set; }
 
-        public PersonViewModel? Creator { get; set; }
+        public Person? Creator { get; set; }
 
         public Category? Category { get; set; }
 
         public string? Description { get; set; } = string.Empty;
 
-        public int BuyerId { get; set; }
+        public DateTime StartDate { get; set; }
 
-        public PersonViewModel? Buyer { get; set; }
-
-        public PaymentStatus? PaymentStatus { get; set; }
+        public DateTime EndDate { get; set; }
 
         public Frequency Frequency { get; set; }
+        public List<ExpenseEvent> ExpenseEvents { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Created { get; set; }
 
-        public DateTime Updated { get; set; }
     }
 }

@@ -8,23 +8,66 @@ namespace Kaching.Services
     public class ExpenseService : IExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
+        private readonly IExpenseEventRepository _expenseEventRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
 
         public ExpenseService(
             IExpenseRepository expenseRepository,
+            IExpenseEventRepository expenseEventRepository,
             IPersonRepository personRepository,
             IMapper mapper)
         {
             _expenseRepository = expenseRepository;
+            _expenseEventRepository = expenseEventRepository;
             _personRepository = personRepository;
             _mapper = mapper;
         }
-        public async Task CreateExpense(ExpenseViewModel expenseVM)
+        public async Task CreateExpense(ExpenseEventCreateViewModel expenseEventCreateViewModel)
         {
-            var expense = _mapper.Map<Expense>(expenseVM);
+            List<ExpenseEvent> expenseEvents = new List<ExpenseEvent>();
 
+            var endDate = expenseEventCreateViewModel.EndDate;
+            var paymentDate = expenseEventCreateViewModel.StartDate;
+
+            if (expenseEventCreateViewModel.Frequency == Frequency.OneTime)
+            {
+                expenseEventCreateViewModel.EndDate = paymentDate;
+
+                expenseEvents.Add(new ExpenseEvent
+                {
+                    BuyerId = expenseEventCreateViewModel.BuyerId,
+                    PaymentDate = paymentDate,
+                    Comment = expenseEventCreateViewModel.Comment,
+                    PaymentStatus = expenseEventCreateViewModel.PaymentStatus,
+                    ExpenseId = expenseEventCreateViewModel.ExpenseId
+                });
+            }
+            else
+            {
+                while (paymentDate <= endDate)
+                {
+                    paymentDate = NextPaymentDate(paymentDate, expenseEventCreateViewModel.Frequency);
+
+                    if (paymentDate > endDate)
+                    {
+                        break;
+                    }
+
+                    expenseEvents.Add(new ExpenseEvent
+                    {
+                        BuyerId = expenseEventCreateViewModel.BuyerId,
+                        PaymentDate = paymentDate,
+                        Comment = expenseEventCreateViewModel.Comment,
+                        PaymentStatus = expenseEventCreateViewModel.PaymentStatus,
+                        ExpenseId = expenseEventCreateViewModel.ExpenseId
+                    });
+                }
+            }
+
+            var expense = _mapper.Map<Expense>(expenseEventCreateViewModel);
+            expense.ExpenseEvents = expenseEvents;
             _expenseRepository.InsertExpense(expense);
             await _expenseRepository.SaveAsync();
         }
@@ -36,29 +79,27 @@ namespace Kaching.Services
             await _expenseRepository.SaveAsync();
         }
 
-        public async Task<ExpenseViewModel> GetExpense(int expenseId)
+        public async Task<ExpenseEventViewModel> GetExpense(int expenseId)
         {
-            var expense = await _expenseRepository.GetExpenseById(expenseId);
-            return _mapper.Map<ExpenseViewModel>(expense);
-
+            var expense = await _expenseEventRepository.GetExpenseEventsById(expenseId);
+            return _mapper.Map<ExpenseEventViewModel>(expense);
         }
 
         public async Task<ExpenseIndexViewModel> GetExpensesByMonth(int monthNumber)
         {
-            var expensesByMonth = await _expenseRepository.GetExpenses(monthNumber);
+            var expensesByMonth = await _expenseEventRepository.GetExpenseEvents(monthNumber);
             var persons = _personRepository.GetAllPersons();
-            var sum = _expenseRepository.GetExpenseSum(monthNumber);
+            var sum = _expenseEventRepository.GetExpenseEventsSum(monthNumber);
 
             // Total amount / nr. of persons
             var share = sum / persons.Count;
-
             var personViewModelList = _mapper.Map<List<PersonViewModel>>(persons);
 
 
             int index = 0;
             foreach (var person in personViewModelList)
             {
-                var sumPersonExpenses = _expenseRepository.GetSumOfPersonExpenses(person.PersonId, monthNumber);
+                var sumPersonExpenses = _expenseEventRepository.GetSumOfPersonExpenseEvents(person.PersonId, monthNumber);
                 personViewModelList[index].SumOfExpenses = sumPersonExpenses;
                 // For each person: amount paid - share = owes/owed
                 personViewModelList[index].OwesOwed = personViewModelList[index].SumOfExpenses - share;
@@ -70,17 +111,17 @@ namespace Kaching.Services
                 Sum = sum,
                 MonthNumber = monthNumber,
                 Year = 2022,
-                Expenses = _mapper.Map<List<ExpenseViewModel>>(expensesByMonth),
+                Expenses = _mapper.Map<List<ExpenseEventViewModel>>(expensesByMonth),
                 Persons = personViewModelList,
                 CurrentDate = DateOnly.FromDateTime(DateTime.Now).ToString("dddd, dd. MMMM")
             };
             return expenseIndexModel;
         }
 
-        public async Task UpdateExpense(ExpenseViewModel expenseVM)
+        public async Task UpdateExpense(ExpenseEventViewModel expenseEventViewModel)
         {
-            var expense = _mapper.Map<Expense>(expenseVM);
-            _expenseRepository.UpdateExpense(expense);
+            var expense = _mapper.Map<ExpenseEvent>(expenseEventViewModel);
+            _expenseEventRepository.UpdateExpenseEvent(expense);
             await _expenseRepository.SaveAsync();
         }
 
@@ -100,6 +141,23 @@ namespace Kaching.Services
         {
             var person = _personRepository.GetPersonByUserName(userName);
             return _mapper.Map<PersonViewModel>(person);
+        }
+
+        private DateTime NextPaymentDate(DateTime currPaymentDate, Frequency frequency)
+        {
+            var dateTime = currPaymentDate;
+
+            switch (frequency)
+            {
+                case Frequency.Weekly:
+                    return dateTime.AddDays(7);
+                case Frequency.Monthly:
+                    return dateTime.AddMonths(1);
+                case Frequency.Yearly:
+                    return dateTime.AddYears(1);
+            }
+
+            return dateTime;
         }
     }
 }

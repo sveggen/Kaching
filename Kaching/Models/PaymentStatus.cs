@@ -6,6 +6,7 @@ namespace Kaching.Models
     {
         Paid,
         [Display(Name = "Not Paid")]
-        NotPaid
+        NotPaid,
+        Automatic
     }
 }

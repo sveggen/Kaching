@@ -88,22 +88,20 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ExpenseId,Price,Category," +
-            "Description,BuyerId,PaymentStatus,PaymentType")] ExpenseViewModel expenseViewModel)
+        public async Task<IActionResult> Create(ExpenseEventCreateViewModel expenseEventCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                var currentPerson =
-                    _expenseService.GetPersonByUsername(GetCurrentUserName());
-                expenseViewModel.Creator = currentPerson;
+                var currentPerson = 1;
+                expenseEventCreateViewModel.CreatorId = currentPerson;
 
                 // build Expense table
-                await _expenseService.CreateExpense(expenseViewModel);
+                await _expenseService.CreateExpense(expenseEventCreateViewModel);
 
                 return RedirectToAction(nameof(Index));
             }
-            RenderSelectList(expenseViewModel);
-            return View(expenseViewModel);
+            //RenderSelectList(expenseEventCreateViewModel);
+            return View(expenseEventCreateViewModel);
         }
 
         // GET: Expenses/Edit/5
@@ -127,11 +125,10 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ExpenseId,Price,CreatorId,Category," + 
-                            "Description,BuyerId,PaymentStatus,PaymentType,Created")] ExpenseViewModel expenseViewModel)
+        public async Task<IActionResult> Edit(int id, ExpenseEventViewModel expenseEventViewModel)
         {
 
-            if (id != expenseViewModel.ExpenseId)
+            if (id != expenseEventViewModel.ExpenseId)
             {
                 return NotFound();
             }
@@ -139,11 +136,11 @@ namespace Kaching.Controllers
             if (ModelState.IsValid)
             {
 
-                await _expenseService.UpdateExpense(expenseViewModel);
+                await _expenseService.UpdateExpense(expenseEventViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            RenderSelectList(expenseViewModel);
-            return View(expenseViewModel);
+            RenderSelectList(expenseEventViewModel);
+            return View(expenseEventViewModel);
         }
 
         // GET: Expenses/Delete/5
@@ -176,10 +173,10 @@ namespace Kaching.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private void RenderSelectList(ExpenseViewModel expenseVM)
+        private void RenderSelectList(ExpenseEventViewModel expenseEventViewModel)
         {   
             ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
-                "PersonId", "ConnectedUserName", expenseVM.BuyerId);
+                "PersonId", "ConnectedUserName", expenseEventViewModel.BuyerId);
         }
 
         private void RenderSelectListDefault()

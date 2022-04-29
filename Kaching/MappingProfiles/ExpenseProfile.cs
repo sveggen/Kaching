@@ -16,6 +16,13 @@ namespace Kaching.MappingProfiles
             CreateMap<PersonViewModel, ExpenseIndexViewModel>();
 
             CreateMap<ExpenseIndexViewModel, PersonViewModel>();
+
+            CreateMap<ExpenseEventViewModel, ExpenseEvent>();
+            CreateMap<ExpenseEvent, ExpenseEventViewModel>();
+            CreateMap<ExpenseEventViewModel, ExpenseIndexViewModel>();
+
+            CreateMap<ExpenseEventCreateViewModel, Expense>();
+            CreateMap<Expense, ExpenseEventCreateViewModel>();
         }
     }
 }

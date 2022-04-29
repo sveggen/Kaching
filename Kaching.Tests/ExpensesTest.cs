@@ -25,8 +25,6 @@ public class ExpensesTest
         _mockExpenseRepository = new Mock<IExpenseRepository>();
         _mockPersonRepository = new Mock<IPersonRepository>();
         _autoMapper = new Mapper(_expenseMapping);
-        _controller = new ExpensesController(
-            _mockExpenseRepository.Object, _mockPersonRepository.Object, _autoMapper);
 
     }
 
@@ -65,9 +63,7 @@ public class ExpensesTest
         _mockExpenseRepository.Setup
                 (repo => repo.GetExpenses(randomMonthInt))
             .ReturnsAsync(expenseList);
-        _mockExpenseRepository.Setup
-                (repo => repo.GetExpenseSum(randomMonthInt))
-            .Returns(It.IsAny<decimal>());
+
 
         _mockPersonRepository.Setup
                 (repo => repo.GetAllPersons())

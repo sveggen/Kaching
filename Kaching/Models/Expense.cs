@@ -18,20 +18,17 @@ namespace Kaching.Models
 
         public string? Description { get; set; } = string.Empty;
 
-        // public EventOccurence 
+        public DateTime StartDate { get; set; }
 
-        public int BuyerId { get; set; }
+        public DateTime EndDate { get; set; }
 
-        public Person? Buyer { get; set; }
+        public Frequency Frequency { get; set; }
 
-        public PaymentStatus? PaymentStatus { get; set; }
-
-        public PaymentType? PaymentType { get; set; }
+        public List<ExpenseEvent> ExpenseEvents { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Created { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime Updated { get; set; }
+
     }
 }

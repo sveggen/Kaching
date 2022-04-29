@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaching.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220414195449_RemovePayer")]
-    partial class RemovePayer
+    [Migration("20220429081916_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,9 +32,6 @@ namespace Kaching.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpenseId"), 1L, 1);
 
-                    b.Property<int>("BuyerId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Category")
                         .HasColumnType("int");
 
@@ -43,33 +40,65 @@ namespace Kaching.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PaymentStatus")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int?>("PaymentType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonId")
+                    b.Property<int>("Frequency")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("Updated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ExpenseId");
 
-                    b.HasIndex("BuyerId");
-
-                    b.HasIndex("PersonId");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Expense");
+                });
+
+            modelBuilder.Entity("Kaching.Models.ExpenseEvent", b =>
+                {
+                    b.Property<int>("ExpenseEventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpenseEventId"), 1L, 1);
+
+                    b.Property<int>("BuyerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExpenseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Updated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ExpenseEventId");
+
+                    b.HasIndex("BuyerId");
+
+                    b.HasIndex("ExpenseId");
+
+                    b.ToTable("ExpenseEvent");
                 });
 
             modelBuilder.Entity("Kaching.Models.Person", b =>
@@ -95,28 +124,42 @@ namespace Kaching.Migrations
 
             modelBuilder.Entity("Kaching.Models.Expense", b =>
                 {
-                    b.HasOne("Kaching.Models.Person", "Buyer")
-                        .WithMany("ExpensesPaid")
-                        .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("Kaching.Models.Person", "Creator")
+                        .WithMany("ExpensesCreated")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Models.Person", "Person")
-                        .WithMany("ExpensesCreated")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("Kaching.Models.ExpenseEvent", b =>
+                {
+                    b.HasOne("Kaching.Models.Person", "Buyer")
+                        .WithMany()
+                        .HasForeignKey("BuyerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kaching.Models.Expense", "Expense")
+                        .WithMany("ExpenseEvents")
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Buyer");
 
-                    b.Navigation("Person");
+                    b.Navigation("Expense");
+                });
+
+            modelBuilder.Entity("Kaching.Models.Expense", b =>
+                {
+                    b.Navigation("ExpenseEvents");
                 });
 
             modelBuilder.Entity("Kaching.Models.Person", b =>
                 {
                     b.Navigation("ExpensesCreated");
-
-                    b.Navigation("ExpensesPaid");
                 });
 #pragma warning restore 612, 618
         }

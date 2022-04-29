@@ -50,20 +50,20 @@
                             10.10.22
                         </td>
                         <td>
-                            €@Html.DisplayFor(modelItem => item.Price)
+                            €@Html.DisplayFor(modelItem => item.Expense.Price)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Buyer.ConnectedUserName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Category)
+                            @Html.DisplayFor(modelItem => item.Expense.Price)
                         </td>
                         <td>
                             <p>
-                                @if (!String.IsNullOrEmpty(item.Description))
+                                @if (!String.IsNullOrEmpty(item.Expense.Description))
                                 {
 
-                                    <button type="button" class="btn btn-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="@Html.DisplayFor(modelItem => item.Description)">
+                                    <button type="button" class="btn btn-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
                                         <i class="bi-chat-left-text"></i>
                                     </button>
                                 }
@@ -86,10 +86,10 @@
                             }
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.ExpenseId">Edit</a> |
+                            <a asp-action="Edit" asp-route-id="@item.ExpenseEventId">Edit</a> |
                             <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
-                            <a asp-action="Details" asp-route-id="@item.ExpenseId">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.ExpenseId">Delete</a>
+                            <a asp-action="Details" asp-route-id="@item.ExpenseEventId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ExpenseEventId">Delete</a>
 
                         </td>
                     </tr>

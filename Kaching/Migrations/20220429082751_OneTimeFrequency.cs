@@ -4,7 +4,7 @@
 
 namespace Kaching.Migrations
 {
-    public partial class RemovePayer2 : Migration
+    public partial class OneTimeFrequency : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

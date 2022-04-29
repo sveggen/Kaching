@@ -1,4 +1,4 @@
-﻿@model Kaching.ViewModels.ExpenseViewModel
+﻿@model Kaching.ViewModels.ExpenseEventViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -13,6 +13,6 @@
   <partial name="/Views/Expenses/_ExpenseInfo.cshtml" />
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ExpenseId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.ExpenseEventId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -14,12 +14,7 @@ namespace Kaching.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Expense>()
-                 .Property(s => s.Created)
-                 .HasDefaultValueSql("GETDATE()");
-
-            modelBuilder.Entity<Expense>()
-                .Property(s => s.Updated)
-                .ValueGeneratedOnAddOrUpdate()
+                .Property(s => s.Created)
                 .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<Expense>()
@@ -28,17 +23,23 @@ namespace Kaching.Data
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Expense>()
-                .HasOne(f => f.Buyer)
-                .WithMany(f => f.ExpensesPaid)
-                .HasForeignKey(g => g.BuyerId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            modelBuilder.Entity<ExpenseEvent>()
+                .Property(s => s.Updated)
+                .HasDefaultValueSql("GETDATE()");
         }
+
+
+        //    modelBuilder.Entity<Expense>()
+        //        .HasOne(f => f.Buyer)
+        //        .WithMany(f => f.ExpensesPaid)
+        //        .HasForeignKey(g => g.BuyerId)
+        //        .OnDelete(DeleteBehavior.Restrict);
+        //}
 
         public DbSet<Expense> Expense { get; set; }
 
-        public DbSet<Person> Person { get; set; }
+        public DbSet<ExpenseEvent> ExpenseEvent { get; set; }
 
+        public DbSet<Person> Person { get; set; }
     }
 }

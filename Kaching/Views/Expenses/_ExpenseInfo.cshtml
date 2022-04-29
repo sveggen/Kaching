@@ -1,46 +1,64 @@
 ﻿
 @using Microsoft.VisualBasic
-@model Kaching.ViewModels.ExpenseViewModel
+@model Kaching.ViewModels.ExpenseEventViewModel
 
 @*
   
 *@
 
-  <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            €@Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            Paid by
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Buyer.ConnectedUserName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-         <dd class = "col-sm-10">
-             @Strings.FormatDateTime(Model.Created, DateFormat.ShortTime), @Strings.FormatDateTime(Model.Created, DateFormat.LongDate) 
-        </dd>
-          <dt class = "col-sm-2">
-            Type of Payment
-        </dt>
-         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PaymentType)
-        </dd>
-    </dl>
+
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">
+
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Expense.Price)
+                </dt>
+                <dd class="col-sm-10">
+                    €@Html.DisplayFor(model => model.Expense.Price)
+                </dd>
+                <dt class="col-sm-2">
+                    Responsible
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Buyer.ConnectedUserName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Expense.Category)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Expense.Category)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Expense.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Expense.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Expense.Frequency)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Expense.Frequency)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.PaymentStatus)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.PaymentStatus)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.PaymentDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Strings.FormatDateTime(Model.Expense.Created, DateFormat.ShortTime), @Strings.FormatDateTime(Model.PaymentDate, DateFormat.LongDate)
+                </dd>
+            </dl>
+        </p>
+    </div>
+    <div class="card-footer text-muted">
+        Created by: <strong>@Html.DisplayFor(model => model.Expense.Creator.ConnectedUserName)</strong> on @Strings.FormatDateTime(Model.Expense.Created, DateFormat.LongDate)
+    </div>
+</div>
+

@@ -1,10 +1,10 @@
 ﻿namespace Kaching.Models
 {
-    public class Frequency
+    public enum Frequency
     {
-
-        public DateOnly Date { get; set; }
-
-        public int Interval { get; set; }
+        OneTime,
+        Weekly,
+        Monthly,
+        Yearly
     }
 }
