@@ -30,4 +30,7 @@ function disableButton(btn) {
     document.getElementById("paymentReminder").disabled = true;
 }
 
-    
+$('.ui.sidebar').sidebar({
+    context: $('.ui.pushable.segment'),
+    transition: 'overlay'
+}).sidebar('attach events', '#mobile_item');

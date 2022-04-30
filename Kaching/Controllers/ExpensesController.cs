@@ -3,12 +3,13 @@ using System.Globalization;
 using AutoMapper;
 using Kaching.Services;
 using Kaching.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.Controllers
 {
-
+    [Authorize]
     public class ExpensesController : Controller
     {
         private readonly IExpenseService _expenseService;

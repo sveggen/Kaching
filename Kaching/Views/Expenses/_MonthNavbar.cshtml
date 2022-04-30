@@ -7,8 +7,9 @@
 
 
 
+    <div class="active item">Tab</div>
 
-<ul class="nav nav-tabs">
+<div class="ui top attached tabular menu">
     @for (int i = 0; i <= 12; i++) 
     {
         var monthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[i];
@@ -16,14 +17,16 @@
 
         @if (currentMonthNumber == monthNumber)
         {
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/"><strong>@monthName</strong></a>
-            </li>
+            <div class="active item" aria-current="page" href="/">
+                <strong>@monthName</strong>
+            </div>
+
         } else {
-            <li class="nav-item">
-                <a class="nav-link" href="/Expenses/@monthName">@monthName</a>
-            </li>
+
+            <div class="item" href="/Expenses/@monthName">
+                @monthName
+            </div>
         }
     }
 
-</ul>
+</div>

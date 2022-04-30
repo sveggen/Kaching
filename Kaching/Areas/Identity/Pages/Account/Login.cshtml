@@ -6,54 +6,73 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating">
-                    <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
-                    <label asp-for="Input.UserName" class="form-label"></label>
-                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+
+
+<div class="ui segment">
+    <div class="ui two column stackable center aligned grid">
+        <div class="ui vertical divider">Or</div>
+        <div class="middle aligned row">
+            <div class="column">
+                
+                <form id="account" method="post">
+                    <div asp-validation-summary="ModelOnly" class="ui red text"></div>
+
+                <div class="ui left icon input">
+                    <input asp-for="Input.UserName" autocomplete="username" aria-required="true" placeholder="Username"/>
+                    <span asp-validation-for="Input.UserName" class="ui red text"></span>
+                    <i class="user icon"></i>
                 </div>
-                <div class="form-floating">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
-                    <label asp-for="Input.Password" class="form-label"></label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                <div class="ui inverted divider"></div>
+
+                <div class="ui left icon input">
+                    <input asp-for="Input.Password" autocomplete="current-password" aria-required="true" placeholder="Password"/>
+                    <span asp-validation-for="Input.Password" class="ui red text"></span>
+                    <i class="lock icon"></i>
                 </div>
-                <div>
-                    <div class="checkbox">
-                        <label asp-for="Input.RememberMe" class="form-label">
-                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                <div class="ui inverted divider"></div>
+
+                <div class="ui list">
+                    <div class="item">
+                        <div class="ui checkbox">
+                            <input type="checkbox">
+                            <label asp-for="Input.RememberMe">
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
+                            </label>
+                        </div>
+                    </div>
+                <div class="item">
+                    <div>
+                        <button type="submit" class="ui button login-submit">Log in</button>
+                    </div>
+
+                </div>
+                    <div class="item">
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                    </div>
+                    <div class="item">
+                        <p>
+                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        </p>
                     </div>
                 </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
 
-        
-
+                </form>
+            </div>
+            <div class="column">
+                <div class="ui icon header">
+                    <i class="user icon"></i>
+                    Create a new user
+                </div><br/>
+                <a class="ui primary button" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">
+                    Register
+                </a>
+            </div>
+        </div>
     </div>
-    </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

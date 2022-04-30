@@ -2,6 +2,10 @@ html {
   font-size: 14px;
 }
 
+body {
+    background-image: url('https://res.cloudinary.com/dxs9fgwzu/image/upload/v1651256136/ivan-bandura-5cwigXmGWTo-unsplash_rzztmv.jpg');
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
