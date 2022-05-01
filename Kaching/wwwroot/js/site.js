@@ -10,3 +10,33 @@ $('#monthdropdown')
 $('.togglecomment')
         .popup()
     ;
+
+// init modal
+$('#settlementmodal').click(function () {
+    $('.ui.modal').modal('show');
+});
+
+
+
+$('.paymentremindertooltip')
+        .popup()
+    ;
+
+$('#categorydropdown')
+        .dropdown()
+    ;
+
+
+$('#paymentstatusdropdown')
+        .dropdown()
+    ;
+
+$('#buyerdropdown')
+        .dropdown()
+    ;
+
+$('#date_calendar')
+        .calendar({
+            type: 'date'
+        })
+    ;

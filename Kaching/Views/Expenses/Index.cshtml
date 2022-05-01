@@ -1,4 +1,5 @@
-﻿@model Kaching.ViewModels.ExpenseIndexViewModel;
+﻿@using Microsoft.VisualBasic
+@model Kaching.ViewModels.ExpenseIndexViewModel;
 
 @{
     ViewData["Title"] = "Index";
@@ -35,7 +36,7 @@
                     @Html.DisplayFor(modelItem => item.Expense.Category)
                 </td>
                 <td>
-                    €@Html.DisplayFor(modelItem => item.Expense.Price)
+                    € @Html.DisplayFor(modelItem => item.Expense.Price)
                 </td>
                 <td>
                      
@@ -61,28 +62,22 @@
                     <p>
                         @if (!String.IsNullOrEmpty(item.Expense.Description))
                         {
-
-                        <div class="ui icon button togglecomment" data-title="@Html.DisplayFor(modelItem => item.Expense.Creator.ConnectedUserName) on @Html.DisplayFor(modelItem => item.Expense.Created)" data-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
-                            <i class="comment icon"></i>
-                        </div>
+                            <div class="ui icon button togglecomment" data-title="@Html.DisplayFor(modelItem => item.Expense.Creator.ConnectedUserName) on @Strings.FormatDateTime(item.Expense.Created, DateFormat.LongDate)" data-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
+                                <i class="comment icon"></i>
+                            </div>
                         }
                         else
                         {
-                            <button class="ui button" type="button" disabled>
+                            <div class="ui icon button" disabled>
                                 <i class="comment slash icon"></i>
-                            </button>
+                            </div>
                         }
                     </p>
                 </td>
                 <td>
-                @Html.DisplayFor(modelItem => item.PaymentDate)
+                @Strings.FormatDateTime(item.PaymentDate, DateFormat.LongDate)
                 <td>
-                    <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
-                    <a asp-action="Details" asp-route-id="@item.ExpenseEventId">Details</a> |
-                    <a class="ui icon button" asp-action="Edit" asp-route-id="@item.ExpenseEventId">
-                        <i class="edit icon"></i>
-                    </a>
-
+                    <a asp-action="Details" asp-route-id="@item.ExpenseEventId">Details</a>
                 </td>
             </tr>
         }
@@ -95,29 +90,9 @@
                 <a class="ui right floated small primary labeled icon button" asp-action="Create">
                     <i class="money bill alternate outline icon"></i> Add expense
                 </a>
-            </th>
-        </tr>
-        
-        <tr class="table-info">
-            <td>
-                <strong>SUM:</strong>
-            </td>
-            <td>
                 <strong>€@Model.Sum</strong>
-            </td>
-            <td>
-
                 <partial name="/Views/Expenses/_Settlement.cshtml" />
-
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
+            </th>
         </tr>
         </tfoot>
     </table>

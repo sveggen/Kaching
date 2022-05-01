@@ -1,65 +1,66 @@
 ﻿
 @model Kaching.ViewModels.ExpenseIndexViewModel
+<!-- UI Button trigger modal -->
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<!-- UI Modal -->
+<div class="ui right floated button" id="settlementmodal">
     Settlement
-</button>
-                        
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Expenditures as per: @Model.CurrentDate</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                                    
-                                    
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Paid</th>
-                        <th scope="col">Owes</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                    
-                    
-                    @foreach (var item in Model.Persons)
-                        {
-                            <tr>
-                            <td>@item.ConnectedUserName</td>
+</div>
 
-                            <td>€@item.SumOfExpenses</td>
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Expenditures as per: @Model.CurrentDate
+    </div>
+    <div class="content">
+        <div class="description">
+   
+            <table class="ui very basic collapsing celled table center aligned">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Paid</th>
+                <th scope="col">Owes</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+
+            
+            @foreach (var item in Model.Persons)
+            {
+                <tr>
+                    <td>@item.ConnectedUserName</td>
+
+                    <td>€@item.SumOfExpenses</td>
                             
-                                @if (@item.OwesOwed >= 0)
-                                {
-                                    <td><p class="text-success">€0</p></td>
-                                    <td></td>
-                                }
-                                else
-                                {
-                                    <td><p class="text-danger">€@Decimal.Negate(@item.OwesOwed)</p></td>
-                                    <td> <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" 
-                                                 data-bs-html="true" title="Send <em>early</em> payment reminder" id="paymentReminder" onclick="disableButton()">
-                                        <i class="bi bi-envelope"></i>
-                                    </button></td>
-                                }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Settle Month</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+                    @if (@item.OwesOwed >= 0)
+                    {
+                        <td><p style="color: green"> € 0</p></td>
+                        <td></td>
+                    }
+                    else
+                    {
+                        <td><p style="color: red">€ @Decimal.Negate(@item.OwesOwed)</p></td>
+                        <td> <div class="ui button icon paymentremindertooltip" data-content="Send <em>early</em> payment reminder"
+                                     onclick="disableButton()">
+                            <i class="envelope icon"></i>
+                        </div></td>
+                    }
+                </tr>
+            }
+            </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Close
+        </div>
+        <div class="ui positive right labeled icon button">
+            Settle month
+            <i class="checkmark icon"></i>
         </div>
     </div>
 </div>

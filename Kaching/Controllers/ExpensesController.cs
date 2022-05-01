@@ -105,6 +105,26 @@ namespace Kaching.Controllers
             return View(expenseEventCreateViewModel);
         }
 
+        // POST: Expenses/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost("Expenses/CreateRecurring")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRecurring(ExpenseEventCreateViewModel expenseEventCreateViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentPerson = 1;
+                expenseEventCreateViewModel.CreatorId = currentPerson;
+
+                await _expenseService.CreateExpense(expenseEventCreateViewModel);
+
+                return RedirectToAction(nameof(Index));
+            }
+            //RenderSelectList(expenseEventCreateViewModel);
+            return View(expenseEventCreateViewModel);
+        }
+
         // GET: Expenses/Edit/5
         [Route("Expenses/Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
