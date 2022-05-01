@@ -7,10 +7,6 @@
 
 <h1>Expenses</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
 
 <div class="ui container">
     
@@ -31,65 +27,65 @@
         </thead>
         <tbody>
     
-         @foreach (var item in Model.Expenses)
-         {
-             <tr>
+        @foreach (var item in Model.Expenses)
+        {
+            <tr>
                  
-                 <td>
-                     @Html.DisplayFor(modelItem => item.Expense.Category)
-                 </td>
-                 <td>
-                     €@Html.DisplayFor(modelItem => item.Expense.Price)
-                 </td>
-                 <td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Expense.Category)
+                </td>
+                <td>
+                    €@Html.DisplayFor(modelItem => item.Expense.Price)
+                </td>
+                <td>
                      
-                     <h4 class="ui image header">
-                         <img src="https://m.media-amazon.com/images/I/71iFekvN5hS._AC_SL1500_.jpg" class="ui mini rounded image">
-                         <div class="content">
-                             @Html.DisplayFor(modelItem => item.Buyer.ConnectedUserName)
-                         </div>
-                     </h4>
+                    <h4 class="ui image header">
+                        <img src="https://m.media-amazon.com/images/I/71iFekvN5hS._AC_SL1500_.jpg" class="ui mini rounded image">
+                        <div class="content">
+                            @Html.DisplayFor(modelItem => item.Buyer.ConnectedUserName)
+                        </div>
+                    </h4>
 
-                 </td>
-                 <td>
-                     @if (item.PaymentStatus == 0)
-                     {
-                         <i class="check icon" style="color: green"></i>
-                     }
-                     else
-                     {
-                         <i class="close icon" style="color: red"></i>
-                     }
-                 </td>
-                 <td>
-                     <p>
-                         @if (!String.IsNullOrEmpty(item.Expense.Description))
-                         {
+                </td>
+                <td>
+                    @if (item.PaymentStatus == 0)
+                    {
+                        <i class="check icon" style="color: green"></i>
+                    }
+                    else
+                    {
+                        <i class="close icon" style="color: red"></i>
+                    }
+                </td>
+                <td>
+                    <p>
+                        @if (!String.IsNullOrEmpty(item.Expense.Description))
+                        {
 
-                             <button type="button" class="ui button" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
-                                 <i class="comment alternate icon"></i>
-                             </button>
-                         }
-                         else
-                         {
-                             <button class="ui button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@(item.ExpenseId)" aria-expanded="false" aria-controls="collapse@(item.ExpenseId)" disabled>
-                                 <i class="comment icon"></i>
-                             </button>
-                         }
-                     </p>
-                 </td>
-                 <td>
-                     @Html.DisplayFor(modelItem => item.PaymentDate)
-                 <td>
-                     <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
-                     <a asp-action="Details" asp-route-id="@item.ExpenseEventId">Details</a> |
-                     <a class="ui icon button" asp-action="Edit" asp-route-id="@item.ExpenseEventId">
-                         <i class="edit icon"></i>
-                     </a>
+                        <div class="ui icon button togglecomment" data-title="@Html.DisplayFor(modelItem => item.Expense.Creator.ConnectedUserName) on @Html.DisplayFor(modelItem => item.Expense.Created)" data-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
+                            <i class="comment icon"></i>
+                        </div>
+                        }
+                        else
+                        {
+                            <button class="ui button" type="button" disabled>
+                                <i class="comment slash icon"></i>
+                            </button>
+                        }
+                    </p>
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => item.PaymentDate)
+                <td>
+                    <a href="https://localhost:7114/Expenses/Edit/6" data-toggle="modal" data-bs-target="https://localhost:7114/Expenses/Edit/6"></a>
+                    <a asp-action="Details" asp-route-id="@item.ExpenseEventId">Details</a> |
+                    <a class="ui icon button" asp-action="Edit" asp-route-id="@item.ExpenseEventId">
+                        <i class="edit icon"></i>
+                    </a>
 
-                 </td>
-             </tr>
-         }
+                </td>
+            </tr>
+        }
 
         </tbody>
         <tfoot class="full-width">

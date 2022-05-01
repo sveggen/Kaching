@@ -6,3 +6,7 @@
 $('#monthdropdown')
         .dropdown()
     ;
+
+$('.togglecomment')
+        .popup()
+    ;
