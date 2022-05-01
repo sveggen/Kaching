@@ -10,5 +10,9 @@
 
         public ICollection<Expense>? ExpensesCreated { get; set; }
 
+        public ICollection<Payment>? PaymentsReceived { get; set; }
+
+        public ICollection<Payment>? PaymentsSent { get; set; }
+
     }
 }

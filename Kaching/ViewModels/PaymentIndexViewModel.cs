@@ -1,6 +1,6 @@
 ﻿namespace Kaching.ViewModels
 {
-    public class PaymentListViewModel
+    public class PaymentIndexViewModel
     {
     }
 }

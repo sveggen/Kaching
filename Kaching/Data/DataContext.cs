@@ -26,6 +26,18 @@ namespace Kaching.Data
             modelBuilder.Entity<ExpenseEvent>()
                 .Property(s => s.Updated)
                 .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Payment>()
+                .HasOne(f => f.Sender)
+                .WithMany(f => f.PaymentsSent)
+                .HasForeignKey(g => g.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Payment>()
+                .HasOne(f => f.Receiver)
+                .WithMany(f => f.PaymentsReceived)
+                .HasForeignKey(g => g.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
 
@@ -36,10 +48,14 @@ namespace Kaching.Data
         //        .OnDelete(DeleteBehavior.Restrict);
         //}
 
+
+
         public DbSet<Expense> Expense { get; set; }
 
         public DbSet<ExpenseEvent> ExpenseEvent { get; set; }
 
         public DbSet<Person> Person { get; set; }
+
+        public DbSet<Payment> Payment { get; set; }
     }
 }

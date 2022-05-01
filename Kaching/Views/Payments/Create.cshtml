@@ -1,0 +1,67 @@
+﻿@model Kaching.ViewModels.PaymentCreateViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Add payment</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" class="ui form">
+            <div asp-validation-summary="ModelOnly" style="color: red"></div>
+
+            <div class="ui segment">
+                <div class="ui four wide column aligned center aligned grid">
+                    <div class="column">
+                        <div class="field">
+                            <div class="ui right labeled input">
+                                <label for="amount" class="ui label">€</label>
+                                <input asp-for="Amount" placeholder="Amount">
+                                <div class="ui basic label">.00</div>
+                            </div>
+                            <span asp-validation-for="Amount" style="color: red"></span>
+                        </div>
+                        <div class="field">
+                            <select asp-for="ReceiverId" id="receiverdropdown" class="ui selection dropdown" asp-items="ViewBag.PersonId"></select>
+                            <a class="ui tag label">
+                                Receiver
+                            </a>
+                        </div>
+                        <div class="field">
+                            <div class="ui calendar" id="month_year_calendar">
+                                <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input asp-for="PaymentPeriod" type="text" placeholder="Payment month">
+                                    <span asp-validation-for="PaymentPeriod" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui label">
+                                Optional: Description
+                            </div>
+                            <textarea asp-for="Description" rows="3" placeholder="Comments..."> </textarea>
+                            <span asp-validation-for="Description" style="color: red"></span>
+                        </div>
+                        <div class="field">
+                            <input type="submit" value="Create" class="ui button"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div>
+    <a asp-action="Index">All payments</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

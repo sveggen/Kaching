@@ -1,7 +1,10 @@
-﻿using Kaching.MailViewModels;
+﻿using System.Globalization;
+using Kaching.MailViewModels;
 using Kaching.Repositories;
 using Kaching.Services;
+using Kaching.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.Controllers
 {
@@ -9,40 +12,93 @@ namespace Kaching.Controllers
     {
 
         private readonly IEmailService _emailService;
-        private readonly IExpenseRepository _expenseRepository;
-        private readonly IPersonRepository _personRepository;
+        private readonly IPaymentService _paymentService;
+        private readonly IExpenseService _expenseService;
+        private readonly int _currentMonthNumber;
 
         public PaymentsController(IEmailService emailService,
-            IExpenseRepository expenseRepository,
-            IPersonRepository personRepository)
+            IPaymentService paymentService,
+            IExpenseService expenseService)
         {
             _emailService = emailService;
-            _expenseRepository = expenseRepository;
-            _personRepository = personRepository;
+            _paymentService = paymentService;
+            _expenseService = expenseService;
         }
 
-        // POST: Payment/PaymentReminder/
-        [HttpPost("Payment/PaymentReminder/"), ActionName("PaymentReminder")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PaymentReminder(int personId)
+
+        // GET: Payments/
+        // GET: Payments/March
+        [Route("Payments/")]
+        [Route("Payments/{month?}")]
+        public async Task<IActionResult> Index(string? month)
         {
+            string monthName;
+            int monthNumber;
 
-
-            var person = _personRepository.GetPersonByPersonId(personId);
-
-            var paymentVM = new PaymentReminderViewModel
+            if (month != null)
             {
-                Username = person.ConnectedUserName,
-                OwedAmount = 10,
-                MonthName = "July",
-                PersonToPay = "nottest",
-                Deadline = DateTime.Now
-            };
+                try
+                {
+                    monthName = month;
+                    monthNumber = DateTime.ParseExact(monthName, "MMMM", CultureInfo.CurrentCulture).Month;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                monthNumber = _currentMonthNumber;
+            }
 
-            _emailService.SendPaymentReminder(paymentVM);
+            var viewModel = await _paymentService.GetPaymentsByMonth(monthNumber);
 
-
-            return RedirectToAction();
+            return View(viewModel);
         }
+
+        // GET: Payments/Create
+        [Route("Payments/Create")]
+        public IActionResult Create()
+        {
+            RenderSelectListDefault();
+            return View();
+        }
+
+        // POST: Payments/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost("Payments/Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(PaymentCreateViewModel paymentCreateViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentPerson = _expenseService.GetPersonByUsername(GetCurrentUserName());
+                paymentCreateViewModel.SenderId = currentPerson.PersonId;
+
+                // build Expense table
+                await _paymentService.CreatePayment(paymentCreateViewModel);
+
+                return RedirectToAction(nameof(Index));
+            }
+            //RenderSelectList(expenseEventCreateViewModel);
+            return View(paymentCreateViewModel);
+        }
+
+        private void RenderSelectListDefault()
+        {
+            var selectedUsername = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+            ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
+                "PersonId", "ConnectedUserName", selectedUsername);
+        }
+
+        private string GetCurrentUserName()
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            return currentUser.Identity.Name;
+        }
+
+
     }
 }

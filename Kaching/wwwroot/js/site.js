@@ -40,3 +40,13 @@ $('#date_calendar')
             type: 'date'
         })
     ;
+
+$('#receiverdropdown')
+        .dropdown()
+    ;
+
+$('#month_year_calendar')
+        .calendar({
+            type: 'month'
+        })
+    ;
