@@ -4,8 +4,7 @@
 
     @if (SignInManager.IsSignedIn(User))
     {
-
-        <div class="right menu">
+        <div class="ui labeled icon right menu">
             <a class="item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                 <i class="user circle icon"></i>
                 @User.Identity?.Name
