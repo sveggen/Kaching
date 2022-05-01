@@ -8,6 +8,10 @@
 
         public decimal Amount { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public string Description { get; set; }
+
+        public DateTime PaymentPeriod { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }
