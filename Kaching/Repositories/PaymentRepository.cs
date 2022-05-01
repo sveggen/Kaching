@@ -1,5 +1,6 @@
 ﻿using Kaching.Data;
 using Kaching.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Repositories
 {
@@ -69,6 +70,23 @@ namespace Kaching.Repositories
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public decimal GetSumOfPersonSentPayments(int monthNumber, int personId)
+        {
+            return _context.Payment
+                .Include(e => e.Sender)
+                .Where(p => p.Sender.PersonId == personId)
+                .Where(p => p.PaymentPeriod.Month == monthNumber)
+                .Sum(i => i.Amount);
+        }
+        public decimal GetSumOfPersonReceivedPayments(int monthNumber, int personId)
+        {
+            return _context.Payment
+                .Include(e => e.Receiver)
+                .Where(p => p.Receiver.PersonId == personId)
+                .Where(p => p.PaymentPeriod.Month == monthNumber)
+                .Sum(i => i.Amount);
         }
     }
 }

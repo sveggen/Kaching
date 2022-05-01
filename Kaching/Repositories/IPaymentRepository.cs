@@ -9,6 +9,10 @@ namespace Kaching.Repositories
 
         public Task<List<Payment>> GetPersonPayments(int personId, int monthNumber);
 
+        public decimal GetSumOfPersonSentPayments(int monthNumber, int personId);
+
+        public decimal GetSumOfPersonReceivedPayments(int monthNumber, int personId);
+
         public Task<Payment> GetPaymentById(int paymentId);
 
         public bool GetPaymentExistence(int paymentId);

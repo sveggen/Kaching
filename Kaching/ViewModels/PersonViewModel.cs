@@ -14,5 +14,9 @@ namespace Kaching.ViewModels
 
         public decimal OwesOwed { get; set; }
 
+        public decimal PaymentsReceived { get; set; }
+
+        public decimal PaymentsSent { get; set; }
+
     }
 }

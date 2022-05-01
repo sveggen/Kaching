@@ -10,7 +10,7 @@
 <div class="ui modal">
     <i class="close icon"></i>
     <div class="header">
-        Expenditures as per: @Model.CurrentDate
+        Expenditures
     </div>
     <div class="content">
         <div class="description">
@@ -20,6 +20,7 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Paid</th>
+                <th scope="col">Transferred</th>
                 <th scope="col">Owes</th>
                 <th scope="col"></th>
             </tr>
@@ -33,7 +34,9 @@
                 <tr>
                     <td>@item.ConnectedUserName</td>
 
-                    <td>€@item.SumOfExpenses</td>
+                    <td>€ @item.SumOfExpenses</td>
+                    
+                    <td>€ @item.PaymentsSent</td>
                             
                     @if (@item.OwesOwed >= 0)
                     {

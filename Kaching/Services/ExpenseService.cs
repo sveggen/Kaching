@@ -9,6 +9,7 @@ namespace Kaching.Services
     {
         private readonly IExpenseRepository _expenseRepository;
         private readonly IExpenseEventRepository _expenseEventRepository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
@@ -16,11 +17,13 @@ namespace Kaching.Services
         public ExpenseService(
             IExpenseRepository expenseRepository,
             IExpenseEventRepository expenseEventRepository,
+            IPaymentRepository paymentRepository,
             IPersonRepository personRepository,
             IMapper mapper)
         {
             _expenseRepository = expenseRepository;
             _expenseEventRepository = expenseEventRepository;
+            _paymentRepository = paymentRepository;
             _personRepository = personRepository;
             _mapper = mapper;
         }
@@ -101,8 +104,10 @@ namespace Kaching.Services
             {
                 var sumPersonExpenses = _expenseEventRepository.GetSumOfPersonExpenseEvents(person.PersonId, monthNumber);
                 personViewModelList[index].SumOfExpenses = sumPersonExpenses;
+                personViewModelList[index].PaymentsSent = _paymentRepository.GetSumOfPersonSentPayments(monthNumber, person.PersonId);
+                personViewModelList[index].PaymentsReceived = _paymentRepository.GetSumOfPersonReceivedPayments(monthNumber, person.PersonId);
                 // For each person: amount paid - share = owes/owed
-                personViewModelList[index].OwesOwed = personViewModelList[index].SumOfExpenses - share;
+                personViewModelList[index].OwesOwed = personViewModelList[index].SumOfExpenses - share + personViewModelList[index].PaymentsSent - personViewModelList[index].PaymentsReceived;
                 index++;
             }
 
