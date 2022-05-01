@@ -6,59 +6,53 @@
   
 *@
 
-
-<div class="card">
-    <div class="card-body">
-        <p class="card-text">
-
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Expense.Price)
-                </dt>
-                <dd class="col-sm-10">
-                    €@Html.DisplayFor(model => model.Expense.Price)
-                </dd>
-                <dt class="col-sm-2">
-                    Responsible
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Buyer.ConnectedUserName)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Expense.Category)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Expense.Category)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Expense.Description)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Expense.Description)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Expense.Frequency)
-                </dt>
-                <dd class="col-sm-10">
+<div class="ui card">
+    <a class="ui right corner label" asp-action="Edit" asp-route-id="@Model?.ExpenseEventId">
+        <i class="cog icon"></i>
+    </a>
+    <div class="content">
+        <div class="header">€ @Html.DisplayFor(model => model.Expense.Price) assigned to @Html.DisplayFor(model => model.Buyer.ConnectedUserName)</div>
+        <div class="meta">
+            
+            @if (Model.PaymentStatus == PaymentStatus.Automatic)
+            {
+                <span class="right floated time" style="color: yellowgreen">Automatic</span>
+            } 
+            else if (Model.PaymentStatus == PaymentStatus.NotPaid)
+              {
+                  <span class="right floated time" style="color: red">Not paid</span>
+              } 
+            else if (Model.PaymentStatus == PaymentStatus.Paid)
+              {
+                  <span class="right floated time" style="color: green">Paid</span>
+              }
+            <span class="category">@Html.DisplayFor(model => model.Expense.Category)</span>
+        </div>
+        <div class="ui divider"></div>
+        <div class="ui list">
+            <div class="item">
+                <i class="calendar alternate icon"></i>
+                <div class="content">
+                    @Strings.FormatDateTime(Model.PaymentDate, DateFormat.LongDate)
+                </div>
+            </div>
+            <div class="item">
+                <i class="hourglass icon"></i>
+                <div class="content">
                     @Html.DisplayFor(model => model.Expense.Frequency)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.PaymentStatus)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.PaymentStatus)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.PaymentDate)
-                </dt>
-                <dd class="col-sm-10">
-                    @Strings.FormatDateTime(Model.Expense.Created, DateFormat.ShortTime), @Strings.FormatDateTime(Model.PaymentDate, DateFormat.LongDate)
-                </dd>
-            </dl>
-        </p>
+                </div>
+            </div>
+
+        </div>
+        
+
+        <div class="description">
+            @Html.DisplayFor(model => model.Expense.Description)
+        </div>
     </div>
-    <div class="card-footer text-muted">
-        Created by: <strong>@Html.DisplayFor(model => model.Expense.Creator.ConnectedUserName)</strong> on @Strings.FormatDateTime(Model.Expense.Created, DateFormat.LongDate)
+    <div class="extra content">
+        <div class="right floated author">
+            Created by <img class="ui avatar image" src="https://m.media-amazon.com/images/I/71iFekvN5hS._AC_SL1500_.jpg">  @Html.DisplayFor(model => model.Expense.Creator.ConnectedUserName)
+        </div>
     </div>
 </div>
-

@@ -5,73 +5,76 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Expense</h4>
+<h1>Add expense</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio1">Now</label>
+        <form asp-action="Create" class="ui form">
+            <div asp-validation-summary="ModelOnly" style="color: red"></div>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio2">Later</label>
-
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="btnradio3">Recurring</label>
+            <div class="ui two item menu">
+                <a class="item active">
+                    One-Time expense
+                </a>
+                <a class="item">
+                    Recurring expense
+                </a>
             </div>
             
+            
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <div class="input-group">
-                    <span class="input-group-text">€</span>
-                    <input asp-for="Price" class="form-control" placeholder="Price...">
+            <div class="ui segment">
+                <div class="ui four wide column aligned center aligned grid">
+                    <div class="column">
+                        <div class="field">
+                            <div class="ui right labeled input">
+                                <label for="amount" class="ui label">€</label>
+                                <input asp-for="Price" placeholder="Price">
+                                <div class="ui basic label">.00</div>
+                            </div>
+                            <span asp-validation-for="Price" style="color: red"></span>
+                        </div>
+
+                        <div class="field">
+                            <select asp-for="Category" id="categorydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Category>()"></select>
+                        </div>
+                        <div class="field">
+                            <select asp-for="PaymentStatus" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentStatus>()">
+                            </select>
+                        </div>
+                        <div class="field">
+                            <select asp-for="BuyerId" id="buyerdropdown" class="ui selection dropdown" asp-items="ViewBag.PersonId"></select>
+                            <a class="ui tag label">
+                                Responsible
+                            </a>
+                        </div>
+                        <div class="field">
+                            <div class="ui calendar" id="date_calendar">
+                                <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input asp-for="StartDate" type="text" placeholder="Payment Date">
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui label">
+                                Optional: Description
+                            </div>
+                            <textarea asp-for="Description" rows="3" placeholder="Comments..."> </textarea>
+                            <span asp-validation-for="Description" style="color: red"></span>
+                        </div>
+                        <div class="field">
+                            <input type="submit" value="Create" class="ui button"/>
+                        </div>
+                    </div>
                 </div>
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" class="form-control" asp-items="Html.GetEnumSelectList<Category>()"></select>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Payment Status</label>
-                <select asp-for="PaymentStatus" class="form-control" asp-items="Html.GetEnumSelectList<PaymentStatus>()">
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="control-label required">Paid by</label>
-                <select asp-for="BuyerId" class="form-control" asp-items="ViewBag.PersonId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label> <i> - Not Required</i>
-                <textarea asp-for="Description" class="form-control"> </textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Frequency</label>
-                <select asp-for="Frequency" class="form-control" asp-items="Html.GetEnumSelectList<Frequency>()">
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control">
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control">
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
             </div>
         </form>
     </div>
 </div>
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>

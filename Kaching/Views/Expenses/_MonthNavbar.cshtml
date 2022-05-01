@@ -3,27 +3,27 @@
 
 @{
     var currentMonthNumber = Model.MonthNumber;
+    var currentMonthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[currentMonthNumber-1];
 }
 
+<div class="ui selection dropdown" id="monthdropdown">
+    <i class="dropdown icon"></i>   
+    @currentMonthName
+<div class="scrollhint menu">
 
-
-
-<ul class="nav nav-tabs">
-    @for (int i = 0; i <= 12; i++) 
+    @for (int i = 0; i <= 11; i++)
     {
         var monthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[i];
         var monthNumber = i + 1;
 
         @if (currentMonthNumber == monthNumber)
         {
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/"><strong>@monthName</strong></a>
-            </li>
-        } else {
-            <li class="nav-item">
-                <a class="nav-link" href="/Expenses/@monthName">@monthName</a>
-            </li>
+            <a class="active item" href="/"> <strong>@monthName</strong></a>
+        }
+        else
+        {
+            <a class="item" href="/Expenses/@monthName">@monthName</a>
         }
     }
-
-</ul>
+</div>
+</div>

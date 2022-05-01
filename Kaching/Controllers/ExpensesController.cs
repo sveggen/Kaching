@@ -3,12 +3,13 @@ using System.Globalization;
 using AutoMapper;
 using Kaching.Services;
 using Kaching.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.Controllers
 {
-
+    [Authorize]
     public class ExpensesController : Controller
     {
         private readonly IExpenseService _expenseService;
@@ -96,6 +97,26 @@ namespace Kaching.Controllers
                 expenseEventCreateViewModel.CreatorId = currentPerson;
 
                 // build Expense table
+                await _expenseService.CreateExpense(expenseEventCreateViewModel);
+
+                return RedirectToAction(nameof(Index));
+            }
+            //RenderSelectList(expenseEventCreateViewModel);
+            return View(expenseEventCreateViewModel);
+        }
+
+        // POST: Expenses/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost("Expenses/CreateRecurring")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRecurring(ExpenseEventCreateViewModel expenseEventCreateViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentPerson = 1;
+                expenseEventCreateViewModel.CreatorId = currentPerson;
+
                 await _expenseService.CreateExpense(expenseEventCreateViewModel);
 
                 return RedirectToAction(nameof(Index));
