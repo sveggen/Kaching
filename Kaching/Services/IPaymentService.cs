@@ -6,7 +6,7 @@ namespace Kaching.Services
     {
         public Task<PaymentViewModel> GetPayment(int paymentId);
 
-        public Task<PaymentIndexViewModel> GetPaymentsByMonth(int monthNumber);
+        public Task<List<PaymentViewModel>> GetPayments();
 
         public Task CreatePayment(PaymentCreateViewModel paymentVM);
 

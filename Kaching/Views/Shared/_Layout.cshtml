@@ -24,11 +24,15 @@
                 <i class="money bill alternate outline icon"></i>
                 Expenses
             </a>
-            <a class="item" asp-area="" asp-controller="Expenses" asp-action="Create">
-                <i class="plus square outline icon"></i>
-                New Expense
-            </a>
-            <div class="ui stackable labeled icon right menu">
+        <a class="item" asp-area="" asp-controller="Expenses" asp-action="Create">
+            <i class="plus square outline icon"></i>
+            New Expense
+        </a>
+        <a class="item" asp-area="" asp-controller="Payments" asp-action="Index">
+            <i class="hand holding usd icon"></i>
+            Transfers
+        </a>
+        <div class="ui stackable labeled icon right menu">
                 <partial name="_LoginPartial"/>
             </div>
         </nav>

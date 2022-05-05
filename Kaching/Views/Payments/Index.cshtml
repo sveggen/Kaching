@@ -1,4 +1,6 @@
-﻿@*
+﻿@model IEnumerable<Kaching.ViewModels.PaymentViewModel>
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -7,25 +9,29 @@
 
 <table class="ui celled table">
     <thead>
-    <tr><th>Name</th>
-        <th>Age</th>
-        <th>Job</th>
+    <tr><th>Payment Date</th>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Amount</th>
+        <th>Payment Month</th>
     </tr></thead>
     <tbody>
-    <tr>
-        <td data-label="Name">James</td>
-        <td data-label="Age">24</td>
-        <td data-label="Job">Engineer</td>
-    </tr>
-    <tr>
-        <td data-label="Name">Jill</td>
-        <td data-label="Age">26</td>
-        <td data-label="Job">Engineer</td>
-    </tr>
-    <tr>
-        <td data-label="Name">Elyse</td>
-        <td data-label="Age">24</td>
-        <td data-label="Job">Designer</td>
-    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td data-label="Payment Date">@item.Created.ToString("dd.MM.yy")</td>
+            <td data-label="Sender">@item.SenderUserName</td>
+            <td data-label="Receiver">@item.ReceiverUserName</td>
+            <td data-label="Amount">€ @item.Amount</td>
+            <td data-label="Payment Month">@item.PaymentMonth</td>
+        </tr>
+    }
     </tbody>
+    <tfoot class="full-width">
+    <th colspan="5">
+    <a class="ui right floated small primary labeled icon button" asp-action="Create">
+        <i class="money bill alternate outline icon"></i> Add payment
+    </a>
+    </th>
+    </tfoot>
 </table>

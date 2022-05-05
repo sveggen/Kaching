@@ -47,9 +47,13 @@ namespace Kaching.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Payment>> GetPayments(int monthNumber)
+        public async Task<List<Payment>> GetPayments()
         {
-            throw new NotImplementedException();
+            return await _context.Payment
+                .Include(e => e.Sender)
+                .Include(f=> f.Receiver)
+                .OrderByDescending(e=>e.PaymentPeriod)
+                .ToListAsync(); 
         }
 
         public Task<List<Payment>> GetPersonPayments(int personId, int monthNumber)

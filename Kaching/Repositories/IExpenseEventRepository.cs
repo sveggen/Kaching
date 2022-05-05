@@ -4,13 +4,13 @@ namespace Kaching.Repositories
 {
     public interface IExpenseEventRepository
     {
-        public void DeleteExpenseEvents(ExpenseEvent expenseEvent);
+        public void DeleteExpenseEvent(ExpenseEvent expenseEvent);
 
-        public Task<ExpenseEvent> GetExpenseEventsById(int expenseEventId);
+        public Task<ExpenseEvent> GetExpenseEventById(int expenseEventId);
 
         public Task<List<ExpenseEvent>> GetExpenseEvents(int monthNumber);
 
-        public decimal GetExpenseEventsSum(int monthNumber);
+        public decimal GetExpenseEventSum(int monthNumber);
 
         public Task<List<ExpenseEvent>> GetPersonExpenseEvents(int personId, int monthNumber);
 
@@ -19,6 +19,8 @@ namespace Kaching.Repositories
         public void InsertExpenseEvent(ExpenseEvent expenseEvent);
 
         public void Save();
+
+        public Task SaveAsync();
 
         public void UpdateExpenseEvent(ExpenseEvent expenseEvent);
 

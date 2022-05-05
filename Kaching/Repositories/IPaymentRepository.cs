@@ -5,7 +5,7 @@ namespace Kaching.Repositories
     public interface IPaymentRepository
     {
 
-        public Task<List<Payment>> GetPayments(int monthNumber);
+        public Task<List<Payment>> GetPayments();
 
         public Task<List<Payment>> GetPersonPayments(int personId, int monthNumber);
 

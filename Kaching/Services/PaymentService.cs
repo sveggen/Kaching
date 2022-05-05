@@ -34,14 +34,12 @@ namespace Kaching.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PaymentIndexViewModel> GetPaymentsByMonth(int monthNumber)
+        public async Task<List<PaymentViewModel>> GetPayments()
         {
-          //  var sum = _paymentRepository.GetPaymentsSum(monthNumber);
-            var payments = await _paymentRepository.GetPayments(monthNumber);
+            var payments = await _paymentRepository.GetPayments();
 
-           // var personViewModelList = _mapper.Map<List<PersonViewModel>>(persons);
+            return _mapper.Map<List<PaymentViewModel>>(payments);
 
-           return null;
         }
     }
 }

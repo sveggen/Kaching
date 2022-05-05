@@ -75,16 +75,30 @@ namespace Kaching.Services
             await _expenseRepository.SaveAsync();
         }
 
-        public async Task DeleteExpense(int expenseId)
+        public async Task DeleteExpenseAndExpenseEvents(int expenseId)
         {
             var expense = await _expenseRepository.GetExpenseById(expenseId);
+
+            foreach (var expenseEvent in expense.ExpenseEvents)
+            {
+                _expenseEventRepository.DeleteExpenseEvent(expenseEvent);
+            }
+
             _expenseRepository.DeleteExpense(expense);
             await _expenseRepository.SaveAsync();
         }
 
+        public async Task DeleteSingleExpenseEvent(int expenseEventId)
+        {
+            var expenseEvent = await _expenseEventRepository.GetExpenseEventById(expenseEventId);
+
+            _expenseEventRepository.DeleteExpenseEvent(expenseEvent);
+            await _expenseEventRepository.SaveAsync();
+        }
+
         public async Task<ExpenseEventViewModel> GetExpense(int expenseId)
         {
-            var expense = await _expenseEventRepository.GetExpenseEventsById(expenseId);
+            var expense = await _expenseEventRepository.GetExpenseEventById(expenseId);
             return _mapper.Map<ExpenseEventViewModel>(expense);
         }
 
@@ -92,12 +106,11 @@ namespace Kaching.Services
         {
             var expensesByMonth = await _expenseEventRepository.GetExpenseEvents(monthNumber);
             var persons = _personRepository.GetAllPersons();
-            var sum = _expenseEventRepository.GetExpenseEventsSum(monthNumber);
+            var sum = _expenseEventRepository.GetExpenseEventSum(monthNumber);
 
             // Total amount / nr. of persons
             var share = sum / persons.Count;
             var personViewModelList = _mapper.Map<List<PersonViewModel>>(persons);
-
 
             int index = 0;
             foreach (var person in personViewModelList)

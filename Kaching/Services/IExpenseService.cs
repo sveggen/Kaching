@@ -10,7 +10,9 @@ namespace Kaching.Services
 
         public Task CreateExpense(ExpenseEventCreateViewModel expenseVM);
 
-        public Task DeleteExpense(int expenseId);
+        public Task DeleteExpenseAndExpenseEvents(int expenseId);
+
+        public Task DeleteSingleExpenseEvent(int expenseEventId);
 
         public Task UpdateExpense(ExpenseEventViewModel expenseVM);
 

@@ -20,39 +20,17 @@ namespace Kaching.Controllers
             IPaymentService paymentService,
             IExpenseService expenseService)
         {
+            _currentMonthNumber = DateTime.Now.Month;
             _emailService = emailService;
             _paymentService = paymentService;
             _expenseService = expenseService;
         }
 
-
         // GET: Payments/
-        // GET: Payments/March
         [Route("Payments/")]
-        [Route("Payments/{month?}")]
         public async Task<IActionResult> Index(string? month)
         {
-            string monthName;
-            int monthNumber;
-
-            if (month != null)
-            {
-                try
-                {
-                    monthName = month;
-                    monthNumber = DateTime.ParseExact(monthName, "MMMM", CultureInfo.CurrentCulture).Month;
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    return NotFound();
-                }
-            }
-            else
-            {
-                monthNumber = _currentMonthNumber;
-            }
-
-            var viewModel = await _paymentService.GetPaymentsByMonth(monthNumber);
+            var viewModel = await _paymentService.GetPayments();
 
             return View(viewModel);
         }

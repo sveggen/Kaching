@@ -14,13 +14,13 @@ namespace Kaching.Repositories
             _context = context;
         }   
 
-        public void DeleteExpenseEvents(ExpenseEvent expenseEvent)
+        public void DeleteExpenseEvent(ExpenseEvent expenseEvent)
         {
              _context
                 .ExpenseEvent.Remove(expenseEvent);
         }
 
-        public async Task<ExpenseEvent> GetExpenseEventsById(int expenseEventId)
+        public async Task<ExpenseEvent> GetExpenseEventById(int expenseEventId)
         {
             return await _context.ExpenseEvent
                 .Include(e => e.Expense)
@@ -37,7 +37,7 @@ namespace Kaching.Repositories
                 .ToListAsync();
         }
 
-        public decimal GetExpenseEventsSum(int monthNumber)
+        public decimal GetExpenseEventSum(int monthNumber)
         {
             return  _context.ExpenseEvent
                 .Include(e => e.Buyer)

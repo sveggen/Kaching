@@ -188,8 +188,7 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-
-            await _expenseService.DeleteExpense(id);
+            await _expenseService.DeleteExpenseAndExpenseEvents(id);
 
             return RedirectToAction(nameof(Index));
         }
