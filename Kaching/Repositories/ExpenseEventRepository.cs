@@ -34,6 +34,7 @@ namespace Kaching.Repositories
                 .Include(e => e.Buyer)
                 .Include(e => e.Expense)
                 .Where(p => p.PaymentDate.Month == monthNumber)
+                .OrderByDescending(e => e.PaymentDate)
                 .ToListAsync();
         }
 
