@@ -12,6 +12,8 @@ namespace Kaching.Repositories
 
         public Person? GetPersonByUserName(string userName);
 
+        public List<Person> GetAllPersonsWithoutYourself(string username);
+
         public List<Person> GetAllPersons();
 
         public void DeletePersonByUserId(string userId);

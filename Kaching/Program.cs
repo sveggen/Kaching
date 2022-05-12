@@ -1,10 +1,10 @@
 using Kaching.Data;
-using Kaching.Models;
 using Kaching.Repositories;
 using Kaching.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 var userConnectionString = builder.Configuration.GetConnectionString("Identity");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(userConnectionString));
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -35,7 +34,7 @@ builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<IExpenseEventRepository, ExpenseEventRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 

@@ -1,6 +1,5 @@
 ﻿#nullable disable
 using System.Globalization;
-using AutoMapper;
 using Kaching.Services;
 using Kaching.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -14,30 +13,31 @@ namespace Kaching.Controllers
     {
         private readonly IExpenseService _expenseService;
         private readonly int _currentMonthNumber;
+        private readonly List<string> _months;
 
         public ExpensesController(
             IExpenseService expenseService)
         {
             _currentMonthNumber = DateTime.Now.Month;
             _expenseService = expenseService;
-
+            _months = new List<string> 
+            {"January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"};
         }
 
         // GET: /
-        // GET: Expenses
         // GET: Expenses/March
         [Route("")]
         [Route("Expenses/{month?}")]
         public async Task<IActionResult> Index(string? month)   
         {
-            string monthName;
             int monthNumber;
 
-            if (month != null)
+            if (month!= null && _months.Contains(month))
             {
                 try
                 {
-                    monthName = month;
+                    var monthName = month;
                     monthNumber = DateTime.ParseExact(monthName, "MMMM", CultureInfo.CurrentCulture).Month;
                 }
                 catch (ArgumentOutOfRangeException)
@@ -45,9 +45,13 @@ namespace Kaching.Controllers
                     return NotFound();
                 }
             }
-            else
+            else if (month == null)
             {
                 monthNumber = _currentMonthNumber;
+            }
+            else
+            {
+                return NotFound();
             }
 
             var viewModel = await _expenseService.GetExpensesByMonth(monthNumber);
@@ -59,7 +63,6 @@ namespace Kaching.Controllers
         [Route("Expenses/Details/{id?}")]
         public async Task<IActionResult> Details(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
@@ -80,8 +83,15 @@ namespace Kaching.Controllers
         [Route("Expenses/Create")]
         public IActionResult Create()
         {
-            RenderSelectListDefault();
-            return View();
+            try
+            {
+                RenderSelectListDefault();
+                return View();
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         // POST: Expenses/Create
@@ -149,7 +159,7 @@ namespace Kaching.Controllers
         public async Task<IActionResult> Edit(int id, ExpenseEventViewModel expenseEventViewModel)
         {
 
-            if (id != expenseEventViewModel.ExpenseId)
+            if (id != expenseEventViewModel.ExpenseEventId)
             {
                 return NotFound();
             }
@@ -158,6 +168,29 @@ namespace Kaching.Controllers
             {
 
                 await _expenseService.UpdateExpense(expenseEventViewModel);
+                return RedirectToAction(nameof(Index));
+            }
+            RenderSelectList(expenseEventViewModel);
+            return View(expenseEventViewModel);
+        }
+
+        // POST: Expenses/EditAll/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost("Expenses/EditAll/{id?}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAll(int id, ExpenseEventViewModel expenseEventViewModel)
+        {
+
+            if (id != expenseEventViewModel.ExpenseId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                await _expenseService.UpdateRecurringExpenses(expenseEventViewModel);
                 return RedirectToAction(nameof(Index));
             }
             RenderSelectList(expenseEventViewModel);
@@ -188,7 +221,17 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _expenseService.DeleteExpenseAndExpenseEvents(id);
+            await _expenseService.DeleteExpense(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Expenses/Delete/5
+        [HttpPost("Expenses/DeleteRecurring/{id?}"), ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteRecurringConfirmed(int id)
+        {
+            await _expenseService.DeleteRecurringExpense(id);
 
             return RedirectToAction(nameof(Index));
         }

@@ -75,11 +75,12 @@ namespace Kaching.Services
             await _expenseRepository.SaveAsync();
         }
 
-        public async Task DeleteExpenseAndExpenseEvents(int expenseId)
+        public async Task DeleteRecurringExpense(int expenseEventId)
         {
-            var expense = await _expenseRepository.GetExpenseById(expenseId);
+            var expenseEvent = await _expenseEventRepository.GetExpenseEventById(expenseEventId);
+            var expense = await _expenseRepository.GetExpenseById(expenseEvent.ExpenseId);
 
-            foreach (var expenseEvent in expense.ExpenseEvents)
+            foreach (var item in expense.ExpenseEvents)
             {
                 _expenseEventRepository.DeleteExpenseEvent(expenseEvent);
             }
@@ -88,7 +89,7 @@ namespace Kaching.Services
             await _expenseRepository.SaveAsync();
         }
 
-        public async Task DeleteSingleExpenseEvent(int expenseEventId)
+        public async Task DeleteExpense(int expenseEventId)
         {
             var expenseEvent = await _expenseEventRepository.GetExpenseEventById(expenseEventId);
 
@@ -96,9 +97,9 @@ namespace Kaching.Services
             await _expenseEventRepository.SaveAsync();
         }
 
-        public async Task<ExpenseEventViewModel> GetExpense(int expenseId)
+        public async Task<ExpenseEventViewModel> GetExpense(int expenseEventId)
         {
-            var expense = await _expenseEventRepository.GetExpenseEventById(expenseId);
+            var expense = await _expenseEventRepository.GetExpenseEventById(expenseEventId);
             return _mapper.Map<ExpenseEventViewModel>(expense);
         }
 
@@ -116,6 +117,7 @@ namespace Kaching.Services
             foreach (var person in personViewModelList)
             {
                 var sumPersonExpenses = _expenseEventRepository.GetSumOfPersonExpenseEvents(person.PersonId, monthNumber);
+                
                 personViewModelList[index].SumOfExpenses = sumPersonExpenses;
                 personViewModelList[index].PaymentsSent = _paymentRepository.GetSumOfPersonSentPayments(monthNumber, person.PersonId);
                 personViewModelList[index].PaymentsReceived = _paymentRepository.GetSumOfPersonReceivedPayments(monthNumber, person.PersonId);
@@ -155,6 +157,12 @@ namespace Kaching.Services
             return _mapper.Map<List<PersonViewModel>>(persons);
         }
 
+        public List<PersonViewModel> GetPersonsWithoutYourself(string username)
+        {
+            var persons = _personRepository.GetAllPersonsWithoutYourself(username);
+            return _mapper.Map<List<PersonViewModel>>(persons);
+        }
+
         public PersonViewModel GetPersonByUsername(string userName)
         {
             var person = _personRepository.GetPersonByUserName(userName);
@@ -176,6 +184,11 @@ namespace Kaching.Services
             }
 
             return dateTime;
+        }
+
+        public Task UpdateRecurringExpenses(ExpenseEventViewModel expenseVM)
+        {
+            throw new NotImplementedException();
         }
     }
 }

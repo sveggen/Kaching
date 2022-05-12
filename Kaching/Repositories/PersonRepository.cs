@@ -86,5 +86,12 @@ namespace Kaching.Repositories
             return _context.Person
                 .FirstOrDefault(p => p.PersonId == personId);
         }
+
+        public List<Person> GetAllPersonsWithoutYourself(string username)
+        {
+            return _context.Person
+                .Where(e => e.ConnectedUserName != username)
+                .ToList();
+        }
     }
 }

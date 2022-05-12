@@ -14,24 +14,40 @@
     
     <partial name="/Views/Expenses/_MonthNavbar.cshtml" />
 
-    <table class="ui compact selectable celled table">
-        <thead class="full-width">
-        <tr>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Assigned to</th>
-            <th>Paid</th>
-            <th>Comment</th>
-            <th>Payment date</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-    
-        @foreach (var item in Model.Expenses)
+    @if (Model.Expenses.Count == 0)
+        {
+            <div class="ui placeholder segment">
+                <div class="ui icon header">
+                    <i class="euro sign icon"></i>
+                    No expenses are listed for this month
+                </div>
+                <a class="ui primary button" asp-action="Create">Add Expense
+                </a>
+            </div>
+        }
+        else
+        {
+            <table class="ui compact selectable celled table">
+                <thead class="full-width">
+                <tr>
+                    <th>Payment date</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Assigned to / Paid by</th>
+                    <th>Paid</th>
+                    <th>Comment</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+            @foreach (var item in Model.Expenses)
         {
             <tr>
-                 
+                <td>
+                    @Strings.FormatDateTime(item.PaymentDate, DateFormat.LongDate)
+                </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.Expense.Category)
                 </td>
@@ -39,7 +55,7 @@
                     € @Html.DisplayFor(modelItem => item.Expense.Price)
                 </td>
                 <td>
-                     
+
                     <h4 class="ui image header">
                         <img src="https://m.media-amazon.com/images/I/71iFekvN5hS._AC_SL1500_.jpg" class="ui mini rounded image">
                         <div class="content">
@@ -49,20 +65,25 @@
 
                 </td>
                 <td>
-                    @if (item.PaymentStatus == 0)
+                    @if (item.PaymentStatus == PaymentStatus.Paid)
                     {
                         <i class="check icon" style="color: green"></i>
                     }
-                    else
-                    {
+                    else if (item.PaymentStatus == PaymentStatus.NotPaid)
+                    {   
                         <i class="close icon" style="color: red"></i>
+                    }
+                    else if (item.PaymentStatus == PaymentStatus.Automatic)
+                    {
+                        <i class="sync icon" style="color: blue"></i>
                     }
                 </td>
                 <td>
                     <p>
                         @if (!String.IsNullOrEmpty(item.Expense.Description))
                         {
-                            <div class="ui icon button togglecomment" data-title="@Html.DisplayFor(modelItem => item.Expense.Creator.ConnectedUserName) on @Strings.FormatDateTime(item.Expense.Created, DateFormat.LongDate)" data-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
+                            <div class="ui icon button togglecomment" data-title="@Html.DisplayFor(modelItem => item.Expense.Creator.ConnectedUserName) on @Strings.FormatDateTime(item.Expense.Created, DateFormat.LongDate)" 
+                                 data-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
                                 <i class="comment icon"></i>
                             </div>
                         }
@@ -74,26 +95,25 @@
                         }
                     </p>
                 </td>
-                <td>
-                @Strings.FormatDateTime(item.PaymentDate, DateFormat.LongDate)
+
                 <td>
                     <a asp-action="Details" asp-route-id="@item.ExpenseEventId">Details</a>
                 </td>
             </tr>
         }
-
-        </tbody>
-        <tfoot class="full-width">
-        <tr>
-            <th></th>
-            <th colspan="6">
-                <a class="ui right floated small primary labeled icon button" asp-action="Create">
-                    <i class="money bill alternate outline icon"></i> Add expense
-                </a>
-                <strong>€@Model.Sum</strong>
-                <partial name="/Views/Expenses/_Settlement.cshtml" />
-            </th>
-        </tr>
-        </tfoot>
-    </table>
+                </tbody>
+                <tfoot class="full-width">
+                <tr>
+                    <th></th>
+                    <th colspan="6">
+                        <a class="ui right floated small primary labeled icon button" asp-action="Create">
+                            <i class="money bill alternate outline icon"></i> Add expense
+                        </a>
+                        <strong>€@Model.Sum</strong>
+                        <partial name="/Views/Expenses/_Settlement.cshtml" />
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        }
 </div>

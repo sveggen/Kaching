@@ -26,7 +26,7 @@
             <div class="ui segment">
                 <div class="ui four wide column aligned center aligned grid">
                     <div class="column">
-                        <div class="field">
+                        <div class="field six wide">
                             <div class="ui right labeled input">
                                 <label for="amount" class="ui label">€</label>
                                 <input asp-for="Price" placeholder="Price">
@@ -35,20 +35,20 @@
                             <span asp-validation-for="Price" style="color: red"></span>
                         </div>
 
-                        <div class="field">
+                        <div class="field six wide">
                             <select asp-for="Category" id="categorydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Category>()"></select>
                         </div>
-                        <div class="field">
+                        <div class="field six wide">
                             <select asp-for="PaymentStatus" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentStatus>()">
                             </select>
                         </div>
-                        <div class="field">
+                        <div class="field six wide">
                             <select asp-for="BuyerId" id="buyerdropdown" class="ui selection dropdown" asp-items="ViewBag.PersonId"></select>
                             <a class="ui tag label">
                                 Responsible
                             </a>
                         </div>
-                        <div class="field">
+                        <div class="field six wide">
                             <div class="ui calendar" id="date_calendar">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
@@ -57,14 +57,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="field">
+                        <div class="field six wide">
                             <div class="ui label">
                                 Optional: Description
                             </div>
                             <textarea asp-for="Description" rows="3" placeholder="Comments..."> </textarea>
                             <span asp-validation-for="Description" style="color: red"></span>
                         </div>
-                        <div class="field">
+                        <div class="field six wide">
                             <input type="submit" value="Create" class="ui button"/>
                         </div>
                     </div>

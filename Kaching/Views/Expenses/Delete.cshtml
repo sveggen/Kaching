@@ -14,8 +14,9 @@
     <partial name="/Views/Expenses/_ExpenseInfo.cshtml" />
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="ExpenseId" />
+        <input type="hidden" asp-for="ExpenseEventId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> <br />
-        <a asp-action="Index">Back to List</a>
     </form>
+
+    <a asp-action="Index">Back to List</a>
 </div>

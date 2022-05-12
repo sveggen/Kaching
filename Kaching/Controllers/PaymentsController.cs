@@ -1,27 +1,21 @@
-﻿using System.Globalization;
-using Kaching.MailViewModels;
-using Kaching.Repositories;
-using Kaching.Services;
+﻿using Kaching.Services;
 using Kaching.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.Controllers
 {
+    [Authorize]
     public class PaymentsController : Controller
     {
-
-        private readonly IEmailService _emailService;
         private readonly IPaymentService _paymentService;
         private readonly IExpenseService _expenseService;
-        private readonly int _currentMonthNumber;
 
-        public PaymentsController(IEmailService emailService,
+        public PaymentsController(
             IPaymentService paymentService,
             IExpenseService expenseService)
         {
-            _currentMonthNumber = DateTime.Now.Month;
-            _emailService = emailService;
             _paymentService = paymentService;
             _expenseService = expenseService;
         }
@@ -37,7 +31,7 @@ namespace Kaching.Controllers
 
         // GET: Payments/Create
         [Route("Payments/Create")]
-        public IActionResult Create()
+        public IActionResult Create()  
         {
             RenderSelectListDefault();
             return View();
@@ -66,9 +60,8 @@ namespace Kaching.Controllers
 
         private void RenderSelectListDefault()
         {
-            var selectedUsername = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
             ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
-                "PersonId", "ConnectedUserName", selectedUsername);
+                "PersonId", "ConnectedUserName");
         }
 
         private string GetCurrentUserName()
@@ -76,7 +69,5 @@ namespace Kaching.Controllers
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             return currentUser.Identity.Name;
         }
-
-
     }
 }
