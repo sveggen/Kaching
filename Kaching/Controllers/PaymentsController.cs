@@ -24,17 +24,30 @@ namespace Kaching.Controllers
         [Route("Payments/")]
         public async Task<IActionResult> Index(string? month)
         {
-            var viewModel = await _paymentService.GetPayments();
-
-            return View(viewModel);
+            try
+            {
+                var viewModel = await _paymentService.GetPayments();
+                return View(viewModel);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         // GET: Payments/Create
         [Route("Payments/Create")]
         public IActionResult Create()  
         {
-            RenderSelectListDefault();
-            return View();
+            try
+            {
+                RenderSelectListDefault();
+                return View();
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         // POST: Payments/Create

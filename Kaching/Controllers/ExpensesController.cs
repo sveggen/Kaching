@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.Controllers
 {
-    [Authorize]
+    [Authorize] 
     public class ExpensesController : Controller
     {
         private readonly IExpenseService _expenseService;
@@ -63,20 +63,27 @@ namespace Kaching.Controllers
         [Route("Expenses/Details/{id?}")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                int valueId = id.Value;
+
+                var expenseVM = await _expenseService.GetExpense(valueId);
+                if (expenseVM == null)
+                {
+                    return NotFound();
+                }
+
+                return View(expenseVM);
+            }
+            catch (Exception)
             {
                 return NotFound();
             }
-
-            int valueId = id.Value;
-
-            var expenseVM = await _expenseService.GetExpense(valueId);
-            if (expenseVM == null)
-            {
-                return NotFound();
-            }
-
-            return View(expenseVM);
         }
 
         // GET: Expenses/Create
@@ -111,7 +118,6 @@ namespace Kaching.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            //RenderSelectList(expenseEventCreateViewModel);
             return View(expenseEventCreateViewModel);
         }
 
@@ -201,19 +207,15 @@ namespace Kaching.Controllers
         [Route("Expenses/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            try
+            {
+                var expenseVm = await _expenseService.GetExpense(id);
+                return View(expenseVm);
+            }
+            catch (Exception)
             {
                 return NotFound();
             }
-
-            var expenseVM = await _expenseService.GetExpense(id);
-
-            if (expenseVM == null)
-            {
-                return NotFound();
-            }
-
-            return View(expenseVM);
         }
 
         // POST: Expenses/Delete/5
@@ -221,9 +223,15 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _expenseService.DeleteExpense(id);
-
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _expenseService.DeleteExpense(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         // POST: Expenses/Delete/5
@@ -231,9 +239,16 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRecurringConfirmed(int id)
         {
-            await _expenseService.DeleteRecurringExpense(id);
+            try
+            {
+                await _expenseService.DeleteRecurringExpense(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NullReferenceException)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction(nameof(Index));
         }
 
         private void RenderSelectList(ExpenseEventViewModel expenseEventViewModel)
