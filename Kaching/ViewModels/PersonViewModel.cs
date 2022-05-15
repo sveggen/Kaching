@@ -1,5 +1,7 @@
 ﻿
 
+using Microsoft.AspNetCore.Identity;
+
 namespace Kaching.ViewModels
 {
     public class PersonViewModel

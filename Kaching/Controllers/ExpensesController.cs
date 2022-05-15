@@ -101,44 +101,53 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Expenses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Expenses/Create")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ExpenseEventCreateViewModel expenseEventCreateViewModel)
+        // GET: Expenses/CreateRecurring
+        [Route("Expenses/CreateRecurring")]
+        public IActionResult CreateRecurring()
         {
-            if (ModelState.IsValid)
+            try
             {
-                var currentPerson = 1;
-                expenseEventCreateViewModel.CreatorId = currentPerson;
-
-                // build Expense table
-                await _expenseService.CreateExpense(expenseEventCreateViewModel);
-
-                return RedirectToAction(nameof(Index));
+                RenderSelectListDefault();
+                return View();
             }
-            return View(expenseEventCreateViewModel);
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         // POST: Expenses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Expenses/CreateRecurring")]
+        [HttpPost("Expenses/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRecurring(ExpenseEventCreateViewModel expenseEventCreateViewModel)
+        public async Task<IActionResult> Create(ExpenseCreateVM expenseCreateVM)
         {
             if (ModelState.IsValid)
             {
-                var currentPerson = 1;
-                expenseEventCreateViewModel.CreatorId = currentPerson;
-
-                await _expenseService.CreateExpense(expenseEventCreateViewModel);
+                expenseCreateVM.CreatorId = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+                await _expenseService.CreateExpense(expenseCreateVM);
 
                 return RedirectToAction(nameof(Index));
             }
-            //RenderSelectList(expenseEventCreateViewModel);
-            return View(expenseEventCreateViewModel);
+            return View(expenseCreateVM);
+        }
+
+        // POST: Expenses/CreateRecurring
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost("Expenses/CreateRecurring")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRecurring(ExpenseCreateRecurringVM expenseCreateRecurringVM)
+        {
+            if (ModelState.IsValid)
+            {
+                expenseCreateRecurringVM.CreatorId = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+                await _expenseService.CreateExpense(expenseCreateRecurringVM);
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(expenseCreateRecurringVM);
         }
 
         // GET: Expenses/Edit/5
@@ -248,7 +257,6 @@ namespace Kaching.Controllers
             {
                 return NotFound();
             }
-
         }
 
         private void RenderSelectList(ExpenseEventViewModel expenseEventViewModel)

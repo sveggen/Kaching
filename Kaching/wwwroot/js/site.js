@@ -26,6 +26,9 @@ $('#categorydropdown')
         .dropdown()
     ;
 
+$('#frequencydropdown')
+        .dropdown()
+    ;
 
 $('#paymentstatusdropdown')
         .dropdown()
@@ -50,3 +53,12 @@ $('#month_year_calendar')
             type: 'month'
         })
     ;
+
+$('#rangestart').calendar({
+    type: 'date',
+    endCalendar: $('#rangeend')
+});
+$('#rangeend').calendar({
+    type: 'date',
+    startCalendar: $('#rangestart')
+});

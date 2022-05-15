@@ -10,7 +10,6 @@ namespace Kaching.MappingProfiles
         public ExpenseProfile()
         {
             CreateMap<Expense, ExpenseViewModel>();
-            CreateMap<ExpenseViewModel, Expense>();
 
             CreateMap<ExpenseViewModel, ExpenseIndexViewModel>();
             CreateMap<PersonViewModel, ExpenseIndexViewModel>();
@@ -21,8 +20,15 @@ namespace Kaching.MappingProfiles
             CreateMap<ExpenseEvent, ExpenseEventViewModel>();
             CreateMap<ExpenseEventViewModel, ExpenseIndexViewModel>();
 
-            CreateMap<ExpenseEventCreateViewModel, Expense>();
-            CreateMap<Expense, ExpenseEventCreateViewModel>();
+            CreateMap<ExpenseCreateVM, Expense>()
+                .ForMember(m => m.Frequency, d => d.MapFrom(k => Frequency.OneTime))
+                .ForMember(m => m.StartDate, d => d.MapFrom(k => k.PaymentDate))
+                .ForMember(m => m.EndDate, d => d.MapFrom(k => k.PaymentDate));
+            //.ForMember(m => m.Creator, d => d.MapFrom(k => ))
+
+            CreateMap<ExpenseCreateRecurringVM, Expense>();
+
+
         }
     }
 }

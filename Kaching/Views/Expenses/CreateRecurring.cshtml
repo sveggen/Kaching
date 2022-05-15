@@ -1,28 +1,30 @@
-﻿@model Kaching.ViewModels.ExpenseCreateVM
+﻿@model Kaching.ViewModels.ExpenseCreateRecurringVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Recurring Expense";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Add expense</h1>
+<h1>Add recurring expense</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" class="ui form">
+        <form asp-action="CreateRecurring" class="ui form">
             <div asp-validation-summary="ModelOnly" style="color: red"></div>
 
             <div class="ui two item menu">
-                <a class="item active" asp-action="Create">
+                <a class="item" asp-action="Create">
                     One-Time expense
                 </a>
-                <a class="item" asp-action="CreateRecurring">
+                <a class="item active" asp-action="CreateRecurring">
                     Recurring expense
                 </a>
             </div>
+            
+            
 
             <div class="ui segment">
-                <div class="ui four wide column aligned center aligned grid">
+                <div class="ui four wide column aligned right aligned grid">
                     <div class="column">
                         <div class="field six wide">
                             <div class="ui right labeled input">
@@ -47,15 +49,36 @@
                             </a>
                         </div>
                         <div class="field six wide">
-                            <div class="ui calendar" id="date_calendar">
-                                <div class="ui input left icon">
-                                    <i class="calendar icon"></i>
-                                    <input asp-for="PaymentDate" type="text" placeholder="Payment Date">
-                                    <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                            <select asp-for="Frequency" id="frequencydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Frequency>()"></select>
+                        </div>
+
+                        <div class="two fields">
+                            <div class="field six wide">
+                                <div class="ui calendar" id="rangestart">
+                                    <div class="ui input left icon">
+                                        <i class="calendar icon"></i>
+                                        <input asp-for="StartDate" type="text" placeholder="Start date">
+                                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="field six wide">
+                            <div class="field six wide">
+                                <div class="ui calendar" id="rangeend">
+                                    <div class="ui input left icon">
+                                        <i class="calendar icon"></i>
+                                        <input asp-for="EndDate" type="text" placeholder="End Date">
+                                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            
+                            </div>
+                        
+                        
+
+                            <div class="field six wide">
                             <div class="ui label">
                                 Optional: Description
                             </div>

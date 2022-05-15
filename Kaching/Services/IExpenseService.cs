@@ -8,7 +8,9 @@ namespace Kaching.Services
 
         public Task<ExpenseIndexViewModel> GetExpensesByMonth(int monthNumber);
 
-        public Task CreateExpense(ExpenseEventCreateViewModel expenseVM);
+        public Task CreateExpense(ExpenseCreateVM expenseCreateVM);
+
+        public Task CreateExpense(ExpenseCreateRecurringVM expenseCreateRecurringVM);
 
         public Task DeleteExpense(int expenseEventId);
 

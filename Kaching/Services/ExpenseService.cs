@@ -13,7 +13,6 @@ namespace Kaching.Services
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
-
         public ExpenseService(
             IExpenseRepository expenseRepository,
             IExpenseEventRepository expenseEventRepository,
@@ -27,49 +26,49 @@ namespace Kaching.Services
             _personRepository = personRepository;
             _mapper = mapper;
         }
-        public async Task CreateExpense(ExpenseEventCreateViewModel expenseEventCreateViewModel)
+
+        public async Task CreateExpense(ExpenseCreateRecurringVM expenseCreateRecurringVM)
         {
             List<ExpenseEvent> expenseEvents = new List<ExpenseEvent>();
 
-            var endDate = expenseEventCreateViewModel.EndDate;
-            var paymentDate = expenseEventCreateViewModel.StartDate;
+            var paymentDate = expenseCreateRecurringVM.StartDate;
+            var endDate = expenseCreateRecurringVM.EndDate;
 
-            if (expenseEventCreateViewModel.Frequency == Frequency.OneTime)
+            while (paymentDate <= endDate)
             {
-                expenseEventCreateViewModel.EndDate = paymentDate;
+                paymentDate = NextPaymentDate(paymentDate, expenseCreateRecurringVM.Frequency);
+
+                if (paymentDate > endDate)
+                {
+                    break;
+                }
 
                 expenseEvents.Add(new ExpenseEvent
                 {
-                    BuyerId = expenseEventCreateViewModel.BuyerId,
+                    BuyerId = expenseCreateRecurringVM.BuyerId,
                     PaymentDate = paymentDate,
-                    Comment = expenseEventCreateViewModel.Comment,
-                    PaymentStatus = expenseEventCreateViewModel.PaymentStatus,
-                    ExpenseId = expenseEventCreateViewModel.ExpenseId
+                    PaymentStatus = expenseCreateRecurringVM.PaymentStatus,
+                    ExpenseId = expenseCreateRecurringVM.ExpenseId
                 });
             }
-            else
-            {
-                while (paymentDate <= endDate)
+            var expense = _mapper.Map<Expense>(expenseCreateRecurringVM);
+            expense.ExpenseEvents = expenseEvents;
+            _expenseRepository.InsertExpense(expense);
+            await _expenseRepository.SaveAsync();
+        }
+
+        public async Task CreateExpense(ExpenseCreateVM expenseCreateVM)
+        {
+            List<ExpenseEvent> expenseEvents = new List<ExpenseEvent>();
+            expenseEvents.Add(new ExpenseEvent
                 {
-                    paymentDate = NextPaymentDate(paymentDate, expenseEventCreateViewModel.Frequency);
+                    BuyerId = expenseCreateVM.BuyerId,
+                    PaymentDate = expenseCreateVM.PaymentDate,
+                    PaymentStatus = expenseCreateVM.PaymentStatus,
+                    ExpenseId = expenseCreateVM.ExpenseId
+                });
 
-                    if (paymentDate > endDate)
-                    {
-                        break;
-                    }
-
-                    expenseEvents.Add(new ExpenseEvent
-                    {
-                        BuyerId = expenseEventCreateViewModel.BuyerId,
-                        PaymentDate = paymentDate,
-                        Comment = expenseEventCreateViewModel.Comment,
-                        PaymentStatus = expenseEventCreateViewModel.PaymentStatus,
-                        ExpenseId = expenseEventCreateViewModel.ExpenseId
-                    });
-                }
-            }
-
-            var expense = _mapper.Map<Expense>(expenseEventCreateViewModel);
+            var expense = _mapper.Map<Expense>(expenseCreateVM);
             expense.ExpenseEvents = expenseEvents;
             _expenseRepository.InsertExpense(expense);
             await _expenseRepository.SaveAsync();
@@ -190,5 +189,6 @@ namespace Kaching.Services
         {
             throw new NotImplementedException();
         }
+
     }
 }
