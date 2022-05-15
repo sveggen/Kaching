@@ -1,8 +1,5 @@
 {
   "dependencies": {
-    "secrets1": {
-      "type": "secrets.user"
-    },
     "mssql2": {
       "secretStore": "LocalSecretsFile",
       "type": "mssql.onprem",
@@ -12,6 +9,9 @@
       "secretStore": "LocalSecretsFile",
       "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:Identity"
+    },
+    "secrets1": {
+      "type": "secrets.user"
     }
   }
 }

@@ -39,10 +39,10 @@ builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services
-    .AddFluentEmail(builder.Configuration["Mailgun:Sender"])
+    .AddFluentEmail(builder.Configuration.GetConnectionString("MailgunSender"))
     .AddMailGunSender(
-        builder.Configuration["Mailgun:Domain"],
-        builder.Configuration["Mailgun:API"],
+        builder.Configuration.GetConnectionString("MailgunDomain"),
+        builder.Configuration.GetConnectionString("MailgunAPI"),
         FluentEmail.Mailgun.MailGunRegion.USA);
 
 // Add other db services to the container.
