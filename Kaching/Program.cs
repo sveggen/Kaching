@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add user services to the container.
-var userConnectionString = builder.Configuration.GetConnectionString("Identity");
+var userConnectionString = builder.Configuration.GetConnectionString("AzureRemote");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(userConnectionString));
 
@@ -46,7 +46,7 @@ builder.Services
         FluentEmail.Mailgun.MailGunRegion.USA);
 
 // Add other db services to the container.
-var connectionString = builder.Configuration.GetConnectionString("Kaching");
+var connectionString = builder.Configuration.GetConnectionString("AzureRemote");
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));
 
