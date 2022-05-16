@@ -39,7 +39,6 @@ namespace Kaching.Services
             var payments = await _paymentRepository.GetPayments();
 
             return _mapper.Map<List<PaymentViewModel>>(payments);
-
         }
     }
 }

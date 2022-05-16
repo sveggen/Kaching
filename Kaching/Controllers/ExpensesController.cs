@@ -73,10 +73,6 @@ namespace Kaching.Controllers
                 int valueId = id.Value;
 
                 var expenseVM = await _expenseService.GetExpense(valueId);
-                if (expenseVM == null)
-                {
-                    return NotFound();
-                }
 
                 return View(expenseVM);
             }
@@ -181,7 +177,6 @@ namespace Kaching.Controllers
 
             if (ModelState.IsValid)
             {
-
                 await _expenseService.UpdateExpense(expenseEventViewModel);
                 return RedirectToAction(nameof(Index));
             }

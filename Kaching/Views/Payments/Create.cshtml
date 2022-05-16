@@ -14,9 +14,9 @@
             <div asp-validation-summary="ModelOnly" style="color: red"></div>
 
             <div class="ui segment">
-                <div class="ui four wide column aligned center aligned grid">
-                    <div class="column">
-                        <div class="field six wide">
+            <div class="ui four wide column aligned left aligned grid">
+                <div class="column">
+                        <div class="field">
                             <div class="ui right labeled input">
                                 <label for="amount" class="ui label">€</label>
                                 <input asp-for="Amount" placeholder="Amount">
@@ -24,10 +24,10 @@
                             </div>
                             <span asp-validation-for="Amount" style="color: red"></span>
                         </div>
-                        <div class="field six wide">
+                        <div class="field">
                             <select asp-for="ReceiverId" id="receiverdropdown" class="ui selection dropdown" asp-items="ViewBag.PersonId"></select>
                         </div>
-                        <div class="field six wide">
+                        <div class="field">
                             <div class="ui calendar" id="month_year_calendar">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
@@ -36,14 +36,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="field six wide">
+                        <div class="field">
                             <div class="ui label">
                                 Optional: Description
                             </div>
                             <textarea asp-for="Description" rows="3" placeholder="Comments..."> </textarea>
                             <span asp-validation-for="Description" style="color: red"></span>
                         </div>
-                        <div class="field six wide">
+                        <div class="field">
                             <input type="submit" value="Create" class="ui button"/>
                         </div>
                     </div>

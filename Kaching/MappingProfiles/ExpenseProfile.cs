@@ -24,10 +24,8 @@ namespace Kaching.MappingProfiles
                 .ForMember(m => m.Frequency, d => d.MapFrom(k => Frequency.OneTime))
                 .ForMember(m => m.StartDate, d => d.MapFrom(k => k.PaymentDate))
                 .ForMember(m => m.EndDate, d => d.MapFrom(k => k.PaymentDate));
-            //.ForMember(m => m.Creator, d => d.MapFrom(k => ))
 
             CreateMap<ExpenseCreateRecurringVM, Expense>();
-
 
         }
     }
