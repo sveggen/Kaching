@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Kaching.ViewModels
 {
-    public class PersonViewModel
+    public class PersonVM
     {
         public int PersonId { get; set; }
 

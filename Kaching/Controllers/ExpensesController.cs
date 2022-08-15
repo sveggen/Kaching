@@ -60,19 +60,12 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/Details/5
-        [Route("Expenses/Details/{id?}")]
-        public async Task<IActionResult> Details(int? id)
+        [Route("Expenses/Details/{id}")]
+        public async Task<IActionResult> Details(int id)
         {
             try
             {
-                if (id == null)
-                {
-                    return NotFound();
-                }
-
-                int valueId = id.Value;
-
-                var expenseVM = await _expenseService.GetExpense(valueId);
+                var expenseVM = await _expenseService.GetExpense(id);
 
                 return View(expenseVM);
             }
@@ -162,26 +155,55 @@ namespace Kaching.Controllers
             }
         }
 
+        // GET: Expenses/EditRecurring/5
+        [Route("Expenses/EditRecurring/{id}")]
+        public async Task<IActionResult> EditRecurring(int id)
+        {
+            try
+            {
+                var expenseVM = await _expenseService.GetExpense(id);
+                RenderSelectList(expenseVM);
+                return View(expenseVM);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
         // POST: Expenses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ExpenseEventViewModel expenseEventViewModel)
+        public async Task<IActionResult> Edit(int id, ExpenseEditVM expenseEditVM)
         {
-
-            if (id != expenseEventViewModel.ExpenseEventId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                await _expenseService.UpdateExpense(expenseEventViewModel);
+                await _expenseService.UpdateExpense(expenseEditVM);
                 return RedirectToAction(nameof(Index));
             }
-            RenderSelectList(expenseEventViewModel);
-            return View(expenseEventViewModel);
+           // RenderSelectList(expenseEventViewModel);
+            return NotFound();
+        }
+
+        // POST: Expenses/EditRecurring/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost("Expenses/EditRecurring/{id?}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRecurring(int id, ExpenseEditRecurringVM expenseEditRecurringVM)
+        {
+            if (ModelState.IsValid)
+            {
+                await _expenseService.UpdateExpense(expenseEditRecurringVM);
+                return RedirectToAction(nameof(Index));
+            }
+            //var expenseVM = await _expenseService.GetExpense()
+
+            //RenderSelectList(expenseEventViewModel);
+            //return View(expenseCreateRecurringVM);
+            return NotFound();
         }
 
         // POST: Expenses/EditAll/5
@@ -189,9 +211,8 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/EditAll/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAll(int id, ExpenseEventViewModel expenseEventViewModel)
+        public async Task<IActionResult> EditAll(int id, EEventVM expenseEventViewModel)
         {
-
             if (id != expenseEventViewModel.ExpenseId)
             {
                 return NotFound();
@@ -222,6 +243,21 @@ namespace Kaching.Controllers
             }
         }
 
+        // GET: Expenses/Delete/5
+        [Route("Expenses/DeleteRecurring/{id}")]
+        public async Task<IActionResult> DeleteRecurring(int id)
+        {
+            try
+            {
+                var expenseVm = await _expenseService.GetExpense(id);
+                return View(expenseVm);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
+
         // POST: Expenses/Delete/5
         [HttpPost("Expenses/Delete/{id?}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -238,8 +274,8 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Expenses/Delete/5
-        [HttpPost("Expenses/DeleteRecurring/{id?}"), ActionName("Delete")]
+        // POST: Expenses/DeleteRecurring/12
+        [HttpPost("Expenses/DeleteRecurring/{id?}"), ActionName("DeleteRecurring")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRecurringConfirmed(int id)
         {
@@ -254,7 +290,7 @@ namespace Kaching.Controllers
             }
         }
 
-        private void RenderSelectList(ExpenseEventViewModel expenseEventViewModel)
+        private void RenderSelectList(EEventVM expenseEventViewModel)
         {   
             ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
                 "PersonId", "ConnectedUserName", expenseEventViewModel.BuyerId);

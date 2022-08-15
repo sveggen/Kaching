@@ -4,9 +4,9 @@ namespace Kaching.Services
 {
     public interface IExpenseService
     {
-        public Task<ExpenseEventViewModel> GetExpense(int expenseEventId);
+        public Task<EEventVM> GetExpense(int expenseEventId);
 
-        public Task<ExpenseIndexViewModel> GetExpensesByMonth(int monthNumber);
+        public Task<ExpenseIndexVM> GetExpensesByMonth(int monthNumber);
 
         public Task CreateExpense(ExpenseCreateVM expenseCreateVM);
 
@@ -16,16 +16,16 @@ namespace Kaching.Services
 
         public Task DeleteRecurringExpense(int expenseEventId);
 
-        public List<PersonViewModel> GetPersonsWithoutYourself(string username);
+        public List<PersonVM> GetPersonsWithoutYourself(string username);
 
-        public Task UpdateExpense(ExpenseEventViewModel expenseVM);
+        public Task UpdateExpense(ExpenseEditVM expenseEditVM);
 
-        public Task UpdateRecurringExpenses(ExpenseEventViewModel expenseVM);
+        public Task UpdateExpense(ExpenseEditRecurringVM expenseEditRecurringVM);
 
-        public PersonViewModel GetPerson(int personId);
+        public Task UpdateRecurringExpenses(EEventVM expenseVM);
 
-        public PersonViewModel GetPersonByUsername(string userName);
+        public PersonVM GetPersonByUsername(string userName);
 
-        public List<PersonViewModel> GetPersons();
+        public List<PersonVM> GetPersons();
     }
 }

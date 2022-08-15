@@ -72,6 +72,7 @@ namespace Kaching.Repositories
         public async Task<Expense> GetExpenseById(int expenseId)
         {
             return await _context.Expense
+                .Include(e => e.ExpenseEvents)
                 .FirstOrDefaultAsync(e => e.ExpenseId == expenseId);
         }
 

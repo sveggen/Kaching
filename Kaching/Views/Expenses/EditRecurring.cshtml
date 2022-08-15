@@ -1,18 +1,18 @@
 ﻿@model Kaching.ViewModels.EEventVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Recurring";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Edit Recurring</h1>
 
 
 <h4>Expense</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" class="ui form">
+        <form asp-action="EditRecurring" class="ui form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="ExpenseId" />
@@ -39,7 +39,7 @@
             </div>
             <div class="field">
                 <label class="ui label">Paid by</label>
-                <select asp-for="BuyerId" asp-items="ViewBag.PersonId"></select>
+                <select asp-for="BuyerId" class ="form-control" asp-items="ViewBag.PersonId"></select>
             </div>            
             <div class="field">
                 <label class="ui label">Description <i>: Not Required</i> </label>
@@ -49,10 +49,19 @@
         </form>
     </div>
     <div>
-        <form asp-action="Edit">
-            <input type="hidden" asp-for="EEventId" />
-            <input type="submit" value="Edit" class="ui positive button" /> <br />
-        </form>
+        <a class="ui icon button" asp-action="Delete" asp-route-id="@Model.EEventId">
+            <i class="ui button red">
+                Delete
+            </i>
+        </a>
+        @if (Model.Frequency != Frequency.OneTime)
+        {
+            <a class="ui icon button" asp-action="DeleteRecurring" asp-route-id="@Model.EEventId">
+                <i class="ui button red">
+                    Delete all recurring events
+                </i>
+            </a>
+        }
     </div>
 </div>
 

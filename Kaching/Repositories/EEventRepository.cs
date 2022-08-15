@@ -5,30 +5,30 @@ using System.Linq;
 
 namespace Kaching.Repositories
 {
-    public class ExpenseEventRepository : IExpenseEventRepository, IDisposable
+    public class EEventRepository : IEEventRepository, IDisposable
     {
         private readonly DataContext _context;
 
-        public ExpenseEventRepository(DataContext context)
+        public EEventRepository(DataContext context)
         {
             _context = context;
         }   
 
-        public void DeleteExpenseEvent(ExpenseEvent expenseEvent)
+        public void DeleteEEvent(EEvent eEvent)
         {
              _context
-                .ExpenseEvent.Remove(expenseEvent);
+                .ExpenseEvent.Remove(eEvent);
         }
 
-        public async Task<ExpenseEvent> GetExpenseEventById(int expenseEventId)
+        public async Task<EEvent> GetEEventById(int eEventId)
         {
             return await _context.ExpenseEvent
                 .Include(e => e.Expense)
                 .Include(b => b.Buyer)
-                .FirstOrDefaultAsync(m => m.ExpenseEventId == expenseEventId);
+                .FirstOrDefaultAsync(m => m.EEventId == eEventId);
         }
 
-        public async Task<List<ExpenseEvent>> GetExpenseEvents(int monthNumber)
+        public async Task<List<EEvent>> GetEEvents(int monthNumber)
         {
             return await _context.ExpenseEvent
                 .Include(e => e.Buyer)
@@ -48,7 +48,7 @@ namespace Kaching.Repositories
         }
 
 
-        public async Task<List<ExpenseEvent>> GetPersonExpenseEvents(int personId, int monthNumber)
+        public async Task<List<EEvent>> GetPersonExpenseEvents(int personId, int monthNumber)
         {
             return await _context.ExpenseEvent
                 .Include(e => e.Expense)
@@ -67,9 +67,9 @@ namespace Kaching.Repositories
                 .Sum(e => e.Expense.Price);
         }
 
-        public void InsertExpenseEvent(ExpenseEvent expenseEvent)
+        public void InsertExpenseEvent(EEvent eEvent)
         {
-            _context.Add(expenseEvent);
+            _context.Add(eEvent);
         }
 
         public void Save()
@@ -77,14 +77,14 @@ namespace Kaching.Repositories
             _context.SaveChanges();
         }
 
-        public void UpdateExpenseEvent(ExpenseEvent expenseEvent)
+        public void UpdateExpenseEvent(EEvent eEvent)
         {
-            _context.Update(expenseEvent);
+            _context.Update(eEvent);
         }
 
         public bool GetExpenseExistence(int id)
         {
-            return _context.ExpenseEvent.Any(e => e.ExpenseEventId == id);
+            return _context.ExpenseEvent.Any(e => e.EEventId == id);
         }
 
         private bool disposed = false;

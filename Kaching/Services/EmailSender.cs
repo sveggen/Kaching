@@ -33,7 +33,7 @@ namespace Kaching.Services
                 .SendAsync();
         }
 
-        public async Task SendPaymentReminder(PaymentReminderViewModel paymentVM)
+        public async Task SendPaymentReminder(PaymentReminderVM paymentVM)
         {
             var template = 
                 "Dear @Model.Username, For the expenses in @Model.MonthName " +

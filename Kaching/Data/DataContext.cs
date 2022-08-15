@@ -23,7 +23,7 @@ namespace Kaching.Data
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ExpenseEvent>()
+            modelBuilder.Entity<EEvent>()
                 .Property(s => s.Updated)
                 .HasDefaultValueSql("GETDATE()");
 
@@ -52,7 +52,7 @@ namespace Kaching.Data
 
         public DbSet<Expense> Expense { get; set; }
 
-        public DbSet<ExpenseEvent> ExpenseEvent { get; set; }
+        public DbSet<EEvent> ExpenseEvent { get; set; }
 
         public DbSet<Person> Person { get; set; }
 

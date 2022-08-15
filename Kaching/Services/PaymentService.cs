@@ -17,7 +17,7 @@ namespace Kaching.Services
             _paymentRepository = paymentRepository;
             _mapper = mapper;
         }
-        public async Task CreatePayment(PaymentCreateViewModel paymentVM)
+        public async Task CreatePayment(PaymentCreateVM paymentVM)
         {
             var payment = _mapper.Map<Payment>(paymentVM);
             _paymentRepository.InsertPayment(payment);
@@ -29,16 +29,16 @@ namespace Kaching.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PaymentViewModel> GetPayment(int paymentId)
+        public async Task<PaymentVM> GetPayment(int paymentId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<PaymentViewModel>> GetPayments()
+        public async Task<List<PaymentVM>> GetPayments()
         {
             var payments = await _paymentRepository.GetPayments();
 
-            return _mapper.Map<List<PaymentViewModel>>(payments);
+            return _mapper.Map<List<PaymentVM>>(payments);
         }
     }
 }

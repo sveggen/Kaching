@@ -2,7 +2,7 @@
 
 namespace Kaching.ViewModels
 {
-    public class ExpenseIndexViewModel
+    public class ExpenseIndexVM
     {
         public decimal Sum { get; set; }
 
@@ -14,8 +14,8 @@ namespace Kaching.ViewModels
 
         public int Year { get; set; }
 
-        public List<ExpenseEventViewModel>? Expenses { get; set; }
+        public List<EEventVM>? Expenses { get; set; }
 
-        public List<PersonViewModel>? Persons { get; set; }
+        public List<PersonVM>? Persons { get; set; }
     }
 }

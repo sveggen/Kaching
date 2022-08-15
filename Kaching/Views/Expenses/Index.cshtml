@@ -1,5 +1,5 @@
 ﻿@using Microsoft.VisualBasic
-@model Kaching.ViewModels.ExpenseIndexViewModel;
+@model Kaching.ViewModels.ExpenseIndexVM;
 
 @{
     ViewData["Title"] = "Index";
@@ -97,7 +97,7 @@
                 </td>
 
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.ExpenseEventId">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.EEventId">Details</a>
                 </td>
             </tr>
         }

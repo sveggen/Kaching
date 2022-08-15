@@ -55,7 +55,7 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Payments/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PaymentCreateViewModel paymentCreateViewModel)
+        public async Task<IActionResult> Create(PaymentCreateVM paymentCreateViewModel)
         {
             if (ModelState.IsValid)
             {

@@ -2,7 +2,7 @@
 
 namespace Kaching.ViewModels
 {
-    public class PaymentCreateViewModel
+    public class PaymentCreateVM
     {
         public int SenderId { get; set; }
 

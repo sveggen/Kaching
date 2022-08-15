@@ -3,7 +3,7 @@ using Kaching.Models;
 
 namespace Kaching.ViewModels
 {
-    public class ExpenseViewModel
+    public class ExpenseVM
     {
         public int ExpenseId { get; set; }
 
@@ -12,7 +12,7 @@ namespace Kaching.ViewModels
 
         public int CreatorId { get; set; }
 
-        public PersonViewModel? Creator { get; set; }
+        public PersonVM? Creator { get; set; }
 
         public Category? Category { get; set; }
 
@@ -20,7 +20,7 @@ namespace Kaching.ViewModels
 
         public int BuyerId { get; set; }
 
-        public PersonViewModel? Buyer { get; set; }
+        public PersonVM? Buyer { get; set; }
 
         public PaymentStatus? PaymentStatus { get; set; }
 

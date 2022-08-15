@@ -8,20 +8,20 @@ namespace Kaching.Services
     public class ExpenseService : IExpenseService
     {
         private readonly IExpenseRepository _expenseRepository;
-        private readonly IExpenseEventRepository _expenseEventRepository;
+        private readonly IEEventRepository _eEventRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
         public ExpenseService(
             IExpenseRepository expenseRepository,
-            IExpenseEventRepository expenseEventRepository,
+            IEEventRepository eEventRepository,
             IPaymentRepository paymentRepository,
             IPersonRepository personRepository,
             IMapper mapper)
         {
             _expenseRepository = expenseRepository;
-            _expenseEventRepository = expenseEventRepository;
+            _eEventRepository = eEventRepository;
             _paymentRepository = paymentRepository;
             _personRepository = personRepository;
             _mapper = mapper;
@@ -29,7 +29,7 @@ namespace Kaching.Services
 
         public async Task CreateExpense(ExpenseCreateRecurringVM expenseCreateRecurringVM)
         {
-            List<ExpenseEvent> expenseEvents = new List<ExpenseEvent>();
+            List<EEvent> expenseEvents = new List<EEvent>();
 
             var paymentDate = expenseCreateRecurringVM.StartDate;
             var endDate = expenseCreateRecurringVM.EndDate;
@@ -43,7 +43,7 @@ namespace Kaching.Services
                     break;
                 }
 
-                expenseEvents.Add(new ExpenseEvent
+                expenseEvents.Add(new EEvent
                 {
                     BuyerId = expenseCreateRecurringVM.BuyerId,
                     PaymentDate = paymentDate,
@@ -59,8 +59,8 @@ namespace Kaching.Services
 
         public async Task CreateExpense(ExpenseCreateVM expenseCreateVM)
         {
-            List<ExpenseEvent> expenseEvents = new List<ExpenseEvent>();
-            expenseEvents.Add(new ExpenseEvent
+            List<EEvent> expenseEvents = new List<EEvent>();
+            expenseEvents.Add(new EEvent
                 {
                     BuyerId = expenseCreateVM.BuyerId,
                     PaymentDate = expenseCreateVM.PaymentDate,
@@ -76,12 +76,12 @@ namespace Kaching.Services
 
         public async Task DeleteRecurringExpense(int expenseEventId)
         {
-            var expenseEvent = await _expenseEventRepository.GetExpenseEventById(expenseEventId);
+            var expenseEvent = await _eEventRepository.GetEEventById(expenseEventId);
             var expense = await _expenseRepository.GetExpenseById(expenseEvent.ExpenseId);
 
             foreach (var item in expense.ExpenseEvents)
             {
-                _expenseEventRepository.DeleteExpenseEvent(expenseEvent);
+                _eEventRepository.DeleteEEvent(item);
             }
 
             _expenseRepository.DeleteExpense(expense);
@@ -90,32 +90,32 @@ namespace Kaching.Services
 
         public async Task DeleteExpense(int expenseEventId)
         {
-            var expenseEvent = await _expenseEventRepository.GetExpenseEventById(expenseEventId);
+            var expenseEvent = await _eEventRepository.GetEEventById(expenseEventId);
 
-            _expenseEventRepository.DeleteExpenseEvent(expenseEvent);
-            await _expenseEventRepository.SaveAsync();
+            _eEventRepository.DeleteEEvent(expenseEvent);
+            await _eEventRepository.SaveAsync();
         }
 
-        public async Task<ExpenseEventViewModel> GetExpense(int expenseEventId)
+        public async Task<EEventVM> GetExpense(int expenseEventId)
         {
-            var expense = await _expenseEventRepository.GetExpenseEventById(expenseEventId);
-            return _mapper.Map<ExpenseEventViewModel>(expense);
+            var expense = await _eEventRepository.GetEEventById(expenseEventId);
+            return _mapper.Map<EEventVM>(expense);
         }
 
-        public async Task<ExpenseIndexViewModel> GetExpensesByMonth(int monthNumber)
+        public async Task<ExpenseIndexVM> GetExpensesByMonth(int monthNumber)
         {
-            var expensesByMonth = await _expenseEventRepository.GetExpenseEvents(monthNumber);
+            var expensesByMonth = await _eEventRepository.GetEEvents(monthNumber);
             var persons = _personRepository.GetAllPersons();
-            var sum = _expenseEventRepository.GetExpenseEventSum(monthNumber);
+            var sum = _eEventRepository.GetExpenseEventSum(monthNumber);
 
             // Total amount / nr. of persons
             var share = sum / persons.Count;
-            var personViewModelList = _mapper.Map<List<PersonViewModel>>(persons);
+            var personViewModelList = _mapper.Map<List<PersonVM>>(persons);
 
             int index = 0;
             foreach (var person in personViewModelList)
             {
-                var sumPersonExpenses = _expenseEventRepository.GetSumOfPersonExpenseEvents(person.PersonId, monthNumber);
+                var sumPersonExpenses = _eEventRepository.GetSumOfPersonExpenseEvents(person.PersonId, monthNumber);
                 
                 personViewModelList[index].SumOfExpenses = sumPersonExpenses;
                 personViewModelList[index].PaymentsSent = _paymentRepository.GetSumOfPersonSentPayments(monthNumber, person.PersonId);
@@ -125,47 +125,48 @@ namespace Kaching.Services
                 index++;
             }
 
-            var expenseIndexModel = new ExpenseIndexViewModel
+            var expenseIndexModel = new ExpenseIndexVM
             {
                 Sum = sum,
                 MonthNumber = monthNumber,
                 Year = 2022,
-                Expenses = _mapper.Map<List<ExpenseEventViewModel>>(expensesByMonth),
+                Expenses = _mapper.Map<List<EEventVM>>(expensesByMonth),
                 Persons = personViewModelList,
                 CurrentDate = DateOnly.FromDateTime(DateTime.Now).ToString("dddd, dd. MMMM")
             };
             return expenseIndexModel;
         }
 
-        public async Task UpdateExpense(ExpenseEventViewModel expenseEventViewModel)
+        public async Task UpdateExpense(ExpenseEditVM expenseEditVM)
         {
-            var expense = _mapper.Map<ExpenseEvent>(expenseEventViewModel);
-            _expenseEventRepository.UpdateExpenseEvent(expense);
+            var expense = _mapper.Map<EEvent>(expenseEditVM);
+            _eEventRepository.UpdateExpenseEvent(expense);
             await _expenseRepository.SaveAsync();
         }
 
-        public PersonViewModel GetPerson(int personId)
+        public async Task UpdateExpense(ExpenseEditRecurringVM expenseEditRecurringVM)
         {
-            var person = _personRepository.GetPersonByPersonId(personId);
-            return _mapper.Map<PersonViewModel>(person);
+            var expense = _mapper.Map<EEvent>(expenseEditRecurringVM);
+            _eEventRepository.UpdateExpenseEvent(expense);
+            await _expenseRepository.SaveAsync();
         }
 
-        public List<PersonViewModel> GetPersons()
+        public List<PersonVM> GetPersons()
         {
             var persons = _personRepository.GetAllPersons();
-            return _mapper.Map<List<PersonViewModel>>(persons);
+            return _mapper.Map<List<PersonVM>>(persons);
         }
 
-        public List<PersonViewModel> GetPersonsWithoutYourself(string username)
+        public List<PersonVM> GetPersonsWithoutYourself(string username)
         {
             var persons = _personRepository.GetAllPersonsWithoutYourself(username);
-            return _mapper.Map<List<PersonViewModel>>(persons);
+            return _mapper.Map<List<PersonVM>>(persons);
         }
 
-        public PersonViewModel GetPersonByUsername(string userName)
+        public PersonVM GetPersonByUsername(string userName)
         {
             var person = _personRepository.GetPersonByUserName(userName);
-            return _mapper.Map<PersonViewModel>(person);
+            return _mapper.Map<PersonVM>(person);
         }
 
         private DateTime NextPaymentDate(DateTime currPaymentDate, Frequency frequency)
@@ -185,7 +186,7 @@ namespace Kaching.Services
             return dateTime;
         }
 
-        public Task UpdateRecurringExpenses(ExpenseEventViewModel expenseVM)
+        public Task UpdateRecurringExpenses(EEventVM expenseVM)
         {
             throw new NotImplementedException();
         }

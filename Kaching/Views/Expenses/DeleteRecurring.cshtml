@@ -5,11 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-@Model.ExpenseId
-
-
-<h1>Delete</h1>
+<h1>Delete recurring</h1>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
@@ -17,12 +13,10 @@
     <hr />
     <partial name="/Views/Expenses/_ExpenseInfo.cshtml" />
 
-    <form asp-action="Delete">
+    <form asp-action="DeleteRecurring">
         <input type="hidden" asp-for="EEventId" />
         <input type="submit" value="Delete" class="ui red button" /> <br />
     </form>
-
-
 
     <a asp-action="Index">Back to List</a>
 </div>

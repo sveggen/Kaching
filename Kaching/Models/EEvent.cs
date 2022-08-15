@@ -2,10 +2,10 @@
 
 namespace Kaching.Models
 {
-    public class ExpenseEvent
+    public class EEvent
     {
-
-        public int ExpenseEventId { get; set; } 
+        [Column("ExpenseEventId")]
+        public int EEventId { get; set; } 
 
         public int ExpenseId { get; set; }
 

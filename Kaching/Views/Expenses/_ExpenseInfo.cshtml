@@ -1,58 +1,78 @@
 ﻿
 @using Microsoft.VisualBasic
-@model Kaching.ViewModels.ExpenseEventViewModel
+@model Kaching.ViewModels.EEventVM
 
 @*
   
 *@
 
-<div class="ui card">
-    <a class="ui right corner label" asp-action="Edit" asp-route-id="@Model?.ExpenseEventId">
-        <i class="cog icon"></i>
-    </a>
-    <div class="content">
-        <div class="header">€ @Html.DisplayFor(model => model.Expense.Price) assigned to @Html.DisplayFor(model => model.Buyer.ConnectedUserName)</div>
-        <div class="meta">
-            
-            @if (Model.PaymentStatus == PaymentStatus.Automatic)
-            {
-                <span class="right floated time" style="color: yellowgreen">Automatic</span>
-            } 
-            else if (Model.PaymentStatus == PaymentStatus.NotPaid)
-              {
-                  <span class="right floated time" style="color: red">Not paid</span>
-              } 
-            else if (Model.PaymentStatus == PaymentStatus.Paid)
-              {
-                  <span class="right floated time" style="color: green">Paid</span>
-              }
-            <span class="category">@Html.DisplayFor(model => model.Expense.Category)</span>
-        </div>
-        <div class="ui divider"></div>
-        <div class="ui list">
-            <div class="item">
-                <i class="calendar alternate icon"></i>
-                <div class="content">
-                    @Strings.FormatDateTime(Model.PaymentDate, DateFormat.LongDate)
+<div class="row">
+    <div class="ui form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="ExpenseId" />
+            <input type="hidden" asp-for="Expense.CreatorId" />
+            <input type="hidden" asp-for="Expense.Created" />
+
+            <div class="field">
+                <label class="ui label">Price</label>
+                <div class="ui right labeled input">
+                    <label for="amount" class="ui label">€</label>
+                    <input asp-for="Expense.Price" placeholder="Price" disabled>
                 </div>
             </div>
-            <div class="item">
-                <i class="hourglass icon"></i>
-                <div class="content">
-                    @Html.DisplayFor(model => model.Expense.Frequency)
-                </div>
+            <div class="field">
+                <label class="ui label">Category</label>
+                <input asp-for="Expense.Category" disabled>
             </div>
-
-        </div>
-        
-
-        <div class="description">
-            @Html.DisplayFor(model => model.Expense.Description)
+            <div class="field">
+                <label class="ui label">Payment Status</label>
+                <input asp-for="PaymentStatus" disabled>
+            </div>
+            <div class="field">
+                <label class="ui label">Paid by</label>
+                <input asp-for="Buyer.ConnectedUserName" placeholder="Buyer.ConnectedUserName" disabled>
+            </div>  
+            <div class="field">
+                <label class="ui label">Frequency</label>
+                <input asp-for="Frequency" disabled>
+            </div> 
+            <div class="field">
+                <label class="ui label">Frequency</label>
+                <input asp-for="Frequency" disabled>
+            </div>
+            <div class="field">
+                <label class="ui label">Payment Date</label>
+                <input asp-for="PaymentDate" disabled>
+            </div>
+            <div class="field">
+                <label class="ui label">Description <i>: Not Required</i> </label>
+                <textarea asp-for="Expense.Description" disabled> </textarea>
+            </div>
         </div>
     </div>
-    <div class="extra content">
-        <div class="right floated author">
-            Created by <img class="ui avatar image" src="https://m.media-amazon.com/images/I/71iFekvN5hS._AC_SL1500_.jpg">  @Html.DisplayFor(model => model.Expense.Creator.ConnectedUserName)
-        </div>
+    <div>
+        <a class="ui icon button" asp-action="Delete" asp-route-id="@Model.EEventId">
+            <i class="ui button red">
+                Delete
+            </i>
+        </a>
+        @if (Model.Frequency != Frequency.OneTime)
+        {
+            <a class="ui icon button" asp-action="DeleteRecurring" asp-route-id="@Model.EEventId">
+                <i class="ui button red">
+                    Delete all recurring events
+                </i>
+            </a>
+            <a class="ui icon button" asp-action="EditRecurring" asp-route-id="@Model.EEventId">
+                <i class="ui button red">
+                    EditRecurring
+                </i>
+            </a>
+        }
+        <a class="ui icon button" asp-action="Edit" asp-route-id="@Model.EEventId">
+            <i class="ui button">
+                Edit
+            </i>
+        </a>
     </div>
-</div>

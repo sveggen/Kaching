@@ -5,17 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kaching.ViewModels
 {
     [BindProperties]
-    public class ExpenseEventViewModel
+    public class EEventVM
     {
-        public int ExpenseEventId { get; set; }
+        public int EEventId { get; set; }
 
         public int ExpenseId { get; set; }
 
-        public ExpenseViewModel Expense { get; set; }
+        public ExpenseVM Expense { get; set; }
 
         public int BuyerId { get; set; }
 
-        public PersonViewModel? Buyer { get; set; }
+        public PersonVM? Buyer { get; set; }
 
         public string? Comment { get; set; }
 

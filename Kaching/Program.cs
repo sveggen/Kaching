@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add user services to the container.
 var userConnectionString = builder.Configuration.GetConnectionString("AzureRemote");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -31,7 +30,7 @@ builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
-builder.Services.AddScoped<IExpenseEventRepository, ExpenseEventRepository>();
+builder.Services.AddScoped<IEEventRepository, EEventRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();

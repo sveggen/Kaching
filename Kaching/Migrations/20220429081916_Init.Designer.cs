@@ -67,11 +67,11 @@ namespace Kaching.Migrations
 
             modelBuilder.Entity("Kaching.Models.ExpenseEvent", b =>
                 {
-                    b.Property<int>("ExpenseEventId")
+                    b.Property<int>("EEventId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpenseEventId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EEventId"), 1L, 1);
 
                     b.Property<int>("BuyerId")
                         .HasColumnType("int");
@@ -92,7 +92,7 @@ namespace Kaching.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ExpenseEventId");
+                    b.HasKey("EEventId");
 
                     b.HasIndex("BuyerId");
 

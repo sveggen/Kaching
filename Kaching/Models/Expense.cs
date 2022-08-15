@@ -24,7 +24,7 @@ namespace Kaching.Models
 
         public Frequency Frequency { get; set; }
 
-        public List<ExpenseEvent> ExpenseEvents { get; set; }
+        public List<EEvent> ExpenseEvents { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Created { get; set; }
