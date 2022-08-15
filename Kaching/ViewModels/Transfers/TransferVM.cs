@@ -1,6 +1,6 @@
 ﻿namespace Kaching.ViewModels
 {
-    public class PaymentVM
+    public class TransferVM
     {
         public string? SenderUserName { get; set; }
 

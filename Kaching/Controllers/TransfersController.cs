@@ -7,26 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Kaching.Controllers
 {
     [Authorize]
-    public class PaymentsController : Controller
+    public class TransfersController : Controller
     {
-        private readonly IPaymentService _paymentService;
+        private readonly ITransferService _transferService;
         private readonly IExpenseService _expenseService;
 
-        public PaymentsController(
-            IPaymentService paymentService,
+        public TransfersController(
+            ITransferService transferService,
             IExpenseService expenseService)
         {
-            _paymentService = paymentService;
+            _transferService = transferService;
             _expenseService = expenseService;
         }
 
-        // GET: Payments/
-        [Route("Payments/")]
+        // GET: Transfers/
+        [Route("Transfers/")]
         public async Task<IActionResult> Index(string? month)
         {
             try
             {
-                var viewModel = await _paymentService.GetPayments();
+                var viewModel = await _transferService.GetTransfers();
                 return View(viewModel);
             }
             catch (Exception)
@@ -35,8 +35,8 @@ namespace Kaching.Controllers
             }
         }
 
-        // GET: Payments/Create
-        [Route("Payments/Create")]
+        // GET: Transfers/Create
+        [Route("Transfers/Create")]
         public IActionResult Create()  
         {
             try
@@ -50,25 +50,25 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Payments/Create
+        // POST: Transfers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Payments/Create")]
+        [HttpPost("Transfers/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PaymentCreateVM paymentCreateViewModel)
+        public async Task<IActionResult> Create(TransferCreateVM transferCreateViewModel)
         {
             if (ModelState.IsValid)
             {
                 var currentPerson = _expenseService.GetPersonByUsername(GetCurrentUserName());
-                paymentCreateViewModel.SenderId = currentPerson.PersonId;
+                transferCreateViewModel.SenderId = currentPerson.PersonId;
 
                 // build Expense table
-                await _paymentService.CreatePayment(paymentCreateViewModel);
+                await _transferService.CreateTransfer(transferCreateViewModel);
 
                 return RedirectToAction(nameof(Index));
             }
             //RenderSelectList(expenseEventCreateViewModel);
-            return View(paymentCreateViewModel);
+            return View(transferCreateViewModel);
         }
 
         private void RenderSelectListDefault()

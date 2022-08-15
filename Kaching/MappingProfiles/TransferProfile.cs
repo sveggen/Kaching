@@ -4,14 +4,14 @@ using Kaching.ViewModels;
 
 namespace Kaching.MappingProfiles
 {
-    public class PaymentProfile : Profile
+    public class TransferProfile : Profile
     {
 
-        public PaymentProfile()
+        public TransferProfile()
         {
-            CreateMap<PaymentCreateVM, Payment>()
+            CreateMap<TransferCreateVM, Transfer>()
                 .ForMember(m => m.Created, conf => conf.MapFrom(ml => DateTime.Now));
-            CreateMap<Payment, PaymentVM>()
+            CreateMap<Transfer, TransferVM>()
                 .ForMember(e => e.SenderUserName, t => t.MapFrom(w => w.Sender.ConnectedUserName))
                 .ForMember(e=> e.ReceiverUserName, t => t.MapFrom(f=> f.Receiver.ConnectedUserName))
                 .ForMember(e => e.PaymentMonth, f => f.MapFrom(k => k.PaymentPeriod.ToString("MMMM")));

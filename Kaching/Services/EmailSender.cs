@@ -42,7 +42,7 @@ namespace Kaching.Services
 
             await _fluentEmail
                 .To(paymentVM.Email)
-                .Subject("Kaching - Payment Reminder for " + paymentVM.MonthName)
+                .Subject("Kaching - Transfer Reminder for " + paymentVM.MonthName)
                 .UsingTemplate(template, paymentVM)
                 .SendAsync();
         }

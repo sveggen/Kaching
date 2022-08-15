@@ -9,20 +9,20 @@ namespace Kaching.Services
     {
         private readonly IExpenseRepository _expenseRepository;
         private readonly IEEventRepository _eEventRepository;
-        private readonly IPaymentRepository _paymentRepository;
+        private readonly ITransferRepository _transferRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IMapper _mapper;
 
         public ExpenseService(
             IExpenseRepository expenseRepository,
             IEEventRepository eEventRepository,
-            IPaymentRepository paymentRepository,
+            ITransferRepository transferRepository,
             IPersonRepository personRepository,
             IMapper mapper)
         {
             _expenseRepository = expenseRepository;
             _eEventRepository = eEventRepository;
-            _paymentRepository = paymentRepository;
+            _transferRepository = transferRepository;
             _personRepository = personRepository;
             _mapper = mapper;
         }
@@ -118,8 +118,8 @@ namespace Kaching.Services
                 var sumPersonExpenses = _eEventRepository.GetSumOfPersonExpenseEvents(person.PersonId, monthNumber);
                 
                 personViewModelList[index].SumOfExpenses = sumPersonExpenses;
-                personViewModelList[index].PaymentsSent = _paymentRepository.GetSumOfPersonSentPayments(monthNumber, person.PersonId);
-                personViewModelList[index].PaymentsReceived = _paymentRepository.GetSumOfPersonReceivedPayments(monthNumber, person.PersonId);
+                personViewModelList[index].PaymentsSent = _transferRepository.GetSumOfPersonSentTransfers(monthNumber, person.PersonId);
+                personViewModelList[index].PaymentsReceived = _transferRepository.GetSumOfPersonReceivedTransfers(monthNumber, person.PersonId);
                 // For each person: amount paid - share = owes/owed
                 personViewModelList[index].OwesOwed = personViewModelList[index].SumOfExpenses - share + personViewModelList[index].PaymentsSent - personViewModelList[index].PaymentsReceived;
                 index++;

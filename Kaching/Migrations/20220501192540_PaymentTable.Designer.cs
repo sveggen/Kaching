@@ -102,13 +102,13 @@ namespace Kaching.Migrations
                     b.ToTable("ExpenseEvent");
                 });
 
-            modelBuilder.Entity("Kaching.Models.Payment", b =>
+            modelBuilder.Entity("Kaching.Models.Transfer", b =>
                 {
-                    b.Property<int>("PaymentId")
+                    b.Property<int>("TransferId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransferId"), 1L, 1);
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
@@ -128,13 +128,13 @@ namespace Kaching.Migrations
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
 
-                    b.HasKey("PaymentId");
+                    b.HasKey("TransferId");
 
                     b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Transfer");
                 });
 
             modelBuilder.Entity("Kaching.Models.Person", b =>
@@ -188,7 +188,7 @@ namespace Kaching.Migrations
                     b.Navigation("Expense");
                 });
 
-            modelBuilder.Entity("Kaching.Models.Payment", b =>
+            modelBuilder.Entity("Kaching.Models.Transfer", b =>
                 {
                     b.HasOne("Kaching.Models.Person", "Receiver")
                         .WithMany("PaymentsReceived")

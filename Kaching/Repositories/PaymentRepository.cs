@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Repositories
 {
-    public class PaymentRepository : IPaymentRepository, IDisposable
+    public class TransferRepository : ITransferRepository, IDisposable
     {
         private readonly DataContext _context;
 
-        public PaymentRepository(DataContext context)
+        public TransferRepository(DataContext context)
         {
             _context = context;
         }
 
-        public void DeletePayment(Payment payment)
+        public void DeleteTransfer(Transfer transfer)
         {
             throw new NotImplementedException();
         }
@@ -37,17 +37,17 @@ namespace Kaching.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public Task<Payment> GetPaymentById(int paymentId)
+        public Task<Transfer> GetTransferById(int transferId)
         {
             throw new NotImplementedException();
         }
 
-        public bool GetPaymentExistence(int paymentId)
+        public bool GetTransferExistence(int transferId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Payment>> GetPayments()
+        public async Task<List<Transfer>> GetTransfers()
         {
             return await _context.Payment
                 .Include(e => e.Sender)
@@ -56,14 +56,14 @@ namespace Kaching.Repositories
                 .ToListAsync(); 
         }
 
-        public Task<List<Payment>> GetPersonPayments(int personId, int monthNumber)
+        public Task<List<Transfer>> GetPersonTransfers(int personId, int monthNumber)
         {
             throw new NotImplementedException();
         }
 
-        public void InsertPayment(Payment payment)
+        public void InsertTransfer(Transfer transfer)
         {
-            _context.Add(payment);
+            _context.Add(transfer);
         }
 
         public void Save()
@@ -76,7 +76,7 @@ namespace Kaching.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public decimal GetSumOfPersonSentPayments(int monthNumber, int personId)
+        public decimal GetSumOfPersonSentTransfers(int monthNumber, int personId)
         {
             return _context.Payment
                 .Include(e => e.Sender)
@@ -84,7 +84,7 @@ namespace Kaching.Repositories
                 .Where(p => p.PaymentPeriod.Month == monthNumber)
                 .Sum(i => i.Amount);
         }
-        public decimal GetSumOfPersonReceivedPayments(int monthNumber, int personId)
+        public decimal GetSumOfPersonReceivedTransfers(int monthNumber, int personId)
         {
             return _context.Payment
                 .Include(e => e.Receiver)

@@ -1,19 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Kaching.Models;
 
-namespace Kaching.Models
+namespace Kaching.ViewModels
 {
-    public class Payment
+    public class TransferCreateVM
     {
-        public int PaymentId { get; set; }
-
         public int SenderId { get; set; }
-        public Person? Sender  { get; set; }
 
         public int ReceiverId { get; set; }
 
-        public Person? Receiver { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
 
         public string? Description { get; set; }
@@ -21,5 +15,6 @@ namespace Kaching.Models
         public DateTime PaymentPeriod { get; set; }
 
         public DateTime Created { get; set; }
+
     }
 }

@@ -2,24 +2,24 @@
 
 namespace Kaching.Repositories
 {
-    public interface IPaymentRepository
+    public interface ITransferRepository
     {
 
-        public Task<List<Payment>> GetPayments();
+        public Task<List<Transfer>> GetTransfers();
 
-        public Task<List<Payment>> GetPersonPayments(int personId, int monthNumber);
+        public Task<List<Transfer>> GetPersonTransfers(int personId, int monthNumber);
 
-        public decimal GetSumOfPersonSentPayments(int monthNumber, int personId);
+        public decimal GetSumOfPersonSentTransfers(int monthNumber, int personId);
 
-        public decimal GetSumOfPersonReceivedPayments(int monthNumber, int personId);
+        public decimal GetSumOfPersonReceivedTransfers(int monthNumber, int personId);
 
-        public Task<Payment> GetPaymentById(int paymentId);
+        public Task<Transfer> GetTransferById(int transferId);
 
-        public bool GetPaymentExistence(int paymentId);
+        public bool GetTransferExistence(int transferId);
 
-        public void InsertPayment(Payment payment);
+        public void InsertTransfer(Transfer transfer);
 
-        public void DeletePayment(Payment payment);
+        public void DeleteTransfer(Transfer transfer);
 
         public void Save();
 

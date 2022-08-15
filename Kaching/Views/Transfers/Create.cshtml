@@ -1,4 +1,4 @@
-﻿@model Kaching.ViewModels.PaymentCreateVM
+﻿@model Kaching.ViewModels.TransferCreateVM
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -6,7 +6,7 @@
 @{
 }
 
-<h1>Add payment</h1>
+<h1>Add transfer</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -34,7 +34,7 @@
                             <div class="ui calendar" id="month_year_calendar">
                                 <div class="ui input left icon">
                                     <i class="calendar icon"></i>
-                                    <input asp-for="PaymentPeriod" type="text" placeholder="Payment month">
+                                    <input asp-for="PaymentPeriod" type="text" placeholder="Transfer month">
                                     <span asp-validation-for="PaymentPeriod" class="text-danger"></span>
                                 </div>
                             </div>

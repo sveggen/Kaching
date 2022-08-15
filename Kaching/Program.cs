@@ -31,11 +31,11 @@ builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<IEEventRepository, EEventRepository>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<ITransferRepository, TransferRepository>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<ITransferService, TransferService>();
 
 builder.Services
     .AddFluentEmail(builder.Configuration.GetConnectionString("MailgunSender"))

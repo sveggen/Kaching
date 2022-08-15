@@ -10,7 +10,7 @@ namespace Kaching.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Payment",
+                name: "Transfer",
                 columns: table => new
                 {
                     PaymentId = table.Column<int>(type: "int", nullable: false)
@@ -41,19 +41,19 @@ namespace Kaching.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_ReceiverId",
-                table: "Payment",
+                table: "Transfer",
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_SenderId",
-                table: "Payment",
+                table: "Transfer",
                 column: "SenderId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Payment");
+                name: "Transfer");
         }
     }
 }

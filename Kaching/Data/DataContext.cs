@@ -27,13 +27,13 @@ namespace Kaching.Data
                 .Property(s => s.Updated)
                 .HasDefaultValueSql("GETDATE()");
 
-            modelBuilder.Entity<Payment>()
+            modelBuilder.Entity<Transfer>()
                 .HasOne(f => f.Sender)
                 .WithMany(f => f.PaymentsSent)
                 .HasForeignKey(g => g.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Payment>()
+            modelBuilder.Entity<Transfer>()
                 .HasOne(f => f.Receiver)
                 .WithMany(f => f.PaymentsReceived)
                 .HasForeignKey(g => g.ReceiverId)
@@ -56,6 +56,6 @@ namespace Kaching.Data
 
         public DbSet<Person> Person { get; set; }
 
-        public DbSet<Payment> Payment { get; set; }
+        public DbSet<Transfer> Payment { get; set; }
     }
 }

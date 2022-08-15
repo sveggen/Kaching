@@ -3,7 +3,7 @@ using Kaching.Models;
 
 namespace Kaching.ViewModels
 {
-    public class EEventsViewModel
+    public class EEventsVM
     {
         public int ExpenseId { get; set; }
 
