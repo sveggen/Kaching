@@ -36,6 +36,7 @@ builder.Services.AddScoped<ITransferRepository, TransferRepository>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<ITransferService, TransferService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 
 builder.Services
     .AddFluentEmail(builder.Configuration.GetConnectionString("MailgunSender"))

@@ -10,14 +10,14 @@ namespace Kaching.Controllers
     public class TransfersController : Controller
     {
         private readonly ITransferService _transferService;
-        private readonly IExpenseService _expenseService;
+        private readonly IPersonService _personService;
 
         public TransfersController(
             ITransferService transferService,
-            IExpenseService expenseService)
+            IPersonService personService)
         {
             _transferService = transferService;
-            _expenseService = expenseService;
+            _personService = personService;
         }
 
         // GET: Transfers/
@@ -59,10 +59,9 @@ namespace Kaching.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentPerson = _expenseService.GetPersonByUsername(GetCurrentUserName());
+                var currentPerson = _personService.GetPersonByUsername(GetCurrentUserName());
                 transferCreateViewModel.SenderId = currentPerson.PersonId;
 
-                // build Expense table
                 await _transferService.CreateTransfer(transferCreateViewModel);
 
                 return RedirectToAction(nameof(Index));
@@ -73,7 +72,7 @@ namespace Kaching.Controllers
 
         private void RenderSelectListDefault()
         {
-            ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
+            ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
                 "PersonId", "ConnectedUserName");
         }
 

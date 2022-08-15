@@ -12,14 +12,17 @@ namespace Kaching.Controllers
     public class ExpensesController : Controller
     {
         private readonly IExpenseService _expenseService;
+        private readonly IPersonService _personService;
         private readonly int _currentMonthNumber;
         private readonly List<string> _months;
 
         public ExpensesController(
-            IExpenseService expenseService)
+            IExpenseService expenseService,
+            IPersonService personService)
         {
             _currentMonthNumber = DateTime.Now.Month;
             _expenseService = expenseService;
+            _personService = personService;
             _months = new List<string> 
             {"January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"};
@@ -114,7 +117,7 @@ namespace Kaching.Controllers
         {
             if (ModelState.IsValid)
             {
-                expenseCreateVM.CreatorId = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+                expenseCreateVM.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
                 await _expenseService.CreateExpense(expenseCreateVM);
 
                 return RedirectToAction(nameof(Index));
@@ -131,7 +134,7 @@ namespace Kaching.Controllers
         {
             if (ModelState.IsValid)
             {
-                expenseCreateRecurringVM.CreatorId = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+                expenseCreateRecurringVM.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
                 await _expenseService.CreateExpense(expenseCreateRecurringVM);
 
                 return RedirectToAction(nameof(Index));
@@ -292,14 +295,14 @@ namespace Kaching.Controllers
 
         private void RenderSelectList(EEventVM expenseEventViewModel)
         {   
-            ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
+            ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
                 "PersonId", "ConnectedUserName", expenseEventViewModel.BuyerId);
         }
 
         private void RenderSelectListDefault()
         {
-            var selectedUsername = _expenseService.GetPersonByUsername(GetCurrentUserName()).PersonId;
-            ViewData["PersonId"] = new SelectList(_expenseService.GetPersons(),
+            var selectedUsername = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+            ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
                 "PersonId", "ConnectedUserName", selectedUsername);
         }
 

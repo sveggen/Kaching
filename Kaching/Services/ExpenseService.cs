@@ -151,24 +151,6 @@ namespace Kaching.Services
             await _expenseRepository.SaveAsync();
         }
 
-        public List<PersonVM> GetPersons()
-        {
-            var persons = _personRepository.GetAllPersons();
-            return _mapper.Map<List<PersonVM>>(persons);
-        }
-
-        public List<PersonVM> GetPersonsWithoutYourself(string username)
-        {
-            var persons = _personRepository.GetAllPersonsWithoutYourself(username);
-            return _mapper.Map<List<PersonVM>>(persons);
-        }
-
-        public PersonVM GetPersonByUsername(string userName)
-        {
-            var person = _personRepository.GetPersonByUserName(userName);
-            return _mapper.Map<PersonVM>(person);
-        }
-
         private DateTime NextPaymentDate(DateTime currPaymentDate, Frequency frequency)
         {
             var dateTime = currPaymentDate;
