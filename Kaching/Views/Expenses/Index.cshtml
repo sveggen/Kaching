@@ -82,7 +82,7 @@
                     <p>
                         @if (!String.IsNullOrEmpty(item.Expense.Description))
                         {
-                            <div class="ui icon button togglecomment" data-title="@Html.DisplayFor(modelItem => item.Expense.Creator.ConnectedUserName) on @Strings.FormatDateTime(item.Expense.Created, DateFormat.LongDate)" 
+                            <div class="ui icon button togglecomment"
                                  data-content="@Html.DisplayFor(modelItem => item.Expense.Description)">
                                 <i class="comment icon"></i>
                             </div>
