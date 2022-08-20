@@ -46,10 +46,6 @@
                             </div>
                             <select asp-for="BuyerId" id="buyerdropdown" class="ui selection dropdown" asp-items="ViewBag.PersonId"></select>
                         </div>
-                        <div class="field">
-                            <select asp-for="Frequency" id="frequencydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Frequency>()"></select>
-                        </div>
-
                         <div class="two fields">
                             <div class="field">
                                 <div class="ui calendar" id="rangestart">
@@ -61,13 +57,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <div class="ui calendar" id="rangeend">
-                                    <div class="ui input left icon">
-                                        <i class="calendar icon"></i>
-                                        <input asp-for="EndDate" type="text" placeholder="End Date">
-                                        <span asp-validation-for="EndDate" class="text-danger"></span>
-                                    </div>
-                                </div>
+                                <select asp-for="Frequency" id="frequencydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Frequency>()"></select>
                             </div>
                         </div>
                         <div class="field">
