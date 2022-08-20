@@ -32,7 +32,7 @@ namespace Kaching.Services
             List<EEvent> expenseEvents = new List<EEvent>();
 
             var paymentDate = expenseCreateRecurringVM.StartDate;
-            var endDate = expenseCreateRecurringVM.EndDate;
+            var endDate = paymentDate.AddYears(3);
 
             while (paymentDate <= endDate)
             {

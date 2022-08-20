@@ -209,28 +209,6 @@ namespace Kaching.Controllers
             return NotFound();
         }
 
-        // POST: Expenses/EditAll/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Expenses/EditAll/{id?}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAll(int id, EEventVM expenseEventViewModel)
-        {
-            if (id != expenseEventViewModel.ExpenseId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-
-                await _expenseService.UpdateRecurringExpenses(expenseEventViewModel);
-                return RedirectToAction(nameof(Index));
-            }
-            RenderSelectList(expenseEventViewModel);
-            return View(expenseEventViewModel);
-        }
-
         // GET: Expenses/Delete/5
         [Route("Expenses/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
