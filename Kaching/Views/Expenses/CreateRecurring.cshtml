@@ -79,38 +79,7 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-<script>
-    var today = new Date().getDate();
-    var selectedFrequency = $("#frequencydropdown :selected").text(); // The text content of the selected option
-   // $("#frequencydropdown").val(); // The value of the selected option
-
-
-    var maxCap = new Date(date.getDate().getYear() + 2);
-
-    var nextDate;
-
-    function nextOcc(currDate, frequency) {
-        if (frequency == @Frequency.Monthly) {
-            return new Date(date.setMonth(currDate+1));
-        } if (frequency == @Frequency.Monthly) {
-            return new Date(date.setMonth(currDate+1));
-        } if () {
-
-        }
-    }
-
-    $('#enableddates_calendar')
-            .calendar({
-                type: 'date',
-                initialDate: today,
-                enabledDates: [
-                    forEach 
-                ]
-            })
-        ;
-</script>
-
+    
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
