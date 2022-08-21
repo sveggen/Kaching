@@ -51,14 +51,13 @@ namespace Kaching.Controllers
         }
 
         // POST: Transfers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Transfers/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TransferCreateVM transferCreateViewModel)
         {
             if (ModelState.IsValid)
             {
+                transferCreateViewModel.
                 var currentPerson = _personService.GetPersonByUsername(GetCurrentUserName());
                 transferCreateViewModel.SenderId = currentPerson.PersonId;
 
@@ -73,7 +72,7 @@ namespace Kaching.Controllers
         private void RenderSelectListDefault()
         {
             ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
-                "PersonId", "ConnectedUserName");
+                "PersonId", "UserName");
         }
 
         private string GetCurrentUserName()

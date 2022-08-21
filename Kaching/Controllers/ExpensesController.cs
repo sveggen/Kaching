@@ -220,17 +220,17 @@ namespace Kaching.Controllers
             }
         }
 
-        private void RenderSelectList(ExpenseVm expenseEventViewModel)
+        private void RenderSelectList(ExpenseVm expenseViewModel)
         {   
             ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
-                "PersonId", "ConnectedUserName", expenseEventViewModel.ResponsibleId);
+                "PersonId", "UserName", expenseViewModel.ResponsibleId);
         }
 
         private void RenderSelectListDefault()
         {
             var selectedUsername = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
             ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
-                "PersonId", "ConnectedUserName", selectedUsername);
+                "PersonId", "UserName", selectedUsername);
         }
 
         private string GetCurrentUserName()
