@@ -5,7 +5,7 @@ using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using AutoMapper;
-using Kaching.Models;
+using Kaching.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaching.Tests;

@@ -1,4 +1,4 @@
-﻿using Kaching.Models;
+﻿using Kaching.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Data
@@ -19,7 +19,7 @@ namespace Kaching.Data
 
             modelBuilder.Entity<BaseExpense>()
                 .HasOne(f => f.Creator)
-                .WithMany(f => f.BaseExpensesCreated)
+                .WithMany(f => f.Expenses)
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 

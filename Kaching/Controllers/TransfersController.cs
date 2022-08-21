@@ -78,7 +78,7 @@ namespace Kaching.Controllers
 
         private string GetCurrentUserName()
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            System.Security.Claims.ClaimsPrincipal currentUser = User;
             return currentUser.Identity.Name;
         }
     }

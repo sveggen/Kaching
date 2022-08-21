@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Kaching.Models;
+using Kaching.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaching.ViewModels
@@ -10,8 +10,10 @@ namespace Kaching.ViewModels
         public int ExpenseId { get; set; }
 
         public int ResponsibleId { get; set; }
+
+        public PersonLightVm? Responsible { get; set; }
         
-        public Person? Responsible { get; set; }
+        public int CreatorId { get; set; }
         
         public bool Paid { get; set; }
 

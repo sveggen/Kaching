@@ -1,4 +1,4 @@
-﻿using Kaching.Models;
+﻿using Kaching.Enums;
 using Kaching.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;

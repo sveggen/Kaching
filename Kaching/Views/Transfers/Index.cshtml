@@ -21,8 +21,8 @@
     {
         <tr>
             <td data-label="Transfer Date">@item.Created.ToString("dd.MM.yy")</td>
-            <td data-label="Sender">@item.SenderUserName</td>
-            <td data-label="Receiver">@item.ReceiverUserName</td>
+            <td data-label="Sender">@item.Sender.UserName</td>
+            <td data-label="Receiver">@item.Receiver.UserName</td>
             <td data-label="Amount">€ @item.Amount</td>
             <td data-label="Transfer Month">@item.PaymentMonth</td>
         </tr>

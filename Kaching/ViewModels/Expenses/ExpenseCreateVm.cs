@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Kaching.Models;
+using Kaching.Enums;
 
 namespace Kaching.ViewModels
 {
-    public class ExpenseCreateVM
+    public class ExpenseCreateVm
     {
         public decimal Price { get; set; }
 

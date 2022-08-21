@@ -1,10 +1,10 @@
 ﻿namespace Kaching.MailViewModels
 {
-    public class PaymentReminderVM
+    public class PaymentReminderVm
     {
         public string Email { get; set; }
 
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         public decimal OwedAmount { get; set; }
 

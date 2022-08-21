@@ -68,9 +68,9 @@ namespace Kaching.Controllers
         {
             try
             {
-                var expenseVM = await _expenseService.GetExpense(id);
+                var expenseVm = await _expenseService.GetExpense(id);
 
-                return View(expenseVM);
+                return View(expenseVm);
             }
             catch (Exception)
             {
@@ -113,33 +113,16 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ExpenseCreateVM expenseCreateVM)
+        public async Task<IActionResult> Create(ExpenseCreateVm expenseCreateVm)
         {
             if (ModelState.IsValid)
             {
-                expenseCreateVM.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
-                await _expenseService.CreateExpense(expenseCreateVM);
+                expenseCreateVm.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+                await _expenseService.CreateExpense(expenseCreateVm);
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(expenseCreateVM);
-        }
-
-        // POST: Expenses/CreateRecurring
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Expenses/CreateRecurring")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRecurring(ExpenseCreateRecurringVM expenseCreateRecurringVM)
-        {
-            if (ModelState.IsValid)
-            {
-                expenseCreateRecurringVM.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
-                await _expenseService.CreateExpense(expenseCreateRecurringVM);
-
-                return RedirectToAction(nameof(Index));
-            }
-            return View(expenseCreateRecurringVM);
+            return View(expenseCreateVm);
         }
 
         // GET: Expenses/Edit/5
@@ -148,9 +131,9 @@ namespace Kaching.Controllers
         {
             try
             {
-                var expenseVM = await _expenseService.GetExpense(id);
-                RenderSelectList(expenseVM);
-                return View(expenseVM);
+                var expenseVm = await _expenseService.GetExpense(id);
+                RenderSelectList(expenseVm);
+                return View(expenseVm);
             }   
             catch (Exception)
             {
@@ -164,9 +147,9 @@ namespace Kaching.Controllers
         {
             try
             {
-                var expenseVM = await _expenseService.GetExpense(id);
-                RenderSelectList(expenseVM);
-                return View(expenseVM);
+                var expenseVm = await _expenseService.GetExpense(id);
+                RenderSelectList(expenseVm);
+                return View(expenseVm);
             }
             catch (Exception)
             {
@@ -179,54 +162,19 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVM)
+        public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVm)
         {
             if (ModelState.IsValid)
             {
-                await _expenseService.UpdateExpense(expenseEditVM);
+                await _expenseService.UpdateExpense(expenseEditVm);
                 return RedirectToAction(nameof(Index));
             }
-           // RenderSelectList(expenseEventViewModel);
-            return NotFound();
-        }
-
-        // POST: Expenses/EditRecurring/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Expenses/EditRecurring/{id?}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditRecurring(int id, ExpenseEditRecurringVm expenseEditRecurringVM)
-        {
-            if (ModelState.IsValid)
-            {
-                await _expenseService.UpdateExpense(expenseEditRecurringVM);
-                return RedirectToAction(nameof(Index));
-            }
-            //var expenseVM = await _expenseService.GetExpense()
-
-            //RenderSelectList(expenseEventViewModel);
-            //return View(expenseCreateRecurringVM);
             return NotFound();
         }
 
         // GET: Expenses/Delete/5
         [Route("Expenses/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                var expenseVm = await _expenseService.GetExpense(id);
-                return View(expenseVm);
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
-        }
-
-        // GET: Expenses/Delete/5
-        [Route("Expenses/DeleteRecurring/{id}")]
-        public async Task<IActionResult> DeleteRecurring(int id)
         {
             try
             {
@@ -286,7 +234,7 @@ namespace Kaching.Controllers
 
         private string GetCurrentUserName()
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            System.Security.Claims.ClaimsPrincipal currentUser = User;
             return currentUser.Identity.Name;
         }
     }

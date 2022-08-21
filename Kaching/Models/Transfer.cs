@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Kaching.Models
+namespace Kaching.Enums
 {
     public class Transfer
     {

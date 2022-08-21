@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Kaching.Models;
+using Kaching.Enums;
 using Kaching.ViewModels;
 
 namespace Kaching.MappingProfiles
@@ -20,12 +20,12 @@ namespace Kaching.MappingProfiles
             CreateMap<Expense, ExpenseVm>();
             CreateMap<ExpenseVm, ExpensesByMonthVm>();
 
-            CreateMap<ExpenseCreateVM, BaseExpense>()
+            CreateMap<ExpenseCreateVm, BaseExpense>()
                 .ForMember(m => m.Frequency, d => d.MapFrom(k => Frequency.Once))
                 .ForMember(m => m.StartDate, d => d.MapFrom(k => k.PaymentDate))
                 .ForMember(m => m.EndDate, d => d.MapFrom(k => k.PaymentDate));
 
-            CreateMap<ExpenseCreateRecurringVM, BaseExpense>();
+           // CreateMap<ExpenseCreateRecurringVM, BaseExpense>();
 
             CreateMap<ExpenseEditVm, Expense>();
 

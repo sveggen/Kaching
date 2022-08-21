@@ -8,19 +8,19 @@ namespace Kaching.Services
 
         public Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber);
 
-        public Task CreateExpense(ExpenseCreateVM expenseCreateVM);
+        public Task CreateExpense(ExpenseCreateVm expenseCreateVm);
 
-        public Task CreateExpense(ExpenseCreateRecurringVM expenseCreateRecurringVM);
+      //  public Task CreateExpense(ExpenseCreateRecurringVM expenseCreateRecurringVM);
 
         public Task DeleteExpense(int expenseEventId);
 
         public Task DeleteRecurringExpense(int expenseEventId);
 
-        public Task UpdateExpense(ExpenseEditVm expenseEditVM);
+        public Task UpdateExpense(ExpenseEditVm expenseEditVm);
 
-        public Task UpdateExpense(ExpenseEditRecurringVm expenseEditRecurringVM);
+     //   public Task UpdateExpense(ExpenseEditRecurringVm expenseEditRecurringVM);
 
-        public Task UpdateRecurringExpenses(ExpenseVm expenseVM);
+        public Task UpdateRecurringExpenses(ExpenseVm expenseVm);
 
     
     }

@@ -1,6 +1,5 @@
-﻿using System.ComponentModel;
-
-namespace Kaching.Models
+﻿
+namespace Kaching.Enums
 {
     public enum Frequency
     {

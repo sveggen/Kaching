@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Kaching.Models
+﻿
+namespace Kaching.Enums
 {
     public enum PaymentType
     {

@@ -1,5 +1,5 @@
 ﻿using Kaching.Data;
-using Kaching.Models;
+using Kaching.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Repositories

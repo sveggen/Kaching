@@ -3,7 +3,7 @@
 #nullable disable
 
 using Kaching.Repositories;
-using Kaching.Models;
+using Kaching.Enums;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;

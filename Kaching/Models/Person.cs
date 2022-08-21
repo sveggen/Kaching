@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Kaching.Models
+namespace Kaching.Enums
 {
     public class Person
     {
@@ -14,7 +14,7 @@ namespace Kaching.Models
 
         public string? UserName { get; set; }
 
-        public ICollection<BaseExpense>? BaseExpensesCreated { get; set; }
+        public ICollection<BaseExpense>? Expenses { get; set; }
 
         public ICollection<Transfer>? TransfersReceived { get; set; }
 

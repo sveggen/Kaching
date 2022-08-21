@@ -1,4 +1,4 @@
-﻿namespace Kaching.Models
+﻿namespace Kaching.Enums
 {
     public class Group
     {
