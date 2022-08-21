@@ -37,7 +37,7 @@ public class ExpensesTest
         var personList = new List<Person>();
 
         _mockExpenseRepository.Setup
-                (repo => repo.GetExpenses(randomMonthInt))
+                (repo => repo.GetBaseExpenses(randomMonthInt))
             .ReturnsAsync(expenseList);
 
         _mockPersonRepository.Setup
@@ -61,7 +61,7 @@ public class ExpensesTest
         var personList = new List<Person>();
 
         _mockExpenseRepository.Setup
-                (repo => repo.GetExpenses(randomMonthInt))
+                (repo => repo.GetBaseExpenses(randomMonthInt))
             .ReturnsAsync(expenseList);
 
 

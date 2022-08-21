@@ -1,4 +1,4 @@
-﻿@model Kaching.ViewModels.ExpenseCreateRecurringVM
+﻿@model Kaching.ViewModels.ExpenseCreateVm
 
 @{
     ViewData["Title"] = "Create Recurring Expense";
@@ -32,10 +32,15 @@
                             </div>
                             <span asp-validation-for="Price" style="color: red"></span>
                         </div>
-
+                        
+                        
+                        @*
                         <div class="field">
                             <select asp-for="Category" id="categorydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Category>()"></select>
                         </div>
+                        *@
+                        
+                        
                         <div class="field">
                             <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentType>()">
                             </select>
@@ -51,8 +56,8 @@
                                 <div class="ui calendar" id="rangestart">
                                     <div class="ui input left icon">
                                         <i class="calendar icon"></i>
-                                        <input asp-for="StartDate" type="text" placeholder="Start date">
-                                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                                        <input asp-for="PaymentDate" type="text" placeholder="Start date">
+                                        <span asp-validation-for="PaymentDate" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>

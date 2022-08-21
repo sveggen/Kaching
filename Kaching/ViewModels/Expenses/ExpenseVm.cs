@@ -11,6 +11,10 @@ namespace Kaching.ViewModels
 
         public int ResponsibleId { get; set; }
 
+        public decimal Price { get; set; }
+        
+        public Category? Category { get; set; }
+        
         public PersonLightVm? Responsible { get; set; }
         
         public int CreatorId { get; set; }

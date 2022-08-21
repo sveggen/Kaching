@@ -14,7 +14,7 @@ namespace Kaching.Repositories
             _context = context;
         }
 
-        public void InsertExpense(BaseExpense baseExpense)
+        public void InsertBaseExpense(BaseExpense baseExpense)
         {
             _context.Add(baseExpense);
         }
@@ -24,12 +24,12 @@ namespace Kaching.Repositories
             _context.SaveChanges();
         }
 
-        public void UpdateExpense(BaseExpense baseExpense)
+        public void UpdateBaseExpense(BaseExpense baseExpense)
         {
             _context.Update(baseExpense);
         }
 
-        public bool GetExpenseExistence(int id)
+        public bool GetBaseExpenseExistence(int id)
         {
             return _context.BaseExpense.Any(e => e.BaseExpenseId == id);
         }
@@ -59,24 +59,24 @@ namespace Kaching.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<BaseExpense>> GetExpenses(int monthNumber)
+        public async Task<List<BaseExpense>> GetBaseExpenses(int monthNumber)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<BaseExpense>> GetPersonExpenses(int personId, int monthNumber)
+        public async Task<List<BaseExpense>> GetPersonBaseExpenses(int personId, int monthNumber)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<BaseExpense> GetExpenseById(int expenseId)
+        public async Task<BaseExpense> GetBaseExpenseById(int baseExpenseId)
         {
             return await _context.BaseExpense
                 .Include(e => e.Expenses)
-                .FirstOrDefaultAsync(e => e.BaseExpenseId == expenseId);
+                .FirstOrDefaultAsync(e => e.BaseExpenseId == baseExpenseId);
         }
 
-        public void DeleteExpense(BaseExpense baseExpense)
+        public void DeleteBaseExpense(BaseExpense baseExpense)
         {
             _context
                 .BaseExpense.Remove(baseExpense);

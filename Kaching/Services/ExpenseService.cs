@@ -42,14 +42,14 @@ namespace Kaching.Services
         public async Task DeleteRecurringExpense(int expenseEventId)
         {
             var expenseEvent = await _expenseRepository.GetExpenseById(expenseEventId);
-            var expense = await _baseExpenseRepository.GetExpenseById(expenseEvent.ExpenseId);
+            var expense = await _baseExpenseRepository.GetBaseExpenseById(expenseEvent.ExpenseId);
 
             foreach (var item in expense.Expenses)
             {
                 _expenseRepository.DeleteExpense(item);
             }
 
-            _baseExpenseRepository.DeleteExpense(expense);
+            _baseExpenseRepository.DeleteBaseExpense(expense);
             await _baseExpenseRepository.SaveAsync();
         }
 
@@ -146,7 +146,7 @@ namespace Kaching.Services
 
             var expense = _mapper.Map<BaseExpense>(expenseCreateVm);
             expense.Expenses = expenseEvents;
-            _baseExpenseRepository.InsertExpense(expense);
+            _baseExpenseRepository.InsertBaseExpense(expense);
             await _baseExpenseRepository.SaveAsync();
         }
         private async Task CreateRecurringExpense(ExpenseCreateVm expenseCreateVm)
@@ -177,7 +177,7 @@ namespace Kaching.Services
             }
             var expense = _mapper.Map<BaseExpense>(expenseCreateVm);
             expense.Expenses = expenseEvents;
-            _baseExpenseRepository.InsertExpense(expense);
+            _baseExpenseRepository.InsertBaseExpense(expense);
             await _baseExpenseRepository.SaveAsync();
         }
     }

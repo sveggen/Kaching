@@ -1,29 +1,20 @@
-﻿
-@using Microsoft.VisualBasic
-@model Kaching.ViewModels.ExpenseVm
+﻿@model Kaching.ViewModels.ExpenseVm
 
-@*
-  
-*@
 
 <div class="row">
     <div class="ui form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="hidden" asp-for="BaseExpenseId" />
-            <input type="hidden" asp-for="BaseExpense.CreatorId" />
-            <input type="hidden" asp-for="Expense.Created" />
-
-            <div class="field">
+        <div class="field">
                 <label class="ui label">Price</label>
                 <div class="ui right labeled input">
                     <label for="amount" class="ui label">€</label>
-                    <input asp-for="Expense.Price" placeholder="Price" disabled>
+                    <input asp-for="Price" placeholder="Price" disabled>
                 </div>
             </div>
             <div class="field">
                 <label class="ui label">Category</label>
-                <input asp-for="Expense.Category" disabled>
+                <input asp-for="Category" disabled>
             </div>
             <div class="field">
                 <label class="ui label">Transfer Status</label>
@@ -31,7 +22,7 @@
             </div>
             <div class="field">
                 <label class="ui label">Paid by</label>
-                <input asp-for="Responsible.ConnectedUserName" placeholder="Buyer.ConnectedUserName" disabled>
+                <input asp-for="Responsible.UserName" placeholder="User Name" disabled>
             </div>  
             <div class="field">
                 <label class="ui label">Frequency</label>
@@ -47,7 +38,7 @@
             </div>
             <div class="field">
                 <label class="ui label">Description <i>: Not Required</i> </label>
-                <textarea asp-for="Expense.Description" disabled> </textarea>
+                <textarea asp-for="Comment" disabled> </textarea>
             </div>
         </div>
     </div>

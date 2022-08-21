@@ -4,19 +4,19 @@ namespace Kaching.Repositories
 {
     public interface IBaseExpenseRepository : IDisposable
     {
-        public Task<List<BaseExpense>> GetExpenses(int monthNumber);
+        public Task<List<BaseExpense>> GetBaseExpenses(int monthNumber);
 
-        public Task<List<BaseExpense>> GetPersonExpenses(int personId, int monthNumber);
+        public Task<List<BaseExpense>> GetPersonBaseExpenses(int personId, int monthNumber);
 
-        public Task<BaseExpense> GetExpenseById(int expenseId);
+        public Task<BaseExpense> GetBaseExpenseById(int baseExpenseId);
 
-        public bool GetExpenseExistence(int id);
+        public bool GetBaseExpenseExistence(int id);
 
-        public void InsertExpense(BaseExpense baseExpense);
+        public void InsertBaseExpense(BaseExpense baseExpense);
 
-        public void DeleteExpense(BaseExpense baseExpense);
+        public void DeleteBaseExpense(BaseExpense baseExpense);
 
-        public void UpdateExpense(BaseExpense baseExpense);
+        public void UpdateBaseExpense(BaseExpense baseExpense);
 
         public void Save();
 
