@@ -6,7 +6,7 @@ namespace Kaching.Services
     {
         public Task<ExpenseVm> GetExpense(int expenseEventId);
 
-        public Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber);
+        public Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber, string year);
 
         public Task CreateExpense(ExpenseCreateVm expenseCreateVm);
 

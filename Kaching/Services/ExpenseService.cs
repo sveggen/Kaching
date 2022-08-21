@@ -67,10 +67,10 @@ namespace Kaching.Services
             return _mapper.Map<ExpenseVm>(expense);
         }
 
-        public async Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber)
+        public async Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber, string year)
         {
-            var expensesByMonth = await _expenseRepository.GetExpenses(monthNumber);
-            var sum = _expenseRepository.GetSumExpensesByMonth(monthNumber);
+            var expensesByMonth = await _expenseRepository.GetExpenses(monthNumber, year);
+            var sum = _expenseRepository.GetSumExpensesByMonth(monthNumber, year);
             
             /*var persons = _personRepository.GetAllPersons();
 

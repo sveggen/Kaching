@@ -4,6 +4,7 @@
 @{
     var currentMonthNumber = Model.MonthNumber;
     var currentMonthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[currentMonthNumber-1];
+    var currentYear = @DateTime.Now.Year.ToString();
 }
 
 <div class="ui selection dropdown" id="monthdropdown">
@@ -22,7 +23,7 @@
         }
         else
         {
-            <a class="item" href="/Expenses/@monthName">@monthName</a>
+            <a class="item" href="/Expenses/@monthName/@currentYear">@monthName</a>
         }
     }
 </div>

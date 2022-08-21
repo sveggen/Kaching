@@ -31,12 +31,12 @@ namespace Kaching.Controllers
         // GET: /
         // GET: Expenses/March
         [Route("")]
-        [Route("Expenses/{month?}")]
-        public async Task<IActionResult> Index(string? month)   
+        [Route("Expenses/{month?}/{year?}")]
+        public async Task<IActionResult> Index(string? month, string? year)
         {
             int monthNumber;
 
-            if (month!= null && _months.Contains(month))
+            if (month!= null && _months.Contains(month) && year != null)
             {
                 try
                 {
@@ -48,16 +48,17 @@ namespace Kaching.Controllers
                     return NotFound();
                 }
             }
-            else if (month == null)
+            else if (month == null && year == null)
             {
                 monthNumber = _currentMonthNumber;
+                year = DateTime.Now.Year.ToString();
             }
             else
             {
                 return NotFound();
             }
 
-            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber);
+            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber, year);
 
             return View(viewModel);
         }

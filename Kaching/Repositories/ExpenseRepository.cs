@@ -28,22 +28,24 @@ namespace Kaching.Repositories
                 .FirstOrDefaultAsync(m => m.ExpenseId == expenseId);
         }
 
-        public async Task<List<Expense>> GetExpenses(int monthNumber)
+        public async Task<List<Expense>> GetExpenses(int monthNumber, string year)
         {
             return await _context.Expense
                 .Include(e => e.Buyer)
                 .Include(e => e.BaseExpense)
                 .Where(p => p.PaymentDate.Month == monthNumber)
+                .Where(p =>p.PaymentDate.Year == Int16.Parse(year))
                 .OrderByDescending(e => e.PaymentDate)
                 .ToListAsync();
         }
 
-        public decimal GetSumExpensesByMonth(int monthNumber)
+        public decimal GetSumExpensesByMonth(int monthNumber, string year)
         {
             return  _context.Expense
                 .Include(e => e.Buyer)
                 .Include(e => e.BaseExpense)
                 .Where(p => p.PaymentDate.Month == monthNumber)
+                .Where(p =>p.PaymentDate.Year == Int16.Parse(year))
                 .Sum(i => i.Price);
         }
 

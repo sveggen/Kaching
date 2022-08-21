@@ -8,9 +8,9 @@ namespace Kaching.Repositories
 
         public Task<Expense> GetExpenseById(int expenseId);
 
-        public Task<List<Expense>> GetExpenses(int monthNumber);
+        public Task<List<Expense>> GetExpenses(int monthNumber, string year);
 
-        public decimal GetSumExpensesByMonth(int monthNumber);
+        public decimal GetSumExpensesByMonth(int monthNumber, string year);
 
         public Task<List<Expense>> GetPersonExpensesByMonth(int personId, int monthNumber);
 

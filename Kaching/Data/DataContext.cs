@@ -39,6 +39,8 @@ namespace Kaching.Data
                 .HasForeignKey(g => g.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+        
+        
         public DbSet<BaseExpense> BaseExpense { get; set; }
 
         public DbSet<Expense> Expense { get; set; }
