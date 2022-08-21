@@ -5,27 +5,28 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kaching.ViewModels
 {
     [BindProperties]
-    public class EEventVM
+    public class ExpenseVm
     {
-        public int EEventId { get; set; }
-
         public int ExpenseId { get; set; }
 
-        public ExpenseVM Expense { get; set; }
-
-        public int BuyerId { get; set; }
-
-        public PersonVM? Buyer { get; set; }
+        public int ResponsibleId { get; set; }
+        
+        public Person? Responsible { get; set; }
+        
+        public bool Paid { get; set; }
 
         public string? Comment { get; set; }
 
-        public PaymentStatus PaymentStatus { get; set; }
+        public string? CurrencyName { get; set; }
+        
+        public string? CurrencySymbol { get; set; }
+        
+        public PaymentType PaymentType { get; set; }
 
         public Frequency Frequency { get; set; }
 
         public DateTime PaymentDate { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        
         public DateTime Updated { get; set; }
     }
 }

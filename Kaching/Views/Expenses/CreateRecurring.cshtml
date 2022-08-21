@@ -37,7 +37,7 @@
                             <select asp-for="Category" id="categorydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Category>()"></select>
                         </div>
                         <div class="field">
-                            <select asp-for="PaymentStatus" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentStatus>()">
+                            <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentType>()">
                             </select>
                         </div>
                         <div class="field">
@@ -64,8 +64,8 @@
                             <div class="ui label">
                                 Optional: Description
                             </div>
-                            <textarea asp-for="Description" rows="3" placeholder="Comments..."> </textarea>
-                            <span asp-validation-for="Description" style="color: red"></span>
+                            <textarea asp-for="Comment" rows="3" placeholder="Comments..."> </textarea>
+                            <span asp-validation-for="Comment" style="color: red"></span>
                         </div>
                         <div class="field">
                             <input type="submit" value="Create" class="ui button"/>

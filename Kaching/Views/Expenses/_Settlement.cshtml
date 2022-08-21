@@ -1,5 +1,5 @@
 ﻿
-@model Kaching.ViewModels.ExpenseIndexVM
+@model Kaching.ViewModels.ExpensesByMonthVm
 <!-- UI Button trigger modal -->
 
 <!-- UI Modal -->
@@ -32,7 +32,7 @@
             @foreach (var item in Model.Persons)
             {
                 <tr>
-                    <td>@item.ConnectedUserName</td>
+                    <td>@item.UserName</td>
 
                     <td>€ @item.SumOfExpenses</td>
                     

@@ -49,10 +49,10 @@ namespace Kaching.Repositories
 
         public async Task<List<Transfer>> GetTransfers()
         {
-            return await _context.Payment
+            return await _context.Transfer
                 .Include(e => e.Sender)
                 .Include(f=> f.Receiver)
-                .OrderByDescending(e=>e.PaymentPeriod)
+                .OrderByDescending(e=>e.PaymentMonth)
                 .ToListAsync(); 
         }
 
@@ -78,18 +78,18 @@ namespace Kaching.Repositories
 
         public decimal GetSumOfPersonSentTransfers(int monthNumber, int personId)
         {
-            return _context.Payment
+            return _context.Transfer
                 .Include(e => e.Sender)
                 .Where(p => p.Sender.PersonId == personId)
-                .Where(p => p.PaymentPeriod.Month == monthNumber)
+                .Where(p => p.PaymentMonth.Month == monthNumber)
                 .Sum(i => i.Amount);
         }
         public decimal GetSumOfPersonReceivedTransfers(int monthNumber, int personId)
         {
-            return _context.Payment
+            return _context.Transfer
                 .Include(e => e.Receiver)
                 .Where(p => p.Receiver.PersonId == personId)
-                .Where(p => p.PaymentPeriod.Month == monthNumber)
+                .Where(p => p.PaymentMonth.Month == monthNumber)
                 .Sum(i => i.Amount);
         }
     }

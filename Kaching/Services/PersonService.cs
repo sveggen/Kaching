@@ -18,22 +18,22 @@ namespace Kaching.Services
             _mapper = mapper;
         }
 
-        public List<PersonVM> GetPersons()
+        public List<PersonLightVm> GetPersons()
         {
             var persons = _personRepository.GetAllPersons();
-            return _mapper.Map<List<PersonVM>>(persons);
+            return _mapper.Map<List<PersonLightVm>>(persons);
         }
 
-        public List<PersonVM> GetPersonsWithoutYourself(string username)
+        public List<PersonLightVm> GetPersonsWithoutYourself(string username)
         {
             var persons = _personRepository.GetAllPersonsWithoutYourself(username);
-            return _mapper.Map<List<PersonVM>>(persons);
+            return _mapper.Map<List<PersonLightVm>>(persons);
         }
 
-        public PersonVM GetPersonByUsername(string userName)
+        public PersonLightVm GetPersonByUsername(string userName)
         {
             var person = _personRepository.GetPersonByUserName(userName);
-            return _mapper.Map<PersonVM>(person);
+            return _mapper.Map<PersonLightVm>(person);
         }
     }
 }

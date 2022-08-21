@@ -9,8 +9,8 @@ namespace Kaching.MappingProfiles
 
         public PersonProfile()
         {
-            CreateMap<Person, PersonVM>();
-            CreateMap<PersonVM, Person>();
+            CreateMap<Person, PersonLightVm>();
+            CreateMap<PersonLightVm, Person>();
         }
     }
 }

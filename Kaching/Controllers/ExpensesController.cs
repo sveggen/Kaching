@@ -179,7 +179,7 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ExpenseEditVM expenseEditVM)
+        public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVM)
         {
             if (ModelState.IsValid)
             {
@@ -195,7 +195,7 @@ namespace Kaching.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/EditRecurring/{id?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditRecurring(int id, ExpenseEditRecurringVM expenseEditRecurringVM)
+        public async Task<IActionResult> EditRecurring(int id, ExpenseEditRecurringVm expenseEditRecurringVM)
         {
             if (ModelState.IsValid)
             {
@@ -271,10 +271,10 @@ namespace Kaching.Controllers
             }
         }
 
-        private void RenderSelectList(EEventVM expenseEventViewModel)
+        private void RenderSelectList(ExpenseVm expenseEventViewModel)
         {   
             ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
-                "PersonId", "ConnectedUserName", expenseEventViewModel.BuyerId);
+                "PersonId", "ConnectedUserName", expenseEventViewModel.ResponsibleId);
         }
 
         private void RenderSelectListDefault()

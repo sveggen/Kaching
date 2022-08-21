@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add user services to the container.
-var userConnectionString = builder.Configuration.GetConnectionString("AzureRemote");
+var userConnectionString = builder.Configuration.GetConnectionString("SQLDocker");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(userConnectionString));
 
@@ -29,8 +29,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IBaseExpenseRepository, BaseExpenseRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
-builder.Services.AddScoped<IEEventRepository, EEventRepository>();
 builder.Services.AddScoped<ITransferRepository, TransferRepository>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -46,7 +46,7 @@ builder.Services
         FluentEmail.Mailgun.MailGunRegion.USA);
 
 // Add other db services to the container.
-var connectionString = builder.Configuration.GetConnectionString("AzureRemote");
+var connectionString = builder.Configuration.GetConnectionString("SQLDocker");
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));
 

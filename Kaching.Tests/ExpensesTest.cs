@@ -13,7 +13,7 @@ namespace Kaching.Tests;
 [TestFixture]
 public class ExpensesTest
 {
-    private Mock<IExpenseRepository> _mockExpenseRepository;
+    private Mock<IBaseExpenseRepository> _mockExpenseRepository;
     private Mock<IPersonRepository> _mockPersonRepository;
     private ExpensesController _controller;
     private Mapper _autoMapper;
@@ -22,7 +22,7 @@ public class ExpensesTest
     [SetUp]
     public void Setup()
     {
-        _mockExpenseRepository = new Mock<IExpenseRepository>();
+        _mockExpenseRepository = new Mock<IBaseExpenseRepository>();
         _mockPersonRepository = new Mock<IPersonRepository>();
         _autoMapper = new Mapper(_expenseMapping);
 
@@ -33,7 +33,7 @@ public class ExpensesTest
     {
         var randomMonthString = "March";
         var randomMonthInt = 3;
-        var expenseList = new List<Expense>();
+        var expenseList = new List<BaseExpense>();
         var personList = new List<Person>();
 
         _mockExpenseRepository.Setup
@@ -57,7 +57,7 @@ public class ExpensesTest
     {
         var randomMonthString = "March";
         var randomMonthInt = 3;
-        var expenseList = new List<Expense>();
+        var expenseList = new List<BaseExpense>();
         var personList = new List<Person>();
 
         _mockExpenseRepository.Setup

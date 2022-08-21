@@ -1,6 +1,6 @@
-﻿namespace Kaching.Models
+﻿namespace Kaching.ViewModels
 {
-    public class Group
+    public class GroupVm
     {
         public int GroupId { get; set; }
 
@@ -12,14 +12,14 @@
 
         public int MaxMembers { get; set; }
 
-        public List<Person>? Members { get; set; }
+        public List<PersonLightVm>? Members { get; set; }
 
-        public List<Expense>? Expenses { get; set; }
+        public List<ExpenseVm>? Expenses { get; set; }
         
-        public List<Transfer>? Transfers { get; set; }
+        public List<TransferVm>? Transfers { get; set; }
         
         public DateTime LastUpdated { get; set; }
 
         public DateTime Created { get; set; }
-    }
+    }    
 }

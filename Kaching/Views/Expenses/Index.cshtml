@@ -1,5 +1,5 @@
 ﻿@using Microsoft.VisualBasic
-@model Kaching.ViewModels.ExpenseIndexVM;
+@model Kaching.ViewModels.ExpensesByMonthVm;
 
 @{
     ViewData["Title"] = "Index";
@@ -59,21 +59,21 @@
                     <h4 class="ui image header">
                         <img src="https://m.media-amazon.com/images/I/71iFekvN5hS._AC_SL1500_.jpg" class="ui mini rounded image">
                         <div class="content">
-                            @Html.DisplayFor(modelItem => item.Buyer.ConnectedUserName)
+                            @Html.DisplayFor(modelItem => item.Responsible.ConnectedUserName)
                         </div>
                     </h4>
 
                 </td>
                 <td>
-                    @if (item.PaymentStatus == PaymentStatus.Paid)
+                    @if (item.PaymentType == PaymentType.Paid)
                     {
                         <i class="check icon" style="color: green"></i>
                     }
-                    else if (item.PaymentStatus == PaymentStatus.NotPaid)
+                    else if (item.PaymentType == PaymentType.NotPaid)
                     {   
                         <i class="close icon" style="color: red"></i>
                     }
-                    else if (item.PaymentStatus == PaymentStatus.Automatic)
+                    else if (item.PaymentType == PaymentType.Automatic)
                     {
                         <i class="sync icon" style="color: blue"></i>
                     }
@@ -97,7 +97,7 @@
                 </td>
 
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.EEventId">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.ExpenseId">Details</a>
                 </td>
             </tr>
         }

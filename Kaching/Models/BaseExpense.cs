@@ -1,32 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Kaching.Models;
 
-namespace Kaching.ViewModels
+namespace Kaching.Models
 {
-    public class EEventsVM
+    public class BaseExpense
     {
-        public int ExpenseId { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
-
+        public int BaseExpenseId { get; set; }
+        
         public int CreatorId { get; set; }
 
         public Person? Creator { get; set; }
 
+        public int CategoryId { get; set; }
+        
         public Category? Category { get; set; }
-
-        public string? Description { get; set; } = string.Empty;
 
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
         public Frequency Frequency { get; set; }
-        public List<EEvent> ExpenseEvents { get; set; }
+
+        public List<Expense>? Expenses { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Created { get; set; }
 
+        public int GroupId { get; set; }
+        
+        public Group? Group { get; set; }
     }
 }

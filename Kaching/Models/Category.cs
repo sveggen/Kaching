@@ -1,14 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Kaching.Models
+﻿namespace Kaching.Models
 {
-    public enum Category
+    public class Category
     {
-        Groceries,
-        Furnishing,
-        Rent,
-        Utilities,
-        Internet,
-        Misc
+        public int CategoryId { get; set;}
+
+        public string? Name { get; set;}
+
+        public List<BaseExpense>? BaseExpenses { get; set;}
     }
 }

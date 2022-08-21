@@ -1,6 +1,6 @@
 ﻿
 @using Microsoft.VisualBasic
-@model Kaching.ViewModels.EEventVM
+@model Kaching.ViewModels.ExpenseVm
 
 @*
   
@@ -10,7 +10,7 @@
     <div class="ui form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="hidden" asp-for="ExpenseId" />
+            <input type="hidden" asp-for="BaseExpenseId" />
             <input type="hidden" asp-for="Expense.CreatorId" />
             <input type="hidden" asp-for="Expense.Created" />
 
@@ -27,11 +27,11 @@
             </div>
             <div class="field">
                 <label class="ui label">Transfer Status</label>
-                <input asp-for="PaymentStatus" disabled>
+                <input asp-for="PaymentType" disabled>
             </div>
             <div class="field">
                 <label class="ui label">Paid by</label>
-                <input asp-for="Buyer.ConnectedUserName" placeholder="Buyer.ConnectedUserName" disabled>
+                <input asp-for="Responsible.ConnectedUserName" placeholder="Buyer.ConnectedUserName" disabled>
             </div>  
             <div class="field">
                 <label class="ui label">Frequency</label>
@@ -52,25 +52,25 @@
         </div>
     </div>
     <div>
-        <a class="ui icon button" asp-action="Delete" asp-route-id="@Model.EEventId">
+        <a class="ui icon button" asp-action="Delete" asp-route-id="@Model.ExpenseId">
             <i class="ui button red">
                 Delete
             </i>
         </a>
-        @if (Model.Frequency != Frequency.OneTime)
+        @if (Model.Frequency != Frequency.Once)
         {
-            <a class="ui icon button" asp-action="DeleteRecurring" asp-route-id="@Model.EEventId">
+            <a class="ui icon button" asp-action="DeleteRecurring" asp-route-id="@Model.ExpenseId">
                 <i class="ui button red">
                     Delete all recurring events
                 </i>
             </a>
-            <a class="ui icon button" asp-action="EditRecurring" asp-route-id="@Model.EEventId">
+            <a class="ui icon button" asp-action="EditRecurring" asp-route-id="@Model.ExpenseId">
                 <i class="ui button red">
                     EditRecurring
                 </i>
             </a>
         }
-        <a class="ui icon button" asp-action="Edit" asp-route-id="@Model.EEventId">
+        <a class="ui icon button" asp-action="Edit" asp-route-id="@Model.ExpenseId">
             <i class="ui button">
                 Edit
             </i>

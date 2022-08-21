@@ -24,7 +24,7 @@ namespace Kaching.Repositories
         public Person? GetPersonByUserId(string userId)
         {
              return _context.Person
-                .FirstOrDefault(p => p.ConnectedUserId == userId);
+                .FirstOrDefault(p => p.UserId == userId);
         }
 
         public List<Person> GetAllPersons()
@@ -78,7 +78,7 @@ namespace Kaching.Repositories
         public Person? GetPersonByUserName(string userName)
         {
             return _context.Person
-                .FirstOrDefault(p => p.ConnectedUserName == userName);
+                .FirstOrDefault(p => p.UserName == userName);
         }
 
         public Person? GetPersonByPersonId(int personId)
@@ -90,7 +90,7 @@ namespace Kaching.Repositories
         public List<Person> GetAllPersonsWithoutYourself(string username)
         {
             return _context.Person
-                .Where(e => e.ConnectedUserName != username)
+                .Where(e => e.UserName != username)
                 .ToList();
         }
     }

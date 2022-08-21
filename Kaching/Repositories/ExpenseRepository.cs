@@ -1,17 +1,70 @@
 ﻿using Kaching.Data;
 using Kaching.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Kaching.Repositories
 {
     public class ExpenseRepository : IExpenseRepository, IDisposable
     {
-
         private readonly DataContext _context;
 
         public ExpenseRepository(DataContext context)
         {
             _context = context;
+        }   
+
+        public void DeleteExpense(Expense expense)
+        {
+             _context
+                .Expense.Remove(expense);
+        }
+
+        public async Task<Expense> GetExpenseById(int expenseId)
+        {
+            return await _context.Expense
+                .Include(e => e.BaseExpense)
+                .Include(b => b.Buyer)
+                .FirstOrDefaultAsync(m => m.ExpenseId == expenseId);
+        }
+
+        public async Task<List<Expense>> GetExpenses(int monthNumber)
+        {
+            return await _context.Expense
+                .Include(e => e.Buyer)
+                .Include(e => e.BaseExpense)
+                .Where(p => p.PaymentDate.Month == monthNumber)
+                .OrderByDescending(e => e.PaymentDate)
+                .ToListAsync();
+        }
+
+        public decimal GetSumExpensesByMonth(int monthNumber)
+        {
+            return  _context.Expense
+                .Include(e => e.Buyer)
+                .Include(e => e.BaseExpense)
+                .Where(p => p.PaymentDate.Month == monthNumber)
+                .Sum(i => i.Price);
+        }
+
+
+        public async Task<List<Expense>> GetPersonExpensesByMonth(int personId, int monthNumber)
+        {
+            return await _context.Expense
+                .Include(e => e.BaseExpense)
+                .Where(p => p.PaymentDate.Month == monthNumber)
+                .Where(e => e.BuyerId == personId)
+                .ToListAsync();
+        }
+
+        public decimal GetSumOfPersonExpensesByMonth(int personId, int monthNumber)
+        {
+            return _context.Expense
+                .Include(v => v.BaseExpense)
+                .Include(b => b.Buyer)
+                .Where(p => p.PaymentDate.Month == monthNumber)
+                .Where(e => e.BuyerId == personId)
+                .Sum(e => e.Price);
         }
 
         public void InsertExpense(Expense expense)
@@ -59,29 +112,5 @@ namespace Kaching.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Expense>> GetExpenses(int monthNumber)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Expense>> GetPersonExpenses(int personId, int monthNumber)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Expense> GetExpenseById(int expenseId)
-        {
-            return await _context.Expense
-                .Include(e => e.ExpenseEvents)
-                .FirstOrDefaultAsync(e => e.ExpenseId == expenseId);
-        }
-
-        public void DeleteExpense(Expense expense)
-        {
-            _context
-                .Expense.Remove(expense);
-        }
     }
 }
-
-

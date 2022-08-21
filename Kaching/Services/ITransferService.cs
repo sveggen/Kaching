@@ -4,9 +4,9 @@ namespace Kaching.Services
 {
     public interface ITransferService
     {
-        public Task<TransferVM> GetTransfer(int transferId);
+        public Task<TransferVm> GetTransfer(int transferId);
 
-        public Task<List<TransferVM>> GetTransfers();
+        public Task<List<TransferVm>> GetTransfers();
 
         public Task CreateTransfer(TransferCreateVM transferVM);
 

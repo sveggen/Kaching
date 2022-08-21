@@ -1,4 +1,4 @@
-﻿@model Kaching.ViewModels.EEventVM
+﻿@model Kaching.ViewModels.ExpenseVm
 
 @{
     ViewData["Title"] = "Delete";
@@ -14,7 +14,7 @@
     <partial name="/Views/Expenses/_ExpenseInfo.cshtml" />
 
     <form asp-action="DeleteRecurring">
-        <input type="hidden" asp-for="EEventId" />
+        <input type="hidden" asp-for="ExpenseId" />
         <input type="submit" value="Delete" class="ui red button" /> <br />
     </form>
 

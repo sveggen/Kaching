@@ -143,7 +143,7 @@ namespace Kaching.Areas.Identity.Pages.Account
 
                     // Custom - Person hook
                     var userName = await _userManager.GetUserNameAsync(user);
-                    var person = new Person { ConnectedUserId = userId, ConnectedUserName = userName };
+                    var person = new Person { UserId = userId, UserName = userName };
                     _personRepository.CreateNewPerson(person);
 
 

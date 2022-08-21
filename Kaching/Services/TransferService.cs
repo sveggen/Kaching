@@ -29,16 +29,16 @@ namespace Kaching.Services
             throw new NotImplementedException();
         }
 
-        public async Task<TransferVM> GetTransfer(int transferId)
+        public async Task<TransferVm> GetTransfer(int transferId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<TransferVM>> GetTransfers()
+        public async Task<List<TransferVm>> GetTransfers()
         {
             var payments = await _transferRepository.GetTransfers();
 
-            return _mapper.Map<List<TransferVM>>(payments);
+            return _mapper.Map<List<TransferVm>>(payments);
         }
     }
 }
