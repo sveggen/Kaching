@@ -219,6 +219,24 @@ namespace Kaching.Controllers
                 return NotFound();
             }
         }
+        
+        // GET: Expenses/Personal
+        [Route("Expenses/Personal")]
+        public async Task<IActionResult> PersonalIndex()
+        {
+            var year = DateTime.Now.Year.ToString();
+            var month = GetCurrentMonthNumber();
+            
+            try
+            {
+                var expensesVm = await _expenseService.GetPersonalExpensesByMonth(month, year);
+                return View(expensesVm);
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
 
         private void RenderSelectList(ExpenseVm expenseViewModel)
         {   
@@ -237,6 +255,11 @@ namespace Kaching.Controllers
         {
             System.Security.Claims.ClaimsPrincipal currentUser = User;
             return currentUser.Identity.Name;
+        }
+
+        private int GetCurrentMonthNumber()
+        {
+            return _currentMonthNumber;
         }
     }
 }

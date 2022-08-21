@@ -27,6 +27,11 @@ namespace Kaching.Services
             _mapper = mapper;
         }
 
+        public Task<ExpensesByMonthVm> GetPersonalExpensesByMonth(int monthNumber, string year)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task CreateExpense(ExpenseCreateVm expenseCreateVm)
         {
             if (expenseCreateVm.Frequency == Frequency.Once)
@@ -66,6 +71,8 @@ namespace Kaching.Services
             var expense = await _expenseRepository.GetExpenseById(expenseEventId);
             return _mapper.Map<ExpenseVm>(expense);
         }
+        
+        
 
         public async Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber, string year)
         {

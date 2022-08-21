@@ -17,9 +17,13 @@
 <section class="ui container">
     <nav class="ui stackable labeled icon menu">
         <a class="item" asp-area="" asp-controller="Expenses" asp-action="Index">
-                <i class="money bill alternate outline icon"></i>
-                Expenses
-            </a>
+            <i class="money bill alternate outline icon"></i>
+            Expenses
+        </a>
+         <a class="item" asp-area="" asp-controller="Expenses" asp-action="PersonalIndex">
+            <i class="wine glass alternate icon"></i>
+            Personal Expenses
+        </a>
         <a class="item" asp-area="" asp-controller="Expenses" asp-action="Create">
             <i class="plus square outline icon"></i>
             New Expense
@@ -28,6 +32,13 @@
             <i class="hand holding usd icon"></i>
             Transfers
         </a>
+        @if (User.IsInRole("Administrator"))
+        {
+            <a class="item" asp-area="" asp-controller="Admin" asp-action="Index">
+                <i class="key icon"></i>
+                Admin
+            </a>
+        }
         <partial name="_LoginPartial"/>
         </nav>
 <div class="ui segment">

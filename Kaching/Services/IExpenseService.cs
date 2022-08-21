@@ -8,6 +8,8 @@ namespace Kaching.Services
 
         public Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber, string year);
 
+        public Task<ExpensesByMonthVm> GetPersonalExpensesByMonth(int monthNumber, string year);
+
         public Task CreateExpense(ExpenseCreateVm expenseCreateVm);
 
       //  public Task CreateExpense(ExpenseCreateRecurringVM expenseCreateRecurringVM);

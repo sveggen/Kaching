@@ -11,7 +11,7 @@ public class GroupService : IGroupService
     private readonly IMapper _mapper;
 
     public GroupService(
-        GroupRepository groupRepository,
+        IGroupRepository groupRepository,
         IMapper mapper)
     {
         _groupRepository = groupRepository;
