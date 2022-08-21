@@ -57,7 +57,6 @@ namespace Kaching.Controllers
         {
             if (ModelState.IsValid)
             {
-                transferCreateViewModel.
                 var currentPerson = _personService.GetPersonByUsername(GetCurrentUserName());
                 transferCreateViewModel.SenderId = currentPerson.PersonId;
 
