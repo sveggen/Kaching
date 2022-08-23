@@ -41,7 +41,7 @@ namespace Kaching.Controllers
         {
             try
             {
-                RenderSelectListDefault();
+                RenderSelectListWithoutYourself();
                 return View();
             }
             catch (Exception)
@@ -68,10 +68,12 @@ namespace Kaching.Controllers
             return View(transferCreateViewModel);
         }
 
-        private void RenderSelectListDefault()
+        private void RenderSelectListWithoutYourself()
         {
-            ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
+            var yourself = _personService.GetPersonByUsername(GetCurrentUserName());
+            var selectList = new SelectList(_personService.GetPersons(),
                 "PersonId", "UserName");
+            ViewData["PersonId"] = selectList.Where(x => int.Parse(x.Value) != yourself.PersonId);
         }
 
         private string GetCurrentUserName()
