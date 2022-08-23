@@ -33,6 +33,7 @@ builder.Services.AddScoped<IBaseExpenseRepository, BaseExpenseRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<ITransferRepository, TransferRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 

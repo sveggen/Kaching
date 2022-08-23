@@ -37,11 +37,12 @@ namespace Kaching.Controllers
 
         // GET: Transfers/Create
         [Route("Transfers/Create")]
-        public IActionResult Create()  
+        public async Task<IActionResult> Create()  
         {
             try
             {
                 RenderSelectListWithoutYourself();
+                await RenderCurrencySelectList();
                 return View();
             }
             catch (Exception)
@@ -74,6 +75,13 @@ namespace Kaching.Controllers
             var selectList = new SelectList(_personService.GetPersons(),
                 "PersonId", "UserName");
             ViewData["PersonId"] = selectList.Where(x => int.Parse(x.Value) != yourself.PersonId);
+        }
+
+        private async Task RenderCurrencySelectList()
+        {
+            var selectList = new SelectList(await _transferService.GetAllCurrencies(),
+                "CurrencyId", "Name");
+            ViewData["Currencies"] = selectList;
         }
 
         private string GetCurrentUserName()

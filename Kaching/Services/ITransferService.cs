@@ -12,6 +12,7 @@ namespace Kaching.Services
 
         public Task DeleteTransfer(int transferId);
 
+        public Task<List<CurrencyVm>> GetAllCurrencies();
     }
 
 }
