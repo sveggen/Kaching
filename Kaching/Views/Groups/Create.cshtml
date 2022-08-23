@@ -1,0 +1,60 @@
+﻿@model Kaching.ViewModels.GroupCreateVm
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Add expense group</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" class="ui form">
+            <div asp-validation-summary="ModelOnly" style="color: red"></div>
+
+            <div class="ui segment">
+            <div class="ui four wide column aligned left aligned grid">
+                <div class="column">
+                        <div class="field">
+                            <input asp-for="Name" placeholder="Name">
+                                <span asp-validation-for="Name" style="color: red"></span>
+                        </div>
+                    <div class="field">
+                        <div class="ui label">
+                            Add Members
+                        </div>
+                        <select asp-for="Members" id="add_group_members" class="ui fluid search dropdown" multiple="" asp-items="ViewBag.PersonId"></select>
+                    </div>
+                        <div class="field">
+                        <div class="ui right labeled input">
+                           <label for="MaxMembers" class="ui label">Max Members</label>
+                           <input type="number" min="1" max="10" asp-for="MaxMembers" placeholder="Max Members">
+                       </div>
+                       <span asp-validation-for="MaxMembers" style="color: red"></span>
+                        </div>
+                       <div class="field">
+                           <div class="ui right labeled input">
+                               <input asp-for="ColorCode" placeholder="Color Code">
+                          </div>
+                          <span asp-validation-for="MaxMembers" style="color: red"></span>
+                           </div>
+                        <div class="field">
+                            <input type="submit" value="Create" class="ui button"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div>
+    <a asp-action="Index">All payments</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

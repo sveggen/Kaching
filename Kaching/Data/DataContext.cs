@@ -1,4 +1,4 @@
-﻿using Kaching.Enums;
+﻿using Kaching.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Data
@@ -38,9 +38,16 @@ namespace Kaching.Data
                 .WithMany(f => f.TransfersReceived)
                 .HasForeignKey(g => g.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<Group>()
+                .Property(s => s.Created)
+                .HasDefaultValueSql("GETDATE()");
+            
+            modelBuilder.Entity<Group>()
+                .Property(s => s.LastUpdated)
+                .HasDefaultValueSql("GETDATE()");
         }
-        
-        
+
         public DbSet<BaseExpense> BaseExpense { get; set; }
 
         public DbSet<Expense> Expense { get; set; }

@@ -58,3 +58,10 @@ $('#rangestart').calendar({
     type: 'date',
     endCalendar: $('#rangeend')
 });
+
+$('#add_group_members')
+    .dropdown({
+        minSelections: 1,
+        maxSelections: 10
+    })
+;

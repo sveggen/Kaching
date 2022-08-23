@@ -1,5 +1,5 @@
 ﻿
-namespace Kaching.Enums
+namespace Kaching.Models
 {
     public enum Frequency
     {

@@ -1,4 +1,4 @@
-﻿using Kaching.Enums;
+﻿using Kaching.Models;
 using Kaching.Repositories;
 
 namespace Kaching.Helpers;

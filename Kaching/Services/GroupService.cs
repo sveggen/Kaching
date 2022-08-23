@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Kaching.Enums;
+using Kaching.Models;
 using Kaching.Repositories;
+using Kaching.ViewModels;
 
 namespace Kaching.Services;
 
@@ -18,9 +19,11 @@ public class GroupService : IGroupService
         _mapper = mapper;
     }
     
-    public void AddGroup(Group group)
+    public void AddGroup(GroupCreateVm groupCreateVm)
     {
+        var group = _mapper.Map<Group>(groupCreateVm);
         _groupRepository.InsertGroup(group);
+        _groupRepository.Save();
     }
 
     public void AddGroupMember(int groupId, int personId)

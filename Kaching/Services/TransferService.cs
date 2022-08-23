@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Kaching.Enums;
+using Kaching.Models;
 using Kaching.Repositories;
 using Kaching.ViewModels;
 

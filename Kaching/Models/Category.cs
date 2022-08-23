@@ -1,4 +1,4 @@
-﻿namespace Kaching.Enums
+﻿namespace Kaching.Models
 {
     public class Category
     {

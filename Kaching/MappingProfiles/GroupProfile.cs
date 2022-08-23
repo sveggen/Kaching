@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using AutoMapper;
+﻿using AutoMapper;
+using Kaching.Models;
 using Kaching.ViewModels;
 
 namespace Kaching.MappingProfiles;

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Kaching.Enums;
+using Kaching.Models;
 
 namespace Kaching.ViewModels
 {

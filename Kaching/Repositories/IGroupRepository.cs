@@ -1,4 +1,4 @@
-﻿using Kaching.Enums;
+﻿using Kaching.Models;
 
 namespace Kaching.Repositories;
 
@@ -17,4 +17,8 @@ public interface IGroupRepository
     // remove member 
     
     // edit group
+    
+    public void Save();
+
+    public Task SaveAsync();
 }

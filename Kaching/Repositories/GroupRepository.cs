@@ -1,5 +1,5 @@
 ﻿using Kaching.Data;
-using Kaching.Enums;
+using Kaching.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kaching.Repositories;
@@ -37,5 +37,15 @@ public class GroupRepository : IGroupRepository
     public void AddMember(Group group)
     {
         _context.Group.Update(group);
+    }
+
+    public void Save()
+    {
+        _context.SaveChanges();
+    }
+
+    public async Task SaveAsync()
+    {
+        await _context.SaveChangesAsync();
     }
 }

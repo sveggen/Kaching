@@ -4,6 +4,7 @@ using Kaching.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaching.Migrations.Data
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220823184232_RefactoredMigration2")]
+    partial class RefactoredMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace Kaching.Migrations.Data
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("GroupPerson", b =>
-                {
-                    b.Property<int>("GroupsGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MembersPersonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GroupsGroupId", "MembersPersonId");
-
-                    b.HasIndex("MembersPersonId");
-
-                    b.ToTable("GroupPerson");
-                });
 
             modelBuilder.Entity("Kaching.Models.BaseExpense", b =>
                 {
@@ -223,6 +210,9 @@ namespace Kaching.Migrations.Data
                     b.Property<string>("ColorCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -230,6 +220,8 @@ namespace Kaching.Migrations.Data
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PersonId");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Person");
                 });
@@ -282,21 +274,6 @@ namespace Kaching.Migrations.Data
                     b.HasIndex("SenderId");
 
                     b.ToTable("Transfer");
-                });
-
-            modelBuilder.Entity("GroupPerson", b =>
-                {
-                    b.HasOne("Kaching.Models.Group", null)
-                        .WithMany()
-                        .HasForeignKey("GroupsGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Kaching.Models.Person", null)
-                        .WithMany()
-                        .HasForeignKey("MembersPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Kaching.Models.BaseExpense", b =>
@@ -357,6 +334,13 @@ namespace Kaching.Migrations.Data
                     b.Navigation("Currency");
                 });
 
+            modelBuilder.Entity("Kaching.Models.Person", b =>
+                {
+                    b.HasOne("Kaching.Models.Group", null)
+                        .WithMany("Members")
+                        .HasForeignKey("GroupId");
+                });
+
             modelBuilder.Entity("Kaching.Models.Transfer", b =>
                 {
                     b.HasOne("Kaching.Models.Currency", "Currency")
@@ -411,6 +395,8 @@ namespace Kaching.Migrations.Data
             modelBuilder.Entity("Kaching.Models.Group", b =>
                 {
                     b.Navigation("Expenses");
+
+                    b.Navigation("Members");
 
                     b.Navigation("Transfers");
                 });
