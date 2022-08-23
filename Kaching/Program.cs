@@ -1,4 +1,5 @@
 using Kaching.Data;
+using Kaching.Helpers;
 using Kaching.Repositories;
 using Kaching.Services;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +22,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
         options.Password.RequireDigit = false;
         options.Password.RequireUppercase = false;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

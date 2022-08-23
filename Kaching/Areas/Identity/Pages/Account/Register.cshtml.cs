@@ -26,6 +26,8 @@ namespace Kaching.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         // Custom - Person hook
         private readonly IPersonRepository _personRepository;
+        // Custom - Role assigner
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -33,7 +35,8 @@ namespace Kaching.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IPersonRepository personRepository)
+            IPersonRepository personRepository, 
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +46,7 @@ namespace Kaching.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             // Custom - Person hook
             _personRepository = personRepository;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -124,6 +128,9 @@ namespace Kaching.Areas.Identity.Pages.Account
 
                 var user = CreateUser();
 
+                // Custom code - add user to default role
+                await _userManager.AddToRoleAsync(user, "Regular");
+                
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
