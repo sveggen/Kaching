@@ -11,6 +11,8 @@
         public string? ColorCode { get; set; }
 
         public int MaxMembers { get; set; }
+        
+        public bool Personal { get; set; }
 
         public List<PersonLightVm>? Members { get; set; }
 

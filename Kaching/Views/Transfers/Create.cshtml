@@ -18,7 +18,7 @@
                 <div class="column">
                         <div class="field">
                             <div class="ui right labeled input">
-                                <label for="amount" class="ui label">€</label>
+                                <select asp-for="CurrencyId" id="currency_dropdown" class="ui floating labeled icon dropdown button" asp-items="ViewBag.Currency"></select>
                                 <input asp-for="Amount" placeholder="Amount">
                                 <div class="ui basic label">.00</div>
                             </div>

@@ -65,3 +65,11 @@ $('#add_group_members')
         maxSelections: 10
     })
 ;
+
+$('#navbar_dropdown')
+    .dropdown()
+;
+
+$('#currency_dropdown')
+    .dropdown()
+;
