@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using System.Collections;
 using Kaching.Repositories;
 using Kaching.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -28,6 +29,8 @@ namespace Kaching.Areas.Identity.Pages.Account
         private readonly IPersonRepository _personRepository;
         // Custom - Role assigner
         private readonly RoleManager<IdentityRole> _roleManager;
+        // Custom - Group hook
+        private readonly IGroupRepository _groupRepository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -36,7 +39,8 @@ namespace Kaching.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IPersonRepository personRepository, 
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IGroupRepository groupRepository)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,9 +48,10 @@ namespace Kaching.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            // Custom - Person hook
+            // Custom
             _personRepository = personRepository;
             _roleManager = roleManager;
+            _groupRepository = groupRepository;
         }
 
         /// <summary>
@@ -152,6 +157,18 @@ namespace Kaching.Areas.Identity.Pages.Account
                     var userName = await _userManager.GetUserNameAsync(user);
                     var person = new Person { UserId = userId, UserName = userName };
                     _personRepository.CreateNewPerson(person);
+                    var member = new List<Person>();
+                    member.Add(person);
+                    _groupRepository.InsertGroup(new Group
+                    {
+                        Name = person.UserName + "'s Expenses",
+                        Avatar = person.Avatar,
+                        ColorCode = person.ColorCode,
+                        MaxMembers = 1,
+                        Members = member,
+                        Personal = true
+                    });
+                    _groupRepository.Save();
 
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
