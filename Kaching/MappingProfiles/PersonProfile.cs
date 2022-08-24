@@ -11,6 +11,8 @@ namespace Kaching.MappingProfiles
         {
             CreateMap<Person, PersonLightVm>();
             CreateMap<PersonLightVm, Person>();
+
+            CreateMap<Person, PersonAdminVm>();
         }
     }
 }

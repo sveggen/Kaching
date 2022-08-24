@@ -1,5 +1,6 @@
 ﻿using Kaching.Services;
 using Kaching.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -24,8 +25,8 @@ public class GroupsController : Controller
         return View();
     }
     
-    
     // GET: Groups/Create
+    [Authorize(Roles = "Administrator")]
     [Route("Groups/Create")]
     public IActionResult Create()  
     {
@@ -39,8 +40,8 @@ public class GroupsController : Controller
             return NotFound();
         }
     }
-    
     // POST: Groups/Create
+    [Authorize(Roles = "Administrator")]
     [HttpPost("Groups/Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(GroupCreateVm groupCreateVm)

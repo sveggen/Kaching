@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Kaching.ViewModels.PersonLightVm>
+
+@{  
+    ViewData["Title"] = "Index";  
+}  
+  
+<h1>List of Users</h1>
+
+<table class="ui celled table">
+    <thead>
+    <tr><th>Id</th>
+        <th>Name</th>
+         <th>Color Code</th>
+    </tr></thead>
+    <tbody>
+    @foreach (var person in Model)
+    {
+        <tr>  
+            <td>@person.PersonId</td>
+            <td>@person.UserName</td>
+            <td>@person.ColorCode</td>
+        </tr>  
+    }
+    </tbody>
+</table>

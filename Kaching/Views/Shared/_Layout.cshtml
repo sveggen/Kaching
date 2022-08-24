@@ -28,17 +28,17 @@
             <i class="hand holding usd icon"></i>
             Transfers
         </a>
-        @if (User.IsInRole("Administrator"))
-        {
-            <a class="item" asp-area="" asp-controller="Admin" asp-action="Index">
-                <i class="key icon"></i>
-                Admin
-            </a>
-        }
         <a class="item" asp-area="" asp-controller="Expenses" asp-action="PersonalIndex">
             <i class="wine glass alternate icon"></i>
             Personal Expenses
         </a>
+           @if (User.IsInRole("Administrator"))
+                {
+                    <a class="item" asp-area="" asp-controller="Admin" asp-action="Index">
+                        <i class="key icon"></i>
+                        Admin
+                    </a>
+                }
         <div class="right menu">
         <div class="ui dropdown button" id="navbar_dropdown">
             <span class="text">Filter</span>
