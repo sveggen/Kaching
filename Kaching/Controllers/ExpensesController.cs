@@ -58,7 +58,7 @@ namespace Kaching.Controllers
                 return NotFound();
             }
 
-            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber, year);
+            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber, year, 1);
 
             return View(viewModel);
         }
