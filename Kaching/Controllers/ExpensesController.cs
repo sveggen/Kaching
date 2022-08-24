@@ -224,12 +224,15 @@ namespace Kaching.Controllers
         [Route("Expenses/Personal")]
         public async Task<IActionResult> PersonalIndex()
         {
-            var year = DateTime.Now.Year.ToString();
+            var year = DateTime.Now.Year;
             var month = GetCurrentMonthNumber();
+            
+            var person = 
+                _personService.GetPersonByUsername(GetCurrentUserName());
             
             try
             {
-                var expensesVm = await _expenseService.GetPersonalExpensesByMonth(month, year);
+                var expensesVm = await _expenseService.GetPersonalExpensesByMonth(month, year, person.PersonId);
                 return View(expensesVm);
             }
             catch (Exception)

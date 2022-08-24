@@ -7,6 +7,8 @@ public interface IGroupRepository
     public List<Group> GetGroups();
 
     public Group GetGroup(int groupId);
+
+    public Group GetPersonalGroup(int personId);
     
     public void InsertGroup(Group group);
 

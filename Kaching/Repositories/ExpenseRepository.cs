@@ -59,6 +59,17 @@ namespace Kaching.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Expense>> GetGroupExpensesByMonth(int monthNumber, int year, int groupId)
+        {
+            return await _context.Expense
+                .Include(e => e.BaseExpense)
+                .Include(g => g.BaseExpense.Group)
+                .Where(p => p.PaymentDate.Year == year)
+                .Where(p => p.PaymentDate.Month == monthNumber)
+                .Where(p => p.BaseExpense.GroupId == groupId)
+                .ToListAsync();
+        }
+
         public decimal GetSumOfPersonExpensesByMonth(int personId, int monthNumber)
         {
             return _context.Expense

@@ -1,1 +1,25 @@
-﻿
+﻿@model List<Kaching.ViewModels.ExpensePersonalVm>
+
+@{  
+    ViewData["Title"] = "Index";  
+}  
+  
+<h1>Personal Expenses due this month</h1>  
+<a asp-action="Create">Create</a>  
+
+<table class="ui celled table">
+    <thead>
+    <tr><th></th>
+        <th>Category</th>
+        <th>Price</th>
+    </tr></thead>
+    <tbody>
+    @foreach (var expense in Model)
+    {
+        <tr>  
+            <td>@expense.Category</td>  
+            <td>@expense.Price</td>  
+        </tr>  
+    }
+    </tbody>
+</table>

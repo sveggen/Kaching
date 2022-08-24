@@ -11,6 +11,7 @@ namespace Kaching.Services
         private readonly IExpenseRepository _expenseRepository;
         private readonly ITransferRepository _transferRepository;
         private readonly IPersonRepository _personRepository;
+        private readonly IGroupRepository _groupRepository;
         private readonly IMapper _mapper;
 
         public ExpenseService(
@@ -18,18 +19,27 @@ namespace Kaching.Services
             IExpenseRepository expenseRepository,
             ITransferRepository transferRepository,
             IPersonRepository personRepository,
+            IGroupRepository groupRepository,
             IMapper mapper)
         {
             _baseExpenseRepository = baseExpenseRepository;
             _expenseRepository = expenseRepository;
             _transferRepository = transferRepository;
             _personRepository = personRepository;
+            _groupRepository = groupRepository;
             _mapper = mapper;
         }
 
-        public Task<ExpensesByMonthVm> GetPersonalExpensesByMonth(int monthNumber, string year)
+        public Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber, string year, int groupId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<ExpensePersonalVm>> GetPersonalExpensesByMonth(int monthNumber, int year, int personId)
+        {
+            var personalGroup = _groupRepository.GetPersonalGroup(personId);
+            var expenses = await _expenseRepository.GetGroupExpensesByMonth(monthNumber, year, personalGroup.GroupId);
+            return _mapper.Map<List<ExpensePersonalVm>>(expenses);
         }
 
         public async Task CreateExpense(ExpenseCreateVm expenseCreateVm)

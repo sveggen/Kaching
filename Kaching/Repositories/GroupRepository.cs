@@ -24,6 +24,12 @@ public class GroupRepository : IGroupRepository
         return _context.Group.FirstOrDefault(x => x.GroupId == groupId);
     }
 
+    public Group GetPersonalGroup(int personId)
+    {
+        return _context.Group.FirstOrDefault
+            (x => x.Members.FirstOrDefault().PersonId == personId && x.Personal == true);
+    }
+
     public void InsertGroup(Group group)
     {
         _context.Group.Add(group);
