@@ -14,9 +14,9 @@ public class GroupRepository : IGroupRepository
         _context = context;
     }
     
-    public Task<List<Group>> GetGroups()
+    public List<Group> GetGroups()
     {
-        return _context.Group.ToListAsync();
+        return _context.Group.ToList();
     }
 
     public Group GetGroup(int groupId)

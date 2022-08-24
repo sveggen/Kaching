@@ -8,7 +8,7 @@ public class GroupCreateVm
         
     public string? ColorCode { get; set; }
 
-    public bool Personal { get; set; }
+    public bool? Personal { get; set; }
     
     public int MaxMembers { get; set; }
 

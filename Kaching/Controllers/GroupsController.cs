@@ -19,10 +19,12 @@ public class GroupsController : Controller
     }
     
     // GET: Groups/
+    [Authorize(Roles = "Administrator")]
     [Route("Groups/")]
     public IActionResult Index()
     {
-        return View();
+        var groups = _groupService.GetGroups();
+        return View(groups);
     }
     
     // GET: Groups/Create
@@ -48,6 +50,7 @@ public class GroupsController : Controller
     {
         if (ModelState.IsValid)
         {
+            groupCreateVm.Personal = false;
             _groupService.AddGroup(groupCreateVm);
 
             return RedirectToAction(nameof(Index));

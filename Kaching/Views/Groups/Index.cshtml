@@ -1,1 +1,30 @@
-﻿
+﻿@model List<Kaching.ViewModels.GroupVm>
+
+@{  
+    ViewData["Title"] = "Index";  
+}  
+  
+<h1>List of Expense Groups</h1>  
+<a asp-action="Create">Create</a>  
+
+<table class="ui celled table">
+    <thead>
+    <tr><th>Id</th>
+        <th>Name</th>
+        <th>Members</th>
+        <th>Created</th>
+        <th>Personal</th>
+    </tr></thead>
+    <tbody>
+    @foreach (var group in Model)
+    {
+        <tr>  
+            <td>@group.GroupId</td>  
+            <td>@group.Name</td>  
+            <td>@group.Members.Count / @group.MaxMembers</td>
+            <td>@group.Created</td>
+            <td>@group.Personal</td>
+        </tr>  
+    }
+    </tbody>
+</table>

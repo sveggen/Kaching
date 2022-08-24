@@ -26,6 +26,12 @@ public class GroupService : IGroupService
         _groupRepository.Save();
     }
 
+    public List<GroupVm> GetGroups()
+    {
+        var groups = _groupRepository.GetGroups();
+        return _mapper.Map<List<GroupVm>>(groups);
+    }
+
     public void AddGroupMember(int groupId, int personId)
     {
         throw new NotImplementedException();

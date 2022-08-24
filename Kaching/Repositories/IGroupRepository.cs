@@ -4,7 +4,7 @@ namespace Kaching.Repositories;
 
 public interface IGroupRepository
 {
-    public Task<List<Group>> GetGroups();
+    public List<Group> GetGroups();
 
     public Group GetGroup(int groupId);
     
