@@ -16,7 +16,9 @@ public class GroupRepository : IGroupRepository
     
     public List<Group> GetGroups()
     {
-        return _context.Group.ToList();
+        return _context.Group
+            .Include(m => m.Members)
+            .ToList();
     }
 
     public List<Group> GetPersonsGroups(Person person)
