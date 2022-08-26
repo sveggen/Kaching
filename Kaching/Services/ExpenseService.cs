@@ -30,9 +30,10 @@ namespace Kaching.Services
             _mapper = mapper;
         }
 
-        public Task<ExpensesByMonthVm> GetExpensesByMonth(int monthNumber, string year, int groupId)
+        public async Task<List<ExpenseVm>> GetExpensesByMonth(int monthNumber, int year, int groupId)
         {
-            throw new NotImplementedException();
+            var expenses = await _expenseRepository.GetGroupExpensesByMonth(monthNumber, year, groupId);
+            return _mapper.Map<List<ExpenseVm>>(expenses);
         }
 
         public async Task<List<ExpensePersonalVm>> GetPersonalExpensesByMonth(int monthNumber, int year, int personId)

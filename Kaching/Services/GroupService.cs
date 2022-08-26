@@ -9,13 +9,16 @@ public class GroupService : IGroupService
 {
 
     private readonly IGroupRepository _groupRepository;
+    private readonly IPersonRepository _personRepository;
     private readonly IMapper _mapper;
 
     public GroupService(
         IGroupRepository groupRepository,
+        IPersonRepository personRepository,
         IMapper mapper)
     {
         _groupRepository = groupRepository;
+        _personRepository = personRepository;
         _mapper = mapper;
     }
     
@@ -29,6 +32,13 @@ public class GroupService : IGroupService
     public List<GroupVm> GetGroups()
     {
         var groups = _groupRepository.GetGroups();
+        return _mapper.Map<List<GroupVm>>(groups);
+    }
+
+    public List<GroupVm> GetPersonsGroups(int personId)
+    {
+        var person = _personRepository.GetPersonByPersonId(personId);
+        var groups = _groupRepository.GetPersonsGroups(person);
         return _mapper.Map<List<GroupVm>>(groups);
     }
 

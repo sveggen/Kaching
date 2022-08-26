@@ -19,6 +19,14 @@ public class GroupRepository : IGroupRepository
         return _context.Group.ToList();
     }
 
+    public List<Group> GetPersonsGroups(Person person)
+    {
+        return _context.Group
+            .Include(x => x.Members)
+            .Where(x => x.Members.Contains(person))
+            .ToList();
+    }
+
     public Group GetGroup(int groupId)
     {
         return _context.Group.FirstOrDefault(x => x.GroupId == groupId);

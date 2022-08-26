@@ -10,9 +10,11 @@ namespace Kaching.MappingProfiles
         public TransferProfile()
         {
             CreateMap<TransferCreateVM, Transfer>()
-                .ForMember(m => m.Created, conf => conf.MapFrom(ml => DateTime.Now));
+                .ForMember(m => m.Created, conf
+                    => conf.MapFrom(ml => DateTime.Now));
             CreateMap<Transfer, TransferVm>()
-                .ForMember(e => e.PaymentMonth, f => f.MapFrom(k => k.PaymentMonth.ToString("MMMM")));
+                .ForMember(e => e.PaymentMonthYear, f =>
+                    f.MapFrom(k => k.PaymentMonth));
         }
     }
 }

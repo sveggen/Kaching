@@ -5,7 +5,7 @@ namespace Kaching.Repositories
     public interface ITransferRepository
     {
 
-        public Task<List<Transfer>> GetTransfers();
+        public Task<List<Transfer>> GetTransfers(int groupId);
 
         public Task<List<Transfer>> GetPersonTransfers(int personId, int monthNumber);
 

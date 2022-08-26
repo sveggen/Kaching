@@ -47,11 +47,14 @@ namespace Kaching.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<Transfer>> GetTransfers()
+        public async Task<List<Transfer>> GetTransfers(int groupId)
         {
             return await _context.Transfer
                 .Include(e => e.Sender)
+                .Include(c => c.Currency)
                 .Include(f=> f.Receiver)
+                .Include(e => e.Expense)
+                .Where(x => x.GroupId == groupId)
                 .OrderByDescending(e=>e.PaymentMonth)
                 .ToListAsync(); 
         }

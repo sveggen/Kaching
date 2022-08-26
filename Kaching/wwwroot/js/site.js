@@ -73,3 +73,7 @@ $('#navbar_dropdown')
 $('#currency_dropdown')
     .dropdown()
 ;
+
+$('#sidebar')
+    .sidebar('toggle')
+;

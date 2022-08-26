@@ -5,6 +5,8 @@ namespace Kaching.Repositories;
 public interface IGroupRepository
 {
     public List<Group> GetGroups();
+    
+    public List<Group> GetPersonsGroups(Person person);
 
     public Group GetGroup(int groupId);
 
@@ -15,7 +17,7 @@ public interface IGroupRepository
     public void DeleteGroup(Group group);
 
     public void AddMember(Group group);
-    
+
     // remove member 
     
     // edit group

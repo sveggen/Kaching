@@ -27,6 +27,37 @@ public class GroupsController : Controller
         return View(groups);
     }
     
+    // GET: /
+    // GET: Groups/
+    [Route("/")]
+    [Route("MyGroups/")]
+    public IActionResult MyGroups()
+    {
+        try
+        {
+            var personId = _personService.GetPersonByUsername(
+                GetCurrentUserName()).PersonId;
+            var groups = _groupService.GetPersonsGroups(personId);
+            return View(groups);
+        }
+        catch
+        {
+            return NotFound();   
+        }
+
+    }
+    
+    // GET: Groups/4
+    [Route("Groups/{groupId}")]
+    public IActionResult SelectedGroup(int groupId)
+    {
+        Response.Cookies.Append("group-id", groupId.ToString(), SetCookieOptions());
+        
+        return View();
+    }
+    
+    
+
     // GET: Groups/Create
     [Authorize(Roles = "Administrator")]
     [Route("Groups/Create")]
@@ -70,5 +101,16 @@ public class GroupsController : Controller
     {
         System.Security.Claims.ClaimsPrincipal currentUser = User;
         return currentUser.Identity.Name;
+    }
+    
+    private CookieOptions SetCookieOptions()
+    {
+        var cookie = new CookieOptions
+        {
+            Secure = true,
+            HttpOnly = true,
+            Expires = DateTimeOffset.Now.AddDays(1)
+        };
+        return cookie;
     }
 }

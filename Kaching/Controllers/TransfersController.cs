@@ -20,28 +20,21 @@ namespace Kaching.Controllers
             _personService = personService;
         }
 
-        // GET: Transfers/
-        [Route("Transfers/")]
-        public async Task<IActionResult> Index(string? month)
+        // GET: Group/4/Transfers
+        [Route("Group/{GroupId}/Transfers")]
+        public async Task<IActionResult> Index(int groupId)
         {
-            try
-            {
-                var viewModel = await _transferService.GetTransfers();
-                return View(viewModel);
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            var viewModel = await _transferService.GetTransfers(groupId);
+            return View(viewModel);
         }
 
-        // GET: Transfers/Create
-        [Route("Transfers/Create")]
-        public async Task<IActionResult> Create()  
+        // GET: Group/4/Transfers/Create
+        [Route("Group/{groupId}/Transfers/Create")]
+        public async Task<IActionResult> Create(int groupId)  
         {
             try
             {
-                RenderSelectListWithoutYourself();
+                RenderSelectListWithoutYourself(groupId);
                 await RenderCurrencySelectList();
                 return View();
             }
@@ -51,8 +44,8 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Transfers/Create
-        [HttpPost("Transfers/Create")]
+        // POST: Group/4/Transfers/Create
+        [HttpPost("Group/{groupId}/Transfers/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TransferCreateVM transferCreateViewModel)
         {
@@ -69,10 +62,10 @@ namespace Kaching.Controllers
             return View(transferCreateViewModel);
         }
 
-        private void RenderSelectListWithoutYourself()
+        private void RenderSelectListWithoutYourself(int groupId)
         {
             var yourself = _personService.GetPersonByUsername(GetCurrentUserName());
-            var selectList = new SelectList(_personService.GetPersons(),
+            var selectList = new SelectList(_personService.GetPersonsInGroup(groupId),
                 "PersonId", "UserName");
             ViewData["PersonId"] = selectList.Where(x => int.Parse(x.Value) != yourself.PersonId);
         }

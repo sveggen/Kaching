@@ -15,56 +15,20 @@
 </head>
 <body>
 <section class="ui container">
-    <nav class="ui stackable labeled icon menu">
-        <a class="item" asp-area="" asp-controller="Expenses" asp-action="Index">
-            <i class="money bill alternate outline icon"></i>
-            Expenses
-        </a>
-        <a class="item" asp-area="" asp-controller="Expenses" asp-action="Create">
-            <i class="plus square outline icon"></i>
-            New Expense
-        </a>
-        <a class="item" asp-area="" asp-controller="Transfers" asp-action="Index">
-            <i class="hand holding usd icon"></i>
-            Transfers
-        </a>
-        <a class="item" asp-area="" asp-controller="Expenses" asp-action="PersonalIndex">
-            <i class="wine glass alternate icon"></i>
-            Personal Expenses
-        </a>
-           @if (User.IsInRole("Administrator"))
-                {
-                    <a class="item" asp-area="" asp-controller="Admin" asp-action="Index">
-                        <i class="key icon"></i>
-                        Admin
-                    </a>
-                }
-        <div class="right menu">
-        <div class="ui dropdown button" id="navbar_dropdown">
-            <span class="text">Filter</span>
-          <div class="menu">
-            <div class="header">
-              <i class="tags icon"></i>
-              Filter by tag
-            </div>
-            <div class="divider"></div>
-            <div class="item">
-              <i class="attention icon"></i>
-              Important
-            </div>
-            <div class="item">
-              <i class="comment icon"></i>
-              Announcement
-            </div>
-            <div class="item">
-              <i class="conversation icon"></i>
-              Discussion
-            </div>
+    <nav class="ui labeled menu">
+          <div class="header item">
+            Kaching
           </div>
+        @if (User.IsInRole("Administrator"))
+        {
+            <a class="item" asp-area="" style="background-color: cadetblue" asp-controller="Admin" asp-action="Index">
+                Admin
+            </a>
+        }
+        <div class="right menu">
+            <partial name="_LoginPartial"/>
         </div>
-        <partial name="_LoginPartial"/>
-        </div>
-        </nav>
+    </nav>
 <div class="ui segment">
     @RenderBody()
 </div>

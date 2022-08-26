@@ -15,7 +15,5 @@ namespace Kaching.ViewModels
         public int Year { get; set; }
 
         public List<ExpenseVm>? Expenses { get; set; }
-
-        public List<PersonLightVm>? Persons { get; set; }
     }
 }

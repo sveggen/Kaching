@@ -24,6 +24,12 @@ namespace Kaching.Services
             return _mapper.Map<List<PersonLightVm>>(persons);
         }
 
+        public List<PersonLightVm> GetPersonsInGroup(int groupId)
+        {
+            var persons = _personRepository.GetAllPersonsInGroup(groupId);
+            return _mapper.Map<List<PersonLightVm>>(persons);
+        }
+
         public List<PersonLightVm> GetPersonsWithoutYourself(string username)
         {
             var persons = _personRepository.GetAllPersonsWithoutYourself(username);

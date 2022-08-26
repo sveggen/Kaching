@@ -7,6 +7,8 @@ namespace Kaching.Services
         public PersonLightVm GetPersonByUsername(string userName);
 
         public List<PersonLightVm> GetPersons();
+        
+        public List<PersonLightVm> GetPersonsInGroup(int groupId);
 
         public List<PersonLightVm> GetPersonsWithoutYourself(string username);
     }

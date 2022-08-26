@@ -1,0 +1,27 @@
+﻿@model List<Kaching.ViewModels.GroupVm>
+
+@{  
+    ViewData["Title"] = "Index";
+}  
+  
+<h1>My Groups</h1>
+<div class="ui cards">
+        @foreach (var group in Model) {
+        <div class="ui card">
+            <div class="content">
+                <div class="header">@group.Name</div>
+                <div class="meta">
+                <span>
+                    <i class="users icon"></i>
+                    @group.Members.Count Member(s)
+                </span>
+                </div>
+            </div>
+            <div class="content">
+            </div>
+            <div class="extra content">
+                <a class="ui button" asp-controller="Expenses" asp-action="Index" asp-route-groupId="@group.GroupId">View Expenses</a>
+            </div>
+        </div>
+        }
+</div>

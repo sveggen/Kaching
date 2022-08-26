@@ -18,7 +18,7 @@ namespace Kaching.ViewModels
 
         public string? Description { get; set; }
 
-        public DateTime PaymentMonth { get; set; }
+        public DateTime PaymentMonthYear { get; set; }
 
         public DateTime Created { get; set; }
 

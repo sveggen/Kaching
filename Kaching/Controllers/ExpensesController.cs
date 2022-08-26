@@ -5,10 +5,11 @@ using Kaching.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Net.Http.Headers;
 
 namespace Kaching.Controllers
 {
-    [Authorize] 
+    [Authorize]
     public class ExpensesController : Controller
     {
         private readonly IExpenseService _expenseService;
@@ -23,20 +24,21 @@ namespace Kaching.Controllers
             _currentMonthNumber = DateTime.Now.Month;
             _expenseService = expenseService;
             _personService = personService;
-            _months = new List<string> 
-            {"January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"};
+            _months = new List<string>
+            {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            };
         }
 
-        // GET: /
-        // GET: Expenses/March
-        [Route("")]
-        [Route("Expenses/{month?}/{year?}")]
-        public async Task<IActionResult> Index(string? month, string? year)
+        // GET: Group/3/Expenses/
+        // GET: Group/3/Expenses/March/2022
+        [Route("Group/{groupId}/Expenses/{month?}/{year?}")]
+        public async Task<IActionResult> Index(int groupId, string? month, string? year)
         {
             int monthNumber;
 
-            if (month!= null && _months.Contains(month) && year != null)
+            if (month != null && _months.Contains(month) && year != null)
             {
                 try
                 {
@@ -58,18 +60,21 @@ namespace Kaching.Controllers
                 return NotFound();
             }
 
-            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber, year, 1);
+            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber, Int32.Parse(year), groupId);
 
+            ViewData["group"] = groupId;
             return View(viewModel);
         }
 
-        // GET: Expenses/Details/5
-        [Route("Expenses/Details/{id}")]
-        public async Task<IActionResult> Details(int id)
+        // GET: Group/4/Expenses/Details/5
+        [Route("Group/{groupId}/Expenses/Details/{expenseId}")]
+        public async Task<IActionResult> Details(int groupId, int expenseId)
         {
             try
             {
-                var expenseVm = await _expenseService.GetExpense(id);
+                // check if user is part of group
+
+                var expenseVm = await _expenseService.GetExpense(expenseId);
 
                 return View(expenseVm);
             }
@@ -79,9 +84,9 @@ namespace Kaching.Controllers
             }
         }
 
-        // GET: Expenses/Create
-        [Route("Expenses/Create")]
-        public IActionResult Create()
+        // GET: Expenses/7/Create
+        [Route("Expenses/{groupId}/Create")]
+        public IActionResult Create(int groupId)
         {
             try
             {
@@ -90,12 +95,12 @@ namespace Kaching.Controllers
             }
             catch (Exception)
             {
-                return NotFound();
+                return NotFound(); 
             }
         }
 
         // GET: Expenses/CreateRecurring
-        [Route("Expenses/CreateRecurring")]
+        [Route("Expenses/{groupId}/CreateRecurring")]
         public IActionResult CreateRecurring()
         {
             try
@@ -123,6 +128,7 @@ namespace Kaching.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
             return View(expenseCreateVm);
         }
 
@@ -135,7 +141,7 @@ namespace Kaching.Controllers
                 var expenseVm = await _expenseService.GetExpense(id);
                 RenderSelectList(expenseVm);
                 return View(expenseVm);
-            }   
+            }
             catch (Exception)
             {
                 return NotFound();
@@ -170,6 +176,7 @@ namespace Kaching.Controllers
                 await _expenseService.UpdateExpense(expenseEditVm);
                 return RedirectToAction(nameof(Index));
             }
+
             return NotFound();
         }
 
@@ -219,17 +226,17 @@ namespace Kaching.Controllers
                 return NotFound();
             }
         }
-        
+
         // GET: Expenses/Personal
-        [Route("Expenses/Personal")]
+        [Route("/Expenses/Personal")]
         public async Task<IActionResult> PersonalIndex()
         {
             var year = DateTime.Now.Year;
             var month = GetCurrentMonthNumber();
-            
-            var person = 
+
+            var person =
                 _personService.GetPersonByUsername(GetCurrentUserName());
-            
+
             try
             {
                 var expensesVm = await _expenseService.GetPersonalExpensesByMonth(month, year, person.PersonId);
@@ -242,7 +249,7 @@ namespace Kaching.Controllers
         }
 
         private void RenderSelectList(ExpenseVm expenseViewModel)
-        {   
+        {
             ViewData["PersonId"] = new SelectList(_personService.GetPersons(),
                 "PersonId", "UserName", expenseViewModel.ResponsibleId);
         }
@@ -264,5 +271,6 @@ namespace Kaching.Controllers
         {
             return _currentMonthNumber;
         }
+        
     }
 }

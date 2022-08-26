@@ -33,6 +33,15 @@ namespace Kaching.Repositories
                 .ToList();
         }
 
+        public List<Person> GetAllPersonsInGroup(int groupId)
+        {
+            var group = _context.Group.FirstOrDefault(x => x.GroupId == groupId);
+            
+            return _context.Person
+                .Where(x => x.Groups.Contains(group))
+                .ToList();
+        }
+
         private void DeletePerson(Person person)
         {
             _context.Person

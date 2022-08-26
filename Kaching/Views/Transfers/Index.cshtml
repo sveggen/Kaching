@@ -1,36 +1,32 @@
 ﻿@model IEnumerable<Kaching.ViewModels.TransferVm>
 
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+
+<partial name="/Views/Shared/_GroupNavbar.cshtml" />
 
 <h1>Transfers</h1>
 
 <table class="ui celled table">
     <thead>
-    <tr><th>Transfer Date</th>
+    <tr>
         <th>Sender</th>
         <th>Receiver</th>
         <th>Amount</th>
-        <th>Transfer Month</th>
+        <th>Period</th>
     </tr></thead>
     <tbody>
     @foreach (var item in Model)
     {
         <tr>
-            <td data-label="Transfer Date">@item.Created.ToString("dd.MM.yy")</td>
-            <td data-label="Sender">@item.Sender.UserName</td>
-            <td data-label="Receiver">@item.Receiver.UserName</td>
-            <td data-label="Amount">€ @item.Amount</td>
-            <td data-label="Transfer Month">@item.PaymentMonth</td>
+            <td>@item.Sender.UserName</td>
+            <td>@item.Receiver.UserName</td>
+            <td>@item.Currency.Symbol @item.Amount</td>
+            <td>@item.PaymentMonthYear.ToString("MMMM yy")</td>
         </tr>
     }
     </tbody>
     <tfoot class="full-width">
     <th colspan="5">
-    <a class="ui right floated small primary labeled icon button" asp-action="Create">
+    <a class="ui right floated small primary labeled icon button" asp-route-groupId="@ViewContext.RouteData.Values["groupId"]" asp-action="Create">
         <i class="money bill alternate outline icon"></i> Add payment
     </a>
     </th>
