@@ -47,14 +47,14 @@ public class GroupsController : Controller
 
     }
     
-    // GET: Groups/4
+    /*// GET: Groups/4
     [Route("Groups/{groupId}")]
     public IActionResult SelectedGroup(int groupId)
     {
         Response.Cookies.Append("group-id", groupId.ToString(), SetCookieOptions());
         
         return View();
-    }
+    }*/
     
     
 

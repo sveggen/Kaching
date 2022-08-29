@@ -42,7 +42,8 @@ public class GroupRepository : IGroupRepository
 
     public void InsertGroup(Group group)
     {
-        _context.Group.Add(group);
+        _context.Group
+            .Add(group);
     }
 
     public void DeleteGroup(Group group)

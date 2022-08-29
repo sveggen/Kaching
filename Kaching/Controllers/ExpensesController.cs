@@ -1,11 +1,11 @@
 ﻿#nullable disable
 using System.Globalization;
+using Kaching.Helpers;
 using Kaching.Services;
 using Kaching.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Net.Http.Headers;
 
 namespace Kaching.Controllers
 {
@@ -15,7 +15,7 @@ namespace Kaching.Controllers
         private readonly IExpenseService _expenseService;
         private readonly IPersonService _personService;
         private readonly int _currentMonthNumber;
-        private readonly List<string> _months;
+        private readonly DateHelper _dateHelper; 
 
         public ExpensesController(
             IExpenseService expenseService,
@@ -24,11 +24,7 @@ namespace Kaching.Controllers
             _currentMonthNumber = DateTime.Now.Month;
             _expenseService = expenseService;
             _personService = personService;
-            _months = new List<string>
-            {
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            };
+            _dateHelper = new DateHelper();
         }
 
         // GET: Group/3/Expenses/
@@ -38,29 +34,29 @@ namespace Kaching.Controllers
         {
             int monthNumber;
 
-            if (month != null && _months.Contains(month) && year != null)
+            if (month != null && year != null && _dateHelper.StringIsMonth(month))
             {
                 try
                 {
-                    var monthName = month;
-                    monthNumber = DateTime.ParseExact(monthName, "MMMM", CultureInfo.CurrentCulture).Month;
+                    monthNumber = _dateHelper.GetMonthNumber(month);
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     return NotFound();
                 }
             }
-            else if (month == null && year == null)
+            else if (month == null || year == null)
             {
-                monthNumber = _currentMonthNumber;
-                year = DateTime.Now.Year.ToString();
+                monthNumber = _dateHelper.GetCurrentMonthNumber();
+                year = _dateHelper.GetCurrentYear();
             }
             else
             {
                 return NotFound();
             }
 
-            var viewModel = await _expenseService.GetExpensesByMonth(monthNumber, Int32.Parse(year), groupId);
+            var viewModel = await _expenseService.GetExpensesByMonth
+                (monthNumber, Int32.Parse(year), groupId);
 
             ViewData["group"] = groupId;
             return View(viewModel);
@@ -72,8 +68,8 @@ namespace Kaching.Controllers
         {
             try
             {
-                // check if user is part of group
-
+                // MISSING: check if user is part of group
+                
                 var expenseVm = await _expenseService.GetExpense(expenseId);
 
                 return View(expenseVm);
