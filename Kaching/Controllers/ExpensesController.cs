@@ -1,5 +1,4 @@
 ﻿#nullable disable
-using System.Globalization;
 using Kaching.Helpers;
 using Kaching.Services;
 using Kaching.ViewModels;
@@ -14,14 +13,12 @@ namespace Kaching.Controllers
     {
         private readonly IExpenseService _expenseService;
         private readonly IPersonService _personService;
-        private readonly int _currentMonthNumber;
         private readonly DateHelper _dateHelper; 
 
         public ExpensesController(
             IExpenseService expenseService,
             IPersonService personService)
         {
-            _currentMonthNumber = DateTime.Now.Month;
             _expenseService = expenseService;
             _personService = personService;
             _dateHelper = new DateHelper();
@@ -263,10 +260,5 @@ namespace Kaching.Controllers
             return currentUser.Identity.Name;
         }
 
-        private int GetCurrentMonthNumber()
-        {
-            return _currentMonthNumber;
-        }
-        
     }
 }
