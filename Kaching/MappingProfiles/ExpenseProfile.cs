@@ -29,6 +29,8 @@ namespace Kaching.MappingProfiles
 
             CreateMap<ExpenseEditVm, Expense>();
 
+            CreateMap<Category, CategoryVm>();
+
         }
     }
 }

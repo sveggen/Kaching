@@ -58,7 +58,6 @@ namespace Kaching.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            //RenderSelectList(expenseEventCreateViewModel);
             return View(transferCreateViewModel);
         }
 

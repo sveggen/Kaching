@@ -34,13 +34,15 @@
                         </div>
 
                         
-                        @*<div class="field">
-                            <select asp-for="Category" id="categorydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Category>()"></select>
+                        <div class="field">
+                            <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown" asp-items="ViewBag.Category"></select>
                         </div>
+                        
+                        
                         <div class="field">
                             <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentType>()">
                             </select>
-                        </div>*@
+                        </div>
                         
                         
                         <div class="field">

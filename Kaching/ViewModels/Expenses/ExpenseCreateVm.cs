@@ -7,11 +7,15 @@ namespace Kaching.ViewModels
     {
         public decimal Price { get; set; }
 
+        public int GroupId { get; set; }
+        
         public int CreatorId { get; set; }
 
         public int ExpenseId { get; set; }
 
-        public Category? Category { get; set; }
+        public int CategoryId { get; set; }
+        
+        public int CurrencyId { get; set; }
 
         public int BuyerId { get; set; }
 

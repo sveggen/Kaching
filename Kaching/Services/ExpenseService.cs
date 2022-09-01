@@ -12,6 +12,7 @@ namespace Kaching.Services
         private readonly ITransferRepository _transferRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IGroupRepository _groupRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
 
         public ExpenseService(
@@ -20,6 +21,7 @@ namespace Kaching.Services
             ITransferRepository transferRepository,
             IPersonRepository personRepository,
             IGroupRepository groupRepository,
+            ICategoryRepository categoryRepository,
             IMapper mapper)
         {
             _baseExpenseRepository = baseExpenseRepository;
@@ -27,6 +29,7 @@ namespace Kaching.Services
             _transferRepository = transferRepository;
             _personRepository = personRepository;
             _groupRepository = groupRepository;
+            _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
 
@@ -150,21 +153,28 @@ namespace Kaching.Services
             throw new NotImplementedException();
         }
 
+        public List<CategoryVm> GetCategories()
+        {
+            var categories = _categoryRepository.GetCategories();
+            return _mapper.Map<List<CategoryVm>>(categories);
+        }
+
         private async Task CreateSingleExpense(ExpenseCreateVm expenseCreateVm)
         {
-            List<Expense> expenseEvents = new List<Expense>();
-            expenseEvents.Add(new Expense
+            List<Expense> expenses = new List<Expense>();
+            expenses.Add(new Expense
             {
                 BuyerId = expenseCreateVm.BuyerId,
                 PaymentDate = expenseCreateVm.PaymentDate,
                 Price = expenseCreateVm.Price,
+                CurrencyId = 1,
                 PaymentType = expenseCreateVm.PaymentType,
                 ExpenseId = expenseCreateVm.ExpenseId
             });
 
-            var expense = _mapper.Map<BaseExpense>(expenseCreateVm);
-            expense.Expenses = expenseEvents;
-            _baseExpenseRepository.InsertBaseExpense(expense);
+            var baseExpense = _mapper.Map<BaseExpense>(expenseCreateVm);
+            baseExpense.Expenses = expenses;
+            _baseExpenseRepository.InsertBaseExpense(baseExpense);
             await _baseExpenseRepository.SaveAsync();
         }
         private async Task CreateRecurringExpense(ExpenseCreateVm expenseCreateVm)

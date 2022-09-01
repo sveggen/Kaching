@@ -24,6 +24,7 @@ namespace Kaching.Services
 
         public Task UpdateRecurringExpenses(ExpenseVm expenseVm);
 
-    
+        public List<CategoryVm> GetCategories();
+        
     }
 }

@@ -24,9 +24,9 @@ namespace Kaching.Controllers
             _dateHelper = new DateHelper();
         }
 
-        // GET: Group/3/Expenses/
-        // GET: Group/3/Expenses/March/2022
-        [Route("Group/{groupId}/Expenses/{month?}/{year?}")]
+        // GET: Groups/3/Expenses/
+        // GET: Groups/3/Expenses/March/2022
+        [Route("Groups/{groupId}/Expenses/{month?}/{year?}")]
         public async Task<IActionResult> Index(int groupId, string? month, string? year)
         {
             int monthNumber;
@@ -55,7 +55,7 @@ namespace Kaching.Controllers
             return View(viewModel);
         }
 
-        // GET: Group/4/Expenses/Details/5
+        // GET: Groups/4/Expenses/Details/5
         [Route("Group/{groupId}/Expenses/Details/{expenseId}")]
         public async Task<IActionResult> Details(int groupId, int expenseId)
         {
@@ -73,13 +73,14 @@ namespace Kaching.Controllers
             }
         }
 
-        // GET: Expenses/7/Create
-        [Route("Expenses/{groupId}/Create")]
+        // GET: Groups/7/Expenses/7/Create
+        [Route("Groups/{groupId}/Expenses/Create")]
         public IActionResult Create(int groupId)
         {
             try
             {
                 RenderSelectListDefault();
+                RenderCategorySelectList();
                 return View();
             }
             catch (Exception)
@@ -89,12 +90,13 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/CreateRecurring
-        [Route("Expenses/{groupId}/CreateRecurring")]
+        [Route("Groups/{groupId}/Expenses/CreateRecurring")]
         public IActionResult CreateRecurring()
         {
             try
             {
                 RenderSelectListDefault();
+                RenderCategorySelectList();
                 return View();
             }
             catch (Exception)
@@ -103,16 +105,17 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Expenses/Create
+        // POST: Groups/7/Expenses/7/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Expenses/Create")]
+        [HttpPost("Groups/{groupId}/Expenses/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ExpenseCreateVm expenseCreateVm)
+        public async Task<IActionResult> Create(ExpenseCreateVm expenseCreateVm, int groupId)
         {
             if (ModelState.IsValid)
             {
                 expenseCreateVm.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+                expenseCreateVm.GroupId = groupId;
                 await _expenseService.CreateExpense(expenseCreateVm);
 
                 return RedirectToAction(nameof(Index));
@@ -169,21 +172,6 @@ namespace Kaching.Controllers
             return NotFound();
         }
 
-        // GET: Expenses/Delete/5
-        [Route("Expenses/Delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                var expenseVm = await _expenseService.GetExpense(id);
-                return View(expenseVm);
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
-        }
-
         // POST: Expenses/Delete/5
         [HttpPost("Expenses/Delete/{id?}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -228,13 +216,21 @@ namespace Kaching.Controllers
 
             try
             {
-                var expensesVm = await _expenseService.GetPersonalExpensesByMonth(month, year, person.PersonId);
+                var expensesVm =
+                    await _expenseService.GetPersonalExpensesByMonth(month, year, person.PersonId);
                 return View(expensesVm);
             }
             catch (Exception)
             {
                 return View();
             }
+        }
+
+        private void RenderCategorySelectList()
+        {
+            ViewData["Category"] = new SelectList(
+                _expenseService.GetCategories(),
+                "CategoryId", "Name");
         }
 
         private void RenderSelectList(ExpenseVm expenseViewModel)
