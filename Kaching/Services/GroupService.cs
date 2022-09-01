@@ -46,4 +46,11 @@ public class GroupService : IGroupService
     {
         throw new NotImplementedException();
     }
+
+    public void DeleteGroup(int groupId)
+    {
+        var group = _groupRepository.GetGroup(groupId);
+        _groupRepository.DeleteGroup(group);
+        _groupRepository.Save();
+    }
 }

@@ -1,4 +1,6 @@
-﻿@model List<Kaching.ViewModels.GroupVm>
+﻿@using Group = System.Text.RegularExpressions.Group
+@using Microsoft.EntityFrameworkCore
+@model List<Kaching.ViewModels.GroupVm>
 
 @{  
     ViewData["Title"] = "Index";  
@@ -14,17 +16,28 @@
         <th>Members</th>
         <th>Created</th>
         <th>Personal</th>
+        <th></th>
     </tr></thead>
     <tbody>
+    @{ int i = 0; }
     @foreach (var group in Model)
     {
-        <tr>  
-            <td>@group.GroupId</td>  
-            <td>@group.Name</td>  
+        <tr>
+            <td>@group.GroupId</td>
+            <td>@group.Name</td>
             <td>@group.Members.Count / @group.MaxMembers</td>
             <td>@group.Created</td>
             <td>@group.Personal</td>
-        </tr>  
+            <td>
+                @using (Html.BeginForm("Delete", "Groups", FormMethod.Post))
+                {
+                    @Html.Hidden("groupId", group.GroupId)
+                    <button type="submit" class="ui red button" value="Delete">Delete</button>
+                }
+              
+            </td>
+        </tr>
+        i++;
     }
     </tbody>
 </table>

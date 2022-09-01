@@ -12,4 +12,6 @@ public interface IGroupService
     public List<GroupVm> GetPersonsGroups(int personId);
 
     public void AddGroupMember(int groupId, int personId);
+
+    public void DeleteGroup(int groupId);
 }

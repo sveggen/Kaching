@@ -89,6 +89,17 @@ public class GroupsController : Controller
         return View();
     }
     
+    
+    // POST: Groups/Delete
+    [HttpPost("Groups/Delete"), ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult Delete(int groupId)
+    {
+        _groupService.DeleteGroup(groupId);
+        return RedirectToAction(nameof(Index));
+    }
+    
+    
     private void RenderSelectListWithoutYourself()
     {
         var yourself = _personService.GetPersonByUsername(GetCurrentUserName());
