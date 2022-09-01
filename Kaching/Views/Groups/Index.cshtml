@@ -1,6 +1,4 @@
-﻿@using Group = System.Text.RegularExpressions.Group
-@using Microsoft.EntityFrameworkCore
-@model List<Kaching.ViewModels.GroupVm>
+﻿@model List<Kaching.ViewModels.GroupVm>
 
 @{  
     ViewData["Title"] = "Index";  
@@ -19,7 +17,6 @@
         <th></th>
     </tr></thead>
     <tbody>
-    @{ int i = 0; }
     @foreach (var group in Model)
     {
         <tr>
@@ -34,10 +31,8 @@
                     @Html.Hidden("groupId", group.GroupId)
                     <button type="submit" class="ui red button" value="Delete">Delete</button>
                 }
-              
             </td>
         </tr>
-        i++;
     }
     </tbody>
 </table>
