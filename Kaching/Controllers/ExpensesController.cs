@@ -31,16 +31,12 @@ namespace Kaching.Controllers
         {
             int monthNumber;
 
-            if (month != null && year != null && _dateHelper.StringIsMonth(month))
+            if (month != null 
+                && year != null 
+                && _dateHelper.StringIsMonth(month) 
+                && _dateHelper.StringIsYear(year))
             {
-                try
-                {
-                    monthNumber = _dateHelper.GetMonthNumber(month);
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    return NotFound();
-                }
+                monthNumber = _dateHelper.GetMonthNumber(month);
             }
             else if (month == null || year == null)
             {
@@ -54,8 +50,8 @@ namespace Kaching.Controllers
 
             var viewModel = await _expenseService.GetExpensesByMonth
                 (monthNumber, Int32.Parse(year), groupId);
-
             ViewData["group"] = groupId;
+            
             return View(viewModel);
         }
 
@@ -225,7 +221,7 @@ namespace Kaching.Controllers
         public async Task<IActionResult> PersonalIndex()
         {
             var year = DateTime.Now.Year;
-            var month = GetCurrentMonthNumber();
+            var month = _dateHelper.GetCurrentMonthNumber();
 
             var person =
                 _personService.GetPersonByUsername(GetCurrentUserName());

@@ -4,7 +4,6 @@ namespace Kaching.Helpers;
 
 public class DateHelper
 {
-
     private readonly List<string> _months;
 
     public DateHelper()
@@ -30,6 +29,11 @@ public class DateHelper
     public bool StringIsMonth(string month)
     {
         return _months.Contains(month);
+    }
+
+    public bool StringIsYear(string year)
+    {
+        return true;
     }
 
     public string GetCurrentYear()
