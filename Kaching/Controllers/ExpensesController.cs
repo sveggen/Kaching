@@ -62,7 +62,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/4/Expenses/Details/5
-        [Route("Group/{groupId}/Expenses/Details/{expenseId}")]
+        [Route("Groups/{groupId}/Expenses/Details/{expenseId}")]
         public async Task<IActionResult> Details(int groupId, int expenseId)
         {
             try
@@ -160,8 +160,8 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Expenses/Edit/5
-        [HttpPost("Expenses/Edit/{id?}")]
+        // POST: Groups/6/Expenses/Edit/5
+        [HttpPost("Groups/{groupId}/Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVm)
         {
@@ -174,14 +174,14 @@ namespace Kaching.Controllers
             return NotFound();
         }
 
-        // POST: Expenses/Delete/5
-        [HttpPost("Expenses/Delete/{id?}"), ActionName("Delete")]
+        // POST: Expenses/Delete/
+        [HttpPost("/Expenses/Delete/"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int expenseId)
         {
             try
             {
-                await _expenseService.DeleteExpense(id);
+                await _expenseService.DeleteExpense(expenseId);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception)

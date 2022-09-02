@@ -79,6 +79,13 @@ namespace Kaching.Services
         {
             var expenseEvent = await _expenseRepository.GetExpenseById(expenseEventId);
 
+            // Deletes base expense class when there are no 
+            if (expenseEvent.BaseExpense.Expenses.Count <= 1)
+            {
+                var baseExpense = expenseEvent.BaseExpense;
+                _baseExpenseRepository.DeleteBaseExpense(baseExpense);
+            }
+            
             _expenseRepository.DeleteExpense(expenseEvent);
             await _expenseRepository.SaveAsync();
         }

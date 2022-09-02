@@ -2,8 +2,12 @@
 
 @model List<Kaching.ViewModels.ExpenseVm>
 
+
+@{
+    var groupId = ViewContext.RouteData.Values["groupId"];
+}
+
 <h1>List of Expenses</h1>  
-<a asp-action="Create">Create</a>  
 
 <table class="ui unstackable celled table">
     <thead>
@@ -17,10 +21,12 @@
     {
         <tr>
             <td>@expense.PaymentDate</td>
-            <td><strong>@expense.CurrencySymbol @expense.Price</strong> of @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
+            <td><strong>@expense.CurrencySymbol @expense.Price</strong> 
+            of @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
             <td>@expense.Paid</td>
             <td>
-                <a asp-action="Details">Details</a>
+                <a asp-controller="Expenses" asp-action="Details" asp-route-groupId="@groupId" 
+                   asp-route-expenseId="@expense.ExpenseId">Details</a>
             </td>
         </tr>
     }

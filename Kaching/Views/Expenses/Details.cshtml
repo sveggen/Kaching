@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
 <h1>Details</h1>
@@ -10,8 +12,74 @@
 <div>
     <h4>Expense</h4>
     <hr />
-  <partial name="/Views/Expenses/_ExpenseInfo.cshtml" />
+
+<div class="row">
+    <div class="ui form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="field">
+                    <label class="ui label">Price</label>
+                    <div class="ui right labeled input">
+                        <label for="amount" class="ui label">@Model.CurrencySymbol</label>
+                        <input asp-for="Price" disabled>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="ui label">Category</label>
+                    <input asp-for="CategoryName" disabled>
+                </div>
+                <div class="field">
+                    <label class="ui label">Transfer Status</label>
+                    <input asp-for="PaymentType" disabled>
+                </div>
+                <div class="field">
+                    <label class="ui label">Paid by</label>
+                    <input asp-for="Responsible.UserName" disabled>
+                </div>
+            <div class="field">
+                    <label class="ui label">Frequency</label>
+                    <input asp-for="Frequency" disabled>
+                </div>
+                <div class="field">
+                    <label class="ui label">Transfer Date</label>
+                    <input asp-for="PaymentDate" disabled>
+                </div>
+                <div class="field">
+                    <label class="ui label">Description <i>: Not Required</i> </label>
+                    <textarea asp-for="Comment" disabled rows="2"> </textarea>
+                </div>
+            </div>
+        </div>
+        <div>
+
+            @using (Html.BeginForm("Delete", "Expenses", FormMethod.Post))
+                {
+                    @Html.Hidden("expenseId", Model.ExpenseId)
+                    <input type="submit" class="ui red button" value="Delete"
+                            onclick="return confirm('Are you sure you want to delete the expense?')">
+                                                                                                                                                       
+                }
+            
+            <a class="ui button" asp-action="Edit" asp-route-groupId="@groupId" 
+               asp-route-id="@Model.ExpenseId">
+                Edit
+            </a>
+            
+            @if (Model.Frequency != Frequency.Once)
+            {
+
+                <a class="ui icon button" asp-action="DeleteRecurring" asp-route-groupId="@groupId" 
+                   asp-route-id="@Model.ExpenseId">
+                    <i class="ui button red">
+                        Delete all upcoming events
+                    </i>
+                </a>
+                <a class="ui icon button" asp-action="EditRecurring" asp-route-id="@Model.ExpenseId">
+                    <i class="ui button red">
+                        Edit upcoming events
+                    </i>
+                </a>
+            }
+        </div>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
 </div>
