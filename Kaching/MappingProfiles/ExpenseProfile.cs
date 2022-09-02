@@ -26,6 +26,8 @@ namespace Kaching.MappingProfiles
                     => d.MapFrom(k
                     => k.BaseExpense.Category.Icon));
 
+            CreateMap<Expense, PersonLightVm>();
+            
             CreateMap<ExpenseVm, ExpensesByMonthVm>();
 
             CreateMap<ExpenseCreateVm, BaseExpense>()

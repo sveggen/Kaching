@@ -35,12 +35,15 @@
 
                         
                         <div class="field">
-                            <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown" asp-items="ViewBag.Category"></select>
+                            <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown"
+                                    asp-items="ViewBag.Category">
+                            </select>
                         </div>
                         
                         
                         <div class="field">
-                            <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentType>()">
+                            <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown"
+                                    asp-items="Html.GetEnumSelectList<PaymentType>()">
                             </select>
                         </div>
 
@@ -48,8 +51,9 @@
                             <div class="ui pointing below label">
                                 Paid by/Responsible
                             </div>
-                            <select asp-for="BuyerId" id="buyerdropdown" class="ui selection dropdown" asp-items="ViewBag.PersonId"></select>
-
+                            <select asp-for="BuyerId" id="buyerdropdown" class="ui selection dropdown"
+                                    asp-items="ViewBag.PersonId">
+                            </select>
                         </div>
                         <div class="field">
                             <div class="ui calendar" id="date_calendar">

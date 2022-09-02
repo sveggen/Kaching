@@ -18,7 +18,7 @@ namespace Kaching.ViewModels
         
         public string? CategoryIcon { get; set; }
 
-        public PersonLightVm? Responsible { get; set; }
+        public PersonLightVm? Buyer { get; set; }
         
         public int CreatorId { get; set; }
         
