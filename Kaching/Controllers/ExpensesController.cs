@@ -23,25 +23,18 @@ namespace Kaching.Controllers
             _personService = personService;
             _dateHelper = new DateHelper();
         }
-
-        // GET: Groups/3/Expenses/
+        
         // GET: Groups/3/Expenses/March/2022
-        [Route("Groups/{groupId}/Expenses/{month?}/{year?}")]
-        public async Task<IActionResult> Index(int groupId, string? month, string? year)
+        [Route("Groups/{groupId}/Expenses/{month}/{year}")]
+        public async Task<IActionResult> Index(int groupId, string month, string year)
         {
             int monthNumber;
 
-            if (month != null 
-                && year != null 
-                && _dateHelper.StringIsMonth(month) 
-                && _dateHelper.StringIsYear(year))
+            if (month != null && year != null 
+                              && _dateHelper.StringIsMonth(month) 
+                              && _dateHelper.StringIsYear(year))
             {
                 monthNumber = _dateHelper.GetMonthNumber(month);
-            }
-            else if (month == null || year == null)
-            {
-                monthNumber = _dateHelper.GetCurrentMonthNumber();
-                year = _dateHelper.GetCurrentYear();
             }
             else
             {
@@ -52,6 +45,19 @@ namespace Kaching.Controllers
                 (monthNumber, Int32.Parse(year), groupId);
             ViewData["group"] = groupId;
             
+            return View(viewModel);
+        }
+        
+        // GET: Groups/3/Expenses/
+        [Route("Groups/{groupId}/Expenses/")]
+        public async Task<IActionResult> Index(int groupId)
+        {
+            var monthNumber = _dateHelper.GetCurrentMonthNumber();
+            var year = _dateHelper.GetCurrentYear();
+            
+            var viewModel = await _expenseService.GetExpensesByMonth
+                (monthNumber, Int32.Parse(year), groupId);
+
             return View(viewModel);
         }
 
@@ -89,9 +95,9 @@ namespace Kaching.Controllers
             }
         }
 
-        // GET: Expenses/CreateRecurring
+        // GET: Groups/7/Expenses/CreateRecurring
         [Route("Groups/{groupId}/Expenses/CreateRecurring")]
-        public IActionResult CreateRecurring()
+        public IActionResult CreateRecurring(int groupId)
         {
             try
             {
@@ -106,8 +112,6 @@ namespace Kaching.Controllers
         }
 
         // POST: Groups/7/Expenses/7/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Groups/{groupId}/Expenses/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ExpenseCreateVm expenseCreateVm, int groupId)
@@ -157,8 +161,6 @@ namespace Kaching.Controllers
         }
 
         // POST: Expenses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Expenses/Edit/{id?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVm)
@@ -224,6 +226,13 @@ namespace Kaching.Controllers
             {
                 return View();
             }
+        }
+
+        // GET: Groups/7/Settlement
+        [Route("/Groups/{groupId}/Settlement")]
+        public IActionResult Settlement()
+        {
+            return View();
         }
 
         private void RenderCategorySelectList()

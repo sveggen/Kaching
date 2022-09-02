@@ -64,6 +64,8 @@ namespace Kaching.Repositories
             return await _context.Expense
                 .Include(e => e.BaseExpense)
                 .Include(g => g.BaseExpense.Group)
+                .Include(g => g.BaseExpense.Category)
+                .Include(g => g.Currency)
                 .Where(p => p.PaymentDate.Year == year)
                 .Where(p => p.PaymentDate.Month == monthNumber)
                 .Where(p => p.BaseExpense.GroupId == groupId)

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Kaching.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.ViewModels
 {
@@ -13,8 +14,8 @@ namespace Kaching.ViewModels
 
         public decimal Price { get; set; }
         
-        public Category? Category { get; set; }
-        
+        public string? CategoryName { get; set; }
+
         public PersonLightVm? Responsible { get; set; }
         
         public int CreatorId { get; set; }
