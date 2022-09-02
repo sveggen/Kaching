@@ -17,7 +17,7 @@
     {
         <tr>
             <td>@expense.PaymentDate</td>
-            <td>@expense.CurrencySymbol @expense.Price of @expense.CategoryName
+            <td><strong>@expense.CurrencySymbol @expense.Price</strong> of @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
             <td>@expense.Paid</td>
             <td>
                 <a asp-action="Details">Details</a>

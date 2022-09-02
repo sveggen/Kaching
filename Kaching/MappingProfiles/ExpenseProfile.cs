@@ -20,7 +20,11 @@ namespace Kaching.MappingProfiles
                 .ForMember(m
                     => m.CategoryName, d
                     => d.MapFrom(k
-                    => k.BaseExpense.Category.Name));
+                    => k.BaseExpense.Category.Name))
+                .ForMember(m
+                    => m.CategoryIcon, d
+                    => d.MapFrom(k
+                    => k.BaseExpense.Category.Icon));
 
             CreateMap<ExpenseVm, ExpensesByMonthVm>();
 

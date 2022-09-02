@@ -206,8 +206,8 @@ namespace Kaching.Controllers
             }
         }
 
-        // GET: Expenses/Personal
-        [Route("/Expenses/Personal")]
+        // GET: Expenses/PersonalExpenses
+        [Route("/Expenses/PersonalExpenses")]
         public async Task<IActionResult> PersonalIndex()
         {
             var year = DateTime.Now.Year;

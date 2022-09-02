@@ -15,6 +15,8 @@ namespace Kaching.ViewModels
         public decimal Price { get; set; }
         
         public string? CategoryName { get; set; }
+        
+        public string? CategoryIcon { get; set; }
 
         public PersonLightVm? Responsible { get; set; }
         
