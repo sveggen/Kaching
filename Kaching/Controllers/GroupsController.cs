@@ -28,9 +28,7 @@ public class GroupsController : Controller
     }
     
     // GET: /
-    // GET: Groups/
     [Route("/")]
-    [Route("MyGroups/")]
     public IActionResult MyGroups()
     {
         try
@@ -81,6 +79,10 @@ public class GroupsController : Controller
     {
         if (ModelState.IsValid)
         {
+            var intList = new List<int>();
+            intList.Add(1);
+            intList.Add(3);
+            groupCreateVm.MemberIds = intList;
             groupCreateVm.Personal = false;
             _groupService.AddGroup(groupCreateVm);
 

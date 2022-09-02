@@ -16,9 +16,10 @@
 <body>
 <section class="ui container">
     <nav class="ui labeled menu">
-          <div class="header item">
+        <div class="header item">
             Kaching
-          </div>
+        </div>
+        
         @if (User.IsInRole("Administrator"))
         {
             <a class="item" asp-area="" style="background-color: cadetblue" asp-controller="Admin" asp-action="Index">
@@ -26,6 +27,9 @@
             </a>
         }
         <div class="right menu">
+             <a class="item" asp-controller="Groups" asp-action="MyGroups">
+                                    My Expense Groups
+                                </a>
             <partial name="_LoginPartial"/>
         </div>
     </nav>

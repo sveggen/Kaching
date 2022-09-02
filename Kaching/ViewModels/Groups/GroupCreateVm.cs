@@ -14,4 +14,6 @@ public class GroupCreateVm
 
     public List<PersonLightVm>? Members { get; set; }
     
+    public List<int>? MemberIds { get; set; }
+
 }
