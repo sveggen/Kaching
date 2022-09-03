@@ -66,6 +66,7 @@ namespace Kaching.Repositories
         {
             return await _context.Expense
                 .Include(e => e.BaseExpense)
+                .Include(e => e.Buyer)
                 .Include(g => g.BaseExpense.Group)
                 .Include(g => g.BaseExpense.Category)
                 .Include(g => g.Currency)

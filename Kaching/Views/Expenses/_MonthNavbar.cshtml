@@ -1,10 +1,10 @@
 ﻿@using System.Globalization
-@model Kaching.ViewModels.ExpensesByMonthVm
 
 @{
-    var currentMonthNumber = Model.MonthNumber;
+    var currentMonthNumber = Int32.Parse(ViewData["monthNumber"].ToString());
     var currentMonthName = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[currentMonthNumber-1];
     var currentYear = @DateTime.Now.Year.ToString();
+    var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
 <div class="ui selection dropdown" id="monthdropdown">
@@ -23,7 +23,8 @@
         }
         else
         {
-            <a class="item" href="/Expenses/@monthName/@currentYear">@monthName</a>
+            <a class="item" asp-controller="Expenses" asp-action="Index" asp-route-groupId="@groupId" 
+              asp-route-month="@monthName" asp-route-year="@currentYear">@monthName</a>
         }
     }
 </div>

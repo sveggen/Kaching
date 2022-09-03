@@ -7,23 +7,21 @@
     var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
-<h1>List of Expenses</h1>  
+<h1>List of Expenses</h1>
+
+<partial name="/Views/Expenses/_MonthNavbar.cshtml" />
 
 <table class="ui unstackable celled table">
-    <thead>
-    <tr><th>Date</th>
-        <th>Item</th>
-        <th>Paid</th>
-        <th></th>
-    </tr></thead>
     <tbody>
     @foreach (var expense in Model)
     {
+        string paymentText = expense.Paid ? " paid " : " will pay ";
+        
         <tr>
-            <td>@expense.PaymentDate</td>
-            <td><strong>@expense.CurrencySymbol @expense.Price</strong> 
-            of @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
-            <td>@expense.Paid</td>
+            <td>@expense.Buyer.UserName @paymentText<strong> @expense.CurrencySymbol @expense.Price</strong> 
+            for @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
+            on @expense.PaymentDate.DayOfWeek @expense.PaymentDate.Day/@expense.PaymentDate.Month
+            <em data-emoji=":calendar_spiral:"></em>
             <td>
                 <a asp-controller="Expenses" asp-action="Details" asp-route-groupId="@groupId" 
                    asp-route-expenseId="@expense.ExpenseId">Details</a>

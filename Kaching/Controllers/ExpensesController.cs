@@ -43,7 +43,9 @@ namespace Kaching.Controllers
 
             var viewModel = await _expenseService.GetExpensesByMonth
                 (monthNumber, Int32.Parse(year), groupId);
+            
             ViewData["group"] = groupId;
+            ViewData["monthNumber"] = monthNumber;
             
             return View(viewModel);
         }
@@ -58,6 +60,9 @@ namespace Kaching.Controllers
             var viewModel = await _expenseService.GetExpensesByMonth
                 (monthNumber, Int32.Parse(year), groupId);
 
+            ViewData["group"] = groupId;
+            ViewData["monthNumber"] = monthNumber;
+            
             return View(viewModel);
         }
 
