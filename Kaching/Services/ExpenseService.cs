@@ -144,11 +144,11 @@ namespace Kaching.Services
         }
         private async Task CreateRecurringExpense(ExpenseCreateVm expenseCreateVm)
         {
-            List<Expense> expenseEvents = new List<Expense>();
+            List<Expense> expenses = new List<Expense>();
 
             var paymentDate = expenseCreateVm.PaymentDate;
-            const int recurringExpenseMaxCap = 3;
-            var endDate = paymentDate.AddYears(recurringExpenseMaxCap);
+            const int recurringExpenseMaxYear = 3;
+            var endDate = paymentDate.AddYears(recurringExpenseMaxYear);
 
             while (paymentDate <= endDate)
             {
@@ -159,18 +159,19 @@ namespace Kaching.Services
                     break;
                 }
 
-                expenseEvents.Add(new Expense
+                expenses.Add(new Expense
                 {
                     BuyerId = expenseCreateVm.BuyerId,
                     PaymentDate = paymentDate,
                     Price = expenseCreateVm.Price,
                     PaymentType = expenseCreateVm.PaymentType,
-                    ExpenseId = expenseCreateVm.ExpenseId
+                    ExpenseId = expenseCreateVm.ExpenseId,
+                    CurrencyId = 1
                 });
             }
-            var expense = _mapper.Map<BaseExpense>(expenseCreateVm);
-            expense.Expenses = expenseEvents;
-            _baseExpenseRepository.InsertBaseExpense(expense);
+            var baseExpense = _mapper.Map<BaseExpense>(expenseCreateVm);
+            baseExpense.Expenses = expenses;
+            _baseExpenseRepository.InsertBaseExpense(baseExpense);
             await _baseExpenseRepository.SaveAsync();
         }
         private DateTime NextPaymentDate(DateTime currPaymentDate, Frequency frequency)
@@ -183,10 +184,13 @@ namespace Kaching.Services
                     return dateTime.AddDays(7);
                 case Frequency.Monthly:
                     return dateTime.AddMonths(1);
+                case Frequency.Bimonthly:
+                    return dateTime.AddMonths(2);
+                case Frequency.Semesterly:
+                    return dateTime.AddMonths(6);
                 case Frequency.Yearly:
                     return dateTime.AddYears(1);
             }
-
             return dateTime;
         }
     }

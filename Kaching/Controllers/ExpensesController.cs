@@ -132,6 +132,23 @@ namespace Kaching.Controllers
 
             return View(expenseCreateVm);
         }
+        
+        // POST: Groups/7/Expenses/7/CreateRecurring
+        [HttpPost("Groups/{groupId}/Expenses/CreateRecurring")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRecurring(ExpenseCreateVm expenseCreateVm, int groupId)
+        {
+            if (ModelState.IsValid)
+            {
+                expenseCreateVm.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
+                expenseCreateVm.GroupId = groupId;
+                await _expenseService.CreateExpense(expenseCreateVm);
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(expenseCreateVm);
+        }
 
         // GET: Groups/7/Expenses/Edit/5
         [Route("Groups/{groupId}/Expenses/Edit/{id}")]

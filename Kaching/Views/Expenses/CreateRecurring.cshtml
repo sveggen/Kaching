@@ -35,11 +35,9 @@
                             <span asp-validation-for="Price" style="color: red"></span>
                         </div>
                         
-                        
                           <div class="field">
                              <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown" asp-items="ViewBag.Category"></select>
                          </div>
-                                         
                         
                         <div class="field">
                             <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<PaymentType>()">
@@ -62,7 +60,8 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <select asp-for="Frequency" asp-items="@(Html.GetEnumSelectList<Frequency>().Where(x => x.Value != "0"))" id="frequencydropdown" class="ui selection dropdown"></select>
+                                <select asp-for="Frequency" asp-items="@(Html.GetEnumSelectList<Frequency>().Where(x => x.Value != "0"))"
+                                        id="frequencydropdown" class="ui selection dropdown"></select>
                             </div>
                         </div>
                         <div class="field">
@@ -73,7 +72,7 @@
                             <span asp-validation-for="Comment" style="color: red"></span>
                         </div>
                         <div class="field">
-                            <input type="submit" value="Create" class="ui button"/>
+                            <input type="submit" asp-controller="Expenses" value="Create" class="ui button"/>
                         </div>
                     </div>
                 </div>
