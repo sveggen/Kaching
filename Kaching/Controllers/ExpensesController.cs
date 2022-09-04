@@ -167,12 +167,12 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/EditRecurring/5
-        [Route("Expenses/EditRecurring/{id}")]
-        public async Task<IActionResult> EditRecurring(int id)
+        [Route("Groups/{groupId}/Expenses/EditRecurring/{id}")]
+        public async Task<IActionResult> EditRecurring(int groupId, int expenseId)
         {
             try
             {
-                var expenseVm = await _expenseService.GetExpense(id);
+                var expenseVm = await _expenseService.GetExpense(expenseId);
                 RenderSelectList(expenseVm);
                 RenderCategorySelectList();
                 return View(expenseVm);
@@ -231,20 +231,13 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Expenses/DeleteRecurring/12
-        [HttpPost("Expenses/DeleteRecurring/{id?}"), ActionName("DeleteRecurring")]
+        // POST: Expenses/DeleteRecurring/
+        [HttpPost("/Expenses/DeleteRecurring/"), ActionName("DeleteRecurring")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteRecurringConfirmed(int id)
+        public async Task<IActionResult> DeleteRecurringConfirmed(int expenseId)
         {
-            try
-            {
-                await _expenseService.DeleteRecurringExpense(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (NullReferenceException)
-            {
-                return NotFound();
-            }
+            await _expenseService.DeleteRecurringExpense(expenseId);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Expenses/PersonalExpenses

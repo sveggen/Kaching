@@ -67,16 +67,17 @@
             @if (Model.Frequency != Frequency.Once)
             {
 
-                <a class="ui icon button" asp-action="DeleteRecurring" asp-route-groupId="@groupId" 
+                @using (Html.BeginForm("DeleteRecurring", "Expenses", FormMethod.Post))
+                {
+                    @Html.Hidden("expenseId", Model.ExpenseId)
+                    <input type="submit" class="ui red button" value="Delete future expenses"
+                           onclick="return confirm('Are you sure you want to delete all future occurrences of this expense?')">
+                                                                                                                                                       
+                }
+
+                <a class="ui button" asp-controller="Expenses" asp-action="EditRecurring" asp-route-groupId="@groupId" 
                    asp-route-id="@Model.ExpenseId">
-                    <i class="ui button red">
-                        Delete all upcoming events
-                    </i>
-                </a>
-                <a class="ui icon button" asp-action="EditRecurring" asp-route-id="@Model.ExpenseId">
-                    <i class="ui button red">
-                        Edit upcoming events
-                    </i>
+                    Edit all future occurences
                 </a>
             }
         </div>

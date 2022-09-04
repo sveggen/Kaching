@@ -32,17 +32,17 @@ namespace Kaching.MappingProfiles
                 .ForMember(m
                     => m.BaseExpenseId, d
                     => d.MapFrom(k
-                    => k.BaseExpense.BaseExpenseId));
+                    => k.BaseExpense.BaseExpenseId))
+                .ForMember(m
+                    => m.Frequency, d
+                    => d.MapFrom(k
+                    => k.BaseExpense.Frequency));
 
             CreateMap<Expense, PersonLightVm>();
             
             CreateMap<ExpenseVm, ExpensesByMonthVm>();
 
             CreateMap<ExpenseCreateVm, BaseExpense>()
-                .ForMember(m
-                    => m.Frequency, d
-                    => d.MapFrom(k
-                    => Frequency.Once))
                 .ForMember(m
                     => m.StartDate, d
                     => d.MapFrom(k
