@@ -1,4 +1,5 @@
-﻿using Kaching.ViewModels;
+﻿using Kaching.Models;
+using Kaching.ViewModels;
 
 namespace Kaching.Services
 {
@@ -15,6 +16,8 @@ namespace Kaching.Services
       //  public Task CreateExpense(ExpenseCreateRecurringVM expenseCreateRecurringVM);
 
         public Task DeleteExpense(int expenseEventId);
+
+        public Task PayExpense(int expenseId, int buyerId);
 
         public Task DeleteRecurringExpense(int expenseEventId);
 

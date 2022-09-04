@@ -178,6 +178,24 @@ namespace Kaching.Controllers
 
             return NotFound();
         }
+        
+        // POST: Expenses/Pay/
+        [HttpPost("/Expenses/Pay/"), ActionName("Pay")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PayConfirmed(int expenseId)
+        {
+            try
+            {
+                var buyerId = _personService.GetPersonByUsername
+                        (GetCurrentUserName()).PersonId;
+                await _expenseService.PayExpense(expenseId, buyerId);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+        }
 
         // POST: Expenses/Delete/
         [HttpPost("/Expenses/Delete/"), ActionName("Delete")]

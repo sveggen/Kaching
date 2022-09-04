@@ -61,6 +61,16 @@ namespace Kaching.Services
             }
         }
 
+        public async Task PayExpense(int expenseId, int buyerId)
+        {
+            var expense = await _expenseRepository.GetExpenseById(expenseId);
+            expense.BuyerId = buyerId;
+            expense.Paid = true;
+            
+            _expenseRepository.UpdateExpense(expense);
+            await _expenseRepository.SaveAsync();
+        }
+
         public async Task DeleteRecurringExpense(int expenseEventId)
         {
             var expenseEvent = await _expenseRepository.GetExpenseById(expenseEventId);
