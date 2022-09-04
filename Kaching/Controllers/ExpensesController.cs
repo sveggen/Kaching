@@ -127,7 +127,11 @@ namespace Kaching.Controllers
                 expenseCreateVm.GroupId = groupId;
                 await _expenseService.CreateExpense(expenseCreateVm);
 
-                return RedirectToAction(nameof(Index));
+                var year = expenseCreateVm.PaymentDate.Year;
+                var month = expenseCreateVm.PaymentDate.Month;
+                
+                var redirect = await RedirectToExpenses(expenseCreateVm.GroupId, month, year);
+                return redirect;
             }
 
             return View(expenseCreateVm);
@@ -143,8 +147,12 @@ namespace Kaching.Controllers
                 expenseCreateVm.CreatorId = _personService.GetPersonByUsername(GetCurrentUserName()).PersonId;
                 expenseCreateVm.GroupId = groupId;
                 await _expenseService.CreateExpense(expenseCreateVm);
+                
+                var year = expenseCreateVm.PaymentDate.Year;
+                var month = expenseCreateVm.PaymentDate.Month;
 
-                return RedirectToAction(nameof(Index));
+                var redirect = await RedirectToExpenses(expenseCreateVm.GroupId, month, year);
+                return redirect;
             }
 
             return View(expenseCreateVm);
@@ -191,7 +199,8 @@ namespace Kaching.Controllers
             if (ModelState.IsValid)
             {
                 await _expenseService.UpdateExpense(expenseEditVm);
-                return RedirectToAction(nameof(Index));
+                var redirect = await RedirectToExpensesFromExpense(expenseEditVm.ExpenseId);
+                return redirect;
             }
 
             return NotFound();
@@ -206,8 +215,11 @@ namespace Kaching.Controllers
             {
                 var buyerId = _personService.GetPersonByUsername
                         (GetCurrentUserName()).PersonId;
+                
+                var redirect = await RedirectToExpensesFromExpense(expenseId);
                 await _expenseService.PayExpense(expenseId, buyerId);
-                return RedirectToAction(nameof(Index));
+                
+                return redirect;
             }
             catch (Exception)
             {
@@ -222,8 +234,9 @@ namespace Kaching.Controllers
         {
             try
             {
+                var redirect = await RedirectToExpensesFromExpense(expenseId);
                 await _expenseService.DeleteExpense(expenseId);
-                return RedirectToAction(nameof(Index));
+                return redirect;
             }
             catch (Exception)
             {
@@ -237,7 +250,8 @@ namespace Kaching.Controllers
         public async Task<IActionResult> DeleteRecurringConfirmed(int expenseId)
         {
             await _expenseService.DeleteRecurringExpense(expenseId);
-            return RedirectToAction(nameof(Index));
+            var redirect = await RedirectToExpensesFromExpense(expenseId);
+            return redirect;
         }
 
         // GET: Expenses/PersonalExpenses
@@ -249,6 +263,7 @@ namespace Kaching.Controllers
 
             var person =
                 _personService.GetPersonByUsername(GetCurrentUserName());
+
 
             try
             {
@@ -293,6 +308,22 @@ namespace Kaching.Controllers
         {
             System.Security.Claims.ClaimsPrincipal currentUser = User;
             return currentUser.Identity.Name;
+        }
+
+        private async Task<RedirectToActionResult> RedirectToExpensesFromExpense(int expenseId)
+        {
+            var expense = await _expenseService.GetExpense(expenseId);
+            var groupId = expense.GroupId;
+            var expenseYear = expense.PaymentDate.Year;
+            var expenseMonth = _dateHelper.GetMonthName(expense.PaymentDate.Month);
+            
+            return RedirectToAction("Index", new { groupId, year = expenseYear, month = expenseMonth} );
+        }
+        
+        private async Task<RedirectToActionResult> RedirectToExpenses(int groupId, int month, int year)
+        {
+            var monthName = _dateHelper.GetMonthName(month);
+            return RedirectToAction("Index", new { groupId, year, month = monthName} );
         }
 
     }

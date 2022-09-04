@@ -94,16 +94,17 @@ namespace Kaching.Services
 
         public async Task DeleteExpense(int expenseEventId)
         {
-            var expenseEvent = await _expenseRepository.GetExpenseById(expenseEventId);
+            var expense = await _expenseRepository.GetExpenseById(expenseEventId);
+            var baseExpense = await _baseExpenseRepository.GetBaseExpenseById(expense.BaseExpenseId);
 
+            _expenseRepository.DeleteExpense(expense);
+            
             // Deletes base expense class when there are no expenses belonging to it
-            if (expenseEvent.BaseExpense.Expenses.Count <= 1)
+            if (expense.BaseExpense.Expenses.Count <= 1)
             {
-                var baseExpense = expenseEvent.BaseExpense;
                 _baseExpenseRepository.DeleteBaseExpense(baseExpense);
             }
             
-            _expenseRepository.DeleteExpense(expenseEvent);
             await _expenseRepository.SaveAsync();
         }
 

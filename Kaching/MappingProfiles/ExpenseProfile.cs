@@ -36,7 +36,11 @@ namespace Kaching.MappingProfiles
                 .ForMember(m
                     => m.Frequency, d
                     => d.MapFrom(k
-                    => k.BaseExpense.Frequency));
+                    => k.BaseExpense.Frequency))
+                .ForMember(m
+                    => m.GroupId, d
+                    => d.MapFrom(k
+                    => k.BaseExpense.GroupId));
 
             CreateMap<Expense, PersonLightVm>();
             

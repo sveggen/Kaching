@@ -12,6 +12,8 @@ namespace Kaching.ViewModels
         public int BaseExpenseId { get; set; }
 
         public int ResponsibleId { get; set; }
+        
+        public int GroupId { get; set; }
 
         public decimal Price { get; set; }
         

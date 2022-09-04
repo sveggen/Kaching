@@ -40,4 +40,9 @@ public class DateHelper
     {
         return DateTime.Now.Year.ToString();
     }
+
+    public string GetMonthName(int month)
+    {
+        return CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[month-1];
+    }
 }
