@@ -133,9 +133,9 @@ namespace Kaching.Controllers
             return View(expenseCreateVm);
         }
 
-        // GET: Expenses/Edit/5
-        [Route("Expenses/Edit/{id}")]
-        public async Task<IActionResult> Edit(int id)
+        // GET: Groups/7/Expenses/Edit/5
+        [Route("Groups/{groupId}/Expenses/Edit/{id}")]
+        public async Task<IActionResult> Edit(int id, int groupId)
         {
             try
             {
@@ -157,6 +157,7 @@ namespace Kaching.Controllers
             {
                 var expenseVm = await _expenseService.GetExpense(id);
                 RenderSelectList(expenseVm);
+                RenderCategorySelectList();
                 return View(expenseVm);
             }
             catch (Exception)

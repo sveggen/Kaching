@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light">
     
-  
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
 
     <title>@ViewData["Title"] - Kaching</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Kaching.styles.css" asp-append-version="true" />
-
 </head>
 <body>
 <section class="ui container">
@@ -28,8 +26,8 @@
         }
         <div class="right menu">
              <a class="item" asp-controller="Groups" asp-action="MyGroups">
-                                    My Expense Groups
-                                </a>
+                 My Expense Groups
+             </a>
             <partial name="_LoginPartial"/>
         </div>
     </nav>
@@ -42,7 +40,6 @@
 <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
 
 </body>
 </html>

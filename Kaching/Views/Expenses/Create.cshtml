@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
 <h1>Add expense</h1>
@@ -13,10 +15,10 @@
             <div asp-validation-summary="ModelOnly" style="color: red"></div>
 
             <div class="ui two item menu">
-                <a class="item active" asp-action="Create">
+                <a class="item active" asp-controller="Expenses" asp-action="Create" asp-route-groupId="@groupId">
                     <strong>One-Time expense</strong>
                 </a>
-                <a class="item" asp-action="CreateRecurring">
+                <a class="item" asp-controller="Expenses" asp-action="CreateRecurring" asp-route-groupId="@groupId">
                     Recurring expense
                 </a>
             </div>
@@ -39,8 +41,7 @@
                                     asp-items="ViewBag.Category">
                             </select>
                         </div>
-                        
-                        
+
                         <div class="field">
                             <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown"
                                     asp-items="Html.GetEnumSelectList<PaymentType>()">

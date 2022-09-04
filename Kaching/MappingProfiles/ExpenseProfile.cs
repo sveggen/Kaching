@@ -24,7 +24,15 @@ namespace Kaching.MappingProfiles
                 .ForMember(m
                     => m.CategoryIcon, d
                     => d.MapFrom(k
-                    => k.BaseExpense.Category.Icon));
+                    => k.BaseExpense.Category.Icon))
+                .ForMember(m
+                    => m.CategoryId, d
+                    => d.MapFrom(k
+                    => k.BaseExpense.Category.CategoryId))
+                .ForMember(m
+                    => m.BaseExpenseId, d
+                    => d.MapFrom(k
+                    => k.BaseExpense.BaseExpenseId));
 
             CreateMap<Expense, PersonLightVm>();
             

@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Create Recurring Expense";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
 <h1>Add recurring expense</h1>
@@ -12,14 +14,14 @@
         <form asp-action="CreateRecurring" class="ui form">
             <div asp-validation-summary="ModelOnly" style="color: red"></div>
 
-            <div class="ui two item menu">
-                <a class="item" asp-action="Create">
-                    One-Time expense
-                </a>
-                <a class="item active" asp-action="CreateRecurring">
-                    <strong>Recurring expense</strong>
-                </a>
-            </div>
+               <div class="ui two item menu">
+                   <a class="item" asp-controller="Expenses" asp-action="Create" asp-route-groupId="@groupId">
+                       One-Time expense
+                   </a>
+                   <a class="item active" asp-controller="Expenses" asp-action="CreateRecurring" asp-route-groupId="@groupId">
+                       <strong>Recurring expense</strong>
+                   </a>
+               </div>
 
             <div class="ui segment">
                 <div class="ui four wide column aligned left aligned grid">
@@ -60,7 +62,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <select asp-for="Frequency" id="frequencydropdown" class="ui selection dropdown" asp-items="Html.GetEnumSelectList<Frequency>()"></select>
+                                <select asp-for="Frequency" asp-items="@(Html.GetEnumSelectList<Frequency>().Where(x => x.Value != "0"))" id="frequencydropdown" class="ui selection dropdown"></select>
                             </div>
                         </div>
                         <div class="field">

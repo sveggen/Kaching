@@ -1,1 +1,61 @@
-﻿
+﻿@model Kaching.ViewModels.ExpenseVm
+
+@{
+ViewData["Title"] = "Edit";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Expense</h4>
+<hr />
+<div class="row">
+<div class="col-md-4">
+<form asp-action="Edit" class="ui form">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    
+      <input type="hidden" asp-for="BaseExpenseId" />
+      <input type="hidden" asp-for="ResponsibleId" />
+
+      <div class="field">
+            <label class="ui label">Price</label>
+            <div class="ui right labeled input">
+                <label for="amount" class="ui label">€</label>
+                <input asp-for="Price" placeholder="Price">
+                <div class="ui basic label">.00</div>
+            </div>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="field">
+            <label class="ui label">Category</label>
+        <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown"
+                asp-items="ViewBag.Category">
+        </select>
+        </div>
+        <div class="field">
+            <label class="ui label">Transfer Status</label>
+            <select asp-for="PaymentType" asp-items="Html.GetEnumSelectList<PaymentType>()">
+            </select>
+        </div>
+        <div class="field">
+            <label class="ui label">Responsible</label>
+            <select asp-for="ResponsibleId" asp-items="ViewBag.PersonId"></select>
+        </div>
+        <div class="field">
+            <label class="ui label">Description <i>: Not Required</i> </label>
+            <textarea asp-for="Comment"> </textarea>
+            <span asp-validation-for="Comment" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div>
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="ExpenseId" />
+        <input type="submit" value="Edit" class="ui positive button" /> <br />
+    </form>
+</div>
+</div>
+
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

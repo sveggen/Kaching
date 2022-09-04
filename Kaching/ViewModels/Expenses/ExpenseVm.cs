@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Kaching.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.ViewModels
 {
@@ -9,11 +8,14 @@ namespace Kaching.ViewModels
     public class ExpenseVm
     {
         public int ExpenseId { get; set; }
+        
+        public int BaseExpenseId { get; set; }
 
         public int ResponsibleId { get; set; }
 
         public decimal Price { get; set; }
         
+        public int CategoryId { get; set; }
         public string? CategoryName { get; set; }
         
         public string? CategoryIcon { get; set; }
