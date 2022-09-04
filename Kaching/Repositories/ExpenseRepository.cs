@@ -73,6 +73,7 @@ namespace Kaching.Repositories
                 .Where(p => p.PaymentDate.Year == year)
                 .Where(p => p.PaymentDate.Month == monthNumber)
                 .Where(p => p.BaseExpense.GroupId == groupId)
+                .OrderByDescending(e => e.PaymentDate)
                 .ToListAsync();
         }
 

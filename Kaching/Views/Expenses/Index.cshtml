@@ -28,6 +28,12 @@
                 
                 <a class="ui red label">@daysOverdue days overdue</a>   
             }
+            @if (expense.Paid == false && expense.PaymentDate > DateTime.Now)
+            {
+                int daysUntilDue = (expense.PaymentDate - DateTime.Now).Days;
+                
+                <a class="ui teal label">Due in @daysUntilDue days</a>   
+            }
             <td>
             @if (@expense.Paid == false)
                 {
