@@ -4,18 +4,16 @@ using Kaching.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Kaching.Migrations.Data
+namespace Kaching.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220821145043_RefactoredMigration")]
-    partial class RefactoredMigration
+    partial class DataContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +22,22 @@ namespace Kaching.Migrations.Data
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Kaching.Enums.BaseExpense", b =>
+            modelBuilder.Entity("GroupPerson", b =>
+                {
+                    b.Property<int>("GroupsGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MembersPersonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupsGroupId", "MembersPersonId");
+
+                    b.HasIndex("MembersPersonId");
+
+                    b.ToTable("GroupPerson");
+                });
+
+            modelBuilder.Entity("Kaching.Models.BaseExpense", b =>
                 {
                     b.Property<int>("BaseExpenseId")
                         .ValueGeneratedOnAdd()
@@ -66,13 +79,16 @@ namespace Kaching.Migrations.Data
                     b.ToTable("BaseExpense");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Category", b =>
+            modelBuilder.Entity("Kaching.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -82,7 +98,7 @@ namespace Kaching.Migrations.Data
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Currency", b =>
+            modelBuilder.Entity("Kaching.Models.Currency", b =>
                 {
                     b.Property<int>("CurrencyId")
                         .ValueGeneratedOnAdd()
@@ -108,7 +124,7 @@ namespace Kaching.Migrations.Data
                     b.ToTable("Currency");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Expense", b =>
+            modelBuilder.Entity("Kaching.Models.Expense", b =>
                 {
                     b.Property<int>("ExpenseId")
                         .ValueGeneratedOnAdd()
@@ -127,6 +143,9 @@ namespace Kaching.Migrations.Data
 
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
@@ -161,7 +180,7 @@ namespace Kaching.Migrations.Data
                     b.ToTable("Expense");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Group", b =>
+            modelBuilder.Entity("Kaching.Models.Group", b =>
                 {
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd()
@@ -176,10 +195,14 @@ namespace Kaching.Migrations.Data
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<int>("MaxMembers")
                         .HasColumnType("int");
@@ -187,12 +210,15 @@ namespace Kaching.Migrations.Data
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("Personal")
+                        .HasColumnType("bit");
+
                     b.HasKey("GroupId");
 
                     b.ToTable("Group");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Person", b =>
+            modelBuilder.Entity("Kaching.Models.Person", b =>
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
@@ -206,9 +232,6 @@ namespace Kaching.Migrations.Data
                     b.Property<string>("ColorCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -217,12 +240,10 @@ namespace Kaching.Migrations.Data
 
                     b.HasKey("PersonId");
 
-                    b.HasIndex("GroupId");
-
                     b.ToTable("Person");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Transfer", b =>
+            modelBuilder.Entity("Kaching.Models.Transfer", b =>
                 {
                     b.Property<int>("TransferId")
                         .ValueGeneratedOnAdd()
@@ -272,21 +293,36 @@ namespace Kaching.Migrations.Data
                     b.ToTable("Transfer");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.BaseExpense", b =>
+            modelBuilder.Entity("GroupPerson", b =>
                 {
-                    b.HasOne("Kaching.Enums.Category", "Category")
+                    b.HasOne("Kaching.Models.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kaching.Models.Person", null)
+                        .WithMany()
+                        .HasForeignKey("MembersPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Kaching.Models.BaseExpense", b =>
+                {
+                    b.HasOne("Kaching.Models.Category", "Category")
                         .WithMany("BaseExpenses")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Person", "Creator")
+                    b.HasOne("Kaching.Models.Person", "Creator")
                         .WithMany("Expenses")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Group", "Group")
+                    b.HasOne("Kaching.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -299,27 +335,27 @@ namespace Kaching.Migrations.Data
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Expense", b =>
+            modelBuilder.Entity("Kaching.Models.Expense", b =>
                 {
-                    b.HasOne("Kaching.Enums.BaseExpense", "BaseExpense")
+                    b.HasOne("Kaching.Models.BaseExpense", "BaseExpense")
                         .WithMany("Expenses")
                         .HasForeignKey("BaseExpenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Person", "Buyer")
+                    b.HasOne("Kaching.Models.Person", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Currency", "Currency")
+                    b.HasOne("Kaching.Models.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Group", null)
+                    b.HasOne("Kaching.Models.Group", null)
                         .WithMany("Expenses")
                         .HasForeignKey("GroupId");
 
@@ -330,38 +366,31 @@ namespace Kaching.Migrations.Data
                     b.Navigation("Currency");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Person", b =>
+            modelBuilder.Entity("Kaching.Models.Transfer", b =>
                 {
-                    b.HasOne("Kaching.Enums.Group", null)
-                        .WithMany("Members")
-                        .HasForeignKey("GroupId");
-                });
-
-            modelBuilder.Entity("Kaching.Enums.Transfer", b =>
-                {
-                    b.HasOne("Kaching.Enums.Currency", "Currency")
+                    b.HasOne("Kaching.Models.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Expense", "Expense")
+                    b.HasOne("Kaching.Models.Expense", "Expense")
                         .WithMany()
                         .HasForeignKey("ExpenseId");
 
-                    b.HasOne("Kaching.Enums.Group", "Group")
+                    b.HasOne("Kaching.Models.Group", "Group")
                         .WithMany("Transfers")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Person", "Receiver")
+                    b.HasOne("Kaching.Models.Person", "Receiver")
                         .WithMany("TransfersReceived")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Kaching.Enums.Person", "Sender")
+                    b.HasOne("Kaching.Models.Person", "Sender")
                         .WithMany("TransfersSent")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -378,26 +407,24 @@ namespace Kaching.Migrations.Data
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.BaseExpense", b =>
+            modelBuilder.Entity("Kaching.Models.BaseExpense", b =>
                 {
                     b.Navigation("Expenses");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Category", b =>
+            modelBuilder.Entity("Kaching.Models.Category", b =>
                 {
                     b.Navigation("BaseExpenses");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Group", b =>
+            modelBuilder.Entity("Kaching.Models.Group", b =>
                 {
                     b.Navigation("Expenses");
-
-                    b.Navigation("Members");
 
                     b.Navigation("Transfers");
                 });
 
-            modelBuilder.Entity("Kaching.Enums.Person", b =>
+            modelBuilder.Entity("Kaching.Models.Person", b =>
                 {
                     b.Navigation("Expenses");
 

@@ -29,6 +29,8 @@ namespace Kaching.Models
 
         public DateTime PaymentDate { get; set; }
 
+        public DateTime DueDate { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime Updated { get; set; }
     }

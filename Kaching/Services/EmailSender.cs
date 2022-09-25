@@ -1,6 +1,5 @@
 ﻿using FluentEmail.Core;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Kaching.MailViewModels;
 
 namespace Kaching.Services
 {
@@ -30,20 +29,6 @@ namespace Kaching.Services
                 .To(to)
                 .Subject("Test email")
                 .UsingTemplate(template, new { Name = name, Compliment = "Awesome" })
-                .SendAsync();
-        }
-
-        public async Task SendPaymentReminder(PaymentReminderVm paymentVM)
-        {
-            var template = 
-                "Dear @Model.Username, For the expenses in @Model.MonthName " +
-                "You owe @Model.PersonToPay € @Model.OwedAmount. " +
-                "Please pay this by @Model.Deadline.";
-
-            await _fluentEmail
-                .To(paymentVM.Email)
-                .Subject("Kaching - Transfer Reminder for " + paymentVM.MonthName)
-                .UsingTemplate(template, paymentVM)
                 .SendAsync();
         }
     }

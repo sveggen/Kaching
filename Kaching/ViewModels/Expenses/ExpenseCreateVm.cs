@@ -25,6 +25,8 @@ namespace Kaching.ViewModels
 
         public DateTime PaymentDate { get; set; }
         
+        public DateTime DueDate { get; set; }
+        
         public Frequency Frequency { get; set; }
     }
 }

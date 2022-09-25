@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Kaching.Migrations.Data
+namespace Kaching.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220902140824_RefactoredMigration5")]
-    partial class RefactoredMigration5
+    [Migration("20220925140607_InitMigration")]
+    partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,6 +145,9 @@ namespace Kaching.Migrations.Data
 
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");

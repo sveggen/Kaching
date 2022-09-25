@@ -6,6 +6,8 @@ namespace Kaching.ViewModels
     {
         public int ExpenseId { get; set; }
         
+        public int BaseExpenseId { get; set; }
+        
         public decimal Price { get; set; }
         
         public bool Paid { get; set; }

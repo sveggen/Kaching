@@ -82,7 +82,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Expenses}/{action=Index}/{month?}");
+    pattern: "{controller=Home}/{action=Index}");
 app.MapRazorPages();
 
 app.Run();

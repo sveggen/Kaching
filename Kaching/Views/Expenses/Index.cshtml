@@ -15,40 +15,64 @@
     <tbody>
     @foreach (var expense in Model)
     {
-        string paymentText = expense.Paid ? " paid " : " will pay ";
-        
         <tr>
-            <td>@expense.Buyer.UserName @paymentText<strong> @expense.CurrencySymbol @expense.Price</strong> 
-            for @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
-            on @expense.PaymentDate.DayOfWeek @expense.PaymentDate.Day/@expense.PaymentDate.Month
-            <em data-emoji=":calendar_spiral:"></em>
-            @if (expense.Paid == false && expense.PaymentDate < DateTime.Now)
+            @if (expense.Paid)
             {
-                int daysOverdue = (DateTime.Now - expense.PaymentDate).Days;
-                
-                <a class="ui red label">@daysOverdue days overdue</a>   
-            }
-            @if (expense.Paid == false && expense.PaymentDate > DateTime.Now)
+                <td>@expense.Buyer.UserName paid<strong> @expense.CurrencySymbol @expense.Price</strong>
+                for @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
+                on @expense.PaymentDate.DayOfWeek @expense.PaymentDate.Day/@expense.PaymentDate.Month </td>
+            } else
             {
-                int daysUntilDue = (expense.PaymentDate - DateTime.Now).Days;
-                
-                <a class="ui teal label">Due in @daysUntilDue days</a>   
-            }
-            <td>
-            @if (@expense.Paid == false)
-                {
-                    @using (Html.BeginForm("Pay", "Expenses", FormMethod.Post))
-                    {
-                        @Html.Hidden("expenseId", expense.ExpenseId)
-                        <input type="submit" class="ui green button" value="Pay"
-                               onclick="return confirm('Are you sure you want to pay the expense?')">
-                    }
+                <td>@expense.Buyer.UserName will pay<strong> @expense.CurrencySymbol @expense.Price</strong>
+                for @expense.CategoryName <em data-emoji="@expense.CategoryIcon"></em>
+            on @expense.DueDate.DayOfWeek @expense.DueDate.Day/@expense.DueDate.Month </td>
                 }
+
+                @if (expense.Paid == false && expense.DueDate < DateTime.Now)
+                {
+                    
+                    int daysOverdue = (DateTime.Now - expense.DueDate).Days;
+                    <td><em data-emoji=":calendar_spiral:"></em>
+                        <p class="ui red label">@daysOverdue days overdue</p>
+                    </td>
+                }
+                @if (expense.Paid == false && expense.DueDate.Date > DateTime.Now.Date)
+                {
+                    int daysUntilDue = (expense.DueDate - DateTime.Now).Days;
+                    <td><em data-emoji=":calendar_spiral:"></em>
+                        <p class="ui teal label">Due in @daysUntilDue days</p>
+                        </td>
+                }
+            
+                 @if (expense.Paid == false && expense.DueDate.Date == DateTime.Now.Date)
+                {
+                    <td><em data-emoji=":calendar_spiral:"></em>
+                        <p class="ui red label">Due today</p>
+                        </td>
+                }
+                
+                  @if (expense.Paid)
+                    {
+                        var dueDate = (expense.DueDate.ToString("dd/MM"));
+                        <td><em data-emoji=":calendar_spiral:"></em>
+                            <p class="ui grey label">Was due @dueDate</p>
+                            </td>
+                    }
+                <td>
+                    @if (@expense.Paid == false)
+                    {
+                        @using (Html.BeginForm("Pay", "Expenses", FormMethod.Post))
+                        {
+                            @Html.Hidden("expenseId", expense.ExpenseId)
+                            <input type="submit" class="ui green button" value="Pay"
+                                   onclick="return confirm('Are you sure you want to pay the expense?')">
+                        }
+                    }
                 </td>
-            <td>
-                <a asp-controller="Expenses" asp-action="Details" asp-route-groupId="@groupId" 
-                   asp-route-expenseId="@expense.ExpenseId">Details</a>
-            </td>
+                <td>
+                    <a asp-controller="Expenses" asp-action="Details" asp-route-groupId="@groupId"
+                       asp-route-expenseId="@expense.ExpenseId">Details</a>
+                </td>
         </tr>
     }
     </tbody>

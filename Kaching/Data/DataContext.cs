@@ -22,6 +22,7 @@ namespace Kaching.Data
                 .WithMany(f => f.Expenses)
                 .HasForeignKey(g => g.CreatorId)
                 .OnDelete(DeleteBehavior.Restrict);
+            
 
             modelBuilder.Entity<Expense>()
                 .Property(s => s.Updated)

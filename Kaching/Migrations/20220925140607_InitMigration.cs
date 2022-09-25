@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Kaching.Migrations.Data
+namespace Kaching.Migrations
 {
-    public partial class RefactoredMigration : Migration
+    public partial class InitMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,8 @@ namespace Kaching.Migrations.Data
                 {
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -47,9 +48,10 @@ namespace Kaching.Migrations.Data
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ColorCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Personal = table.Column<bool>(type: "bit", nullable: true),
                     MaxMembers = table.Column<int>(type: "int", nullable: false),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -65,17 +67,11 @@ namespace Kaching.Migrations.Data
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ColorCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GroupId = table.Column<int>(type: "int", nullable: true)
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Person", x => x.PersonId);
-                    table.ForeignKey(
-                        name: "FK_Person_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Group",
-                        principalColumn: "GroupId");
                 });
 
             migrationBuilder.CreateTable(
@@ -116,6 +112,30 @@ namespace Kaching.Migrations.Data
                 });
 
             migrationBuilder.CreateTable(
+                name: "GroupPerson",
+                columns: table => new
+                {
+                    GroupsGroupId = table.Column<int>(type: "int", nullable: false),
+                    MembersPersonId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupPerson", x => new { x.GroupsGroupId, x.MembersPersonId });
+                    table.ForeignKey(
+                        name: "FK_GroupPerson_Group_GroupsGroupId",
+                        column: x => x.GroupsGroupId,
+                        principalTable: "Group",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupPerson_Person_MembersPersonId",
+                        column: x => x.MembersPersonId,
+                        principalTable: "Person",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Expense",
                 columns: table => new
                 {
@@ -129,6 +149,7 @@ namespace Kaching.Migrations.Data
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     PaymentType = table.Column<int>(type: "int", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     GroupId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -246,9 +267,9 @@ namespace Kaching.Migrations.Data
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_GroupId",
-                table: "Person",
-                column: "GroupId");
+                name: "IX_GroupPerson_MembersPersonId",
+                table: "GroupPerson",
+                column: "MembersPersonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transfer_CurrencyId",
@@ -279,6 +300,9 @@ namespace Kaching.Migrations.Data
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "GroupPerson");
+
+            migrationBuilder.DropTable(
                 name: "Transfer");
 
             migrationBuilder.DropTable(
@@ -294,10 +318,10 @@ namespace Kaching.Migrations.Data
                 name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "Group");
 
             migrationBuilder.DropTable(
-                name: "Group");
+                name: "Person");
         }
     }
 }

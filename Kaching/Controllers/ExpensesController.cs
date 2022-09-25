@@ -127,8 +127,8 @@ namespace Kaching.Controllers
                 expenseCreateVm.GroupId = groupId;
                 await _expenseService.CreateExpense(expenseCreateVm);
 
-                var year = expenseCreateVm.PaymentDate.Year;
-                var month = expenseCreateVm.PaymentDate.Month;
+                var year = expenseCreateVm.DueDate.Year;
+                var month = expenseCreateVm.DueDate.Month;
                 
                 var redirect = await RedirectToExpenses(expenseCreateVm.GroupId, month, year);
                 return redirect;
@@ -148,8 +148,8 @@ namespace Kaching.Controllers
                 expenseCreateVm.GroupId = groupId;
                 await _expenseService.CreateExpense(expenseCreateVm);
                 
-                var year = expenseCreateVm.PaymentDate.Year;
-                var month = expenseCreateVm.PaymentDate.Month;
+                var year = expenseCreateVm.DueDate.Year;
+                var month = expenseCreateVm.DueDate.Month;
 
                 var redirect = await RedirectToExpenses(expenseCreateVm.GroupId, month, year);
                 return redirect;
@@ -166,6 +166,7 @@ namespace Kaching.Controllers
             {
                 var expenseVm = await _expenseService.GetExpense(id);
                 RenderSelectList(expenseVm);
+                RenderCategorySelectList();
                 return View(expenseVm);
             }
             catch (Exception)
@@ -196,14 +197,10 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVm)
         {
-            if (ModelState.IsValid)
-            {
-                await _expenseService.UpdateExpense(expenseEditVm);
-                var redirect = await RedirectToExpensesFromExpense(expenseEditVm.ExpenseId);
-                return redirect;
-            }
-
-            return NotFound();
+            if (!ModelState.IsValid) return NotFound();
+            await _expenseService.UpdateExpense(expenseEditVm);
+            var redirect = await RedirectToExpensesFromExpense(expenseEditVm.ExpenseId);
+            return redirect;
         }
         
         // POST: Expenses/Pay/
@@ -254,33 +251,11 @@ namespace Kaching.Controllers
             return redirect;
         }
 
-        // GET: Expenses/PersonalExpenses
-        [Route("/Expenses/PersonalExpenses")]
-        public async Task<IActionResult> PersonalIndex()
-        {
-            var year = DateTime.Now.Year;
-            var month = _dateHelper.GetCurrentMonthNumber();
-
-            var person =
-                _personService.GetPersonByUsername(GetCurrentUserName());
-
-
-            try
-            {
-                var expensesVm =
-                    await _expenseService.GetPersonalExpensesByMonth(month, year, person.PersonId);
-                return View(expensesVm);
-            }
-            catch (Exception)
-            {
-                return View();
-            }
-        }
-
         // GET: Groups/7/Settlement
         [Route("/Groups/{groupId}/Settlement")]
         public IActionResult Settlement()
         {
+            
             return View();
         }
 
@@ -314,8 +289,8 @@ namespace Kaching.Controllers
         {
             var expense = await _expenseService.GetExpense(expenseId);
             var groupId = expense.GroupId;
-            var expenseYear = expense.PaymentDate.Year;
-            var expenseMonth = _dateHelper.GetMonthName(expense.PaymentDate.Month);
+            var expenseYear = expense.DueDate.Year;
+            var expenseMonth = _dateHelper.GetMonthName(expense.DueDate.Month);
             
             return RedirectToAction("Index", new { groupId, year = expenseYear, month = expenseMonth} );
         }
@@ -325,6 +300,5 @@ namespace Kaching.Controllers
             var monthName = _dateHelper.GetMonthName(month);
             return RedirectToAction("Index", new { groupId, year, month = monthName} );
         }
-
     }
 }

@@ -64,8 +64,10 @@ namespace Kaching.Services
         public async Task PayExpense(int expenseId, int buyerId)
         {
             var expense = await _expenseRepository.GetExpenseById(expenseId);
+            
             expense.BuyerId = buyerId;
             expense.Paid = true;
+            expense.PaymentDate = DateTime.Now;
             
             _expenseRepository.UpdateExpense(expense);
             await _expenseRepository.SaveAsync();
@@ -78,7 +80,7 @@ namespace Kaching.Services
 
             foreach (var item in baseExpense.Expenses)
             {
-                if (item.PaymentDate > expense.PaymentDate )
+                if (item.DueDate > expense.DueDate )
                 {
                     _expenseRepository.DeleteExpense(item);
                 }
@@ -118,6 +120,7 @@ namespace Kaching.Services
         {
             var expense = _mapper.Map<Expense>(expenseEditVm);
             _expenseRepository.UpdateExpense(expense);
+            _baseExpenseRepository.Save();
             await _baseExpenseRepository.SaveAsync();
         }
 
@@ -138,7 +141,7 @@ namespace Kaching.Services
             expenses.Add(new Expense
             {
                 BuyerId = expenseCreateVm.BuyerId,
-                PaymentDate = expenseCreateVm.PaymentDate,
+                DueDate = expenseCreateVm.DueDate,
                 Price = expenseCreateVm.Price,
                 CurrencyId = 1,
                 PaymentType = expenseCreateVm.PaymentType,
@@ -154,15 +157,15 @@ namespace Kaching.Services
         {
             List<Expense> expenses = new List<Expense>();
 
-            var paymentDate = expenseCreateVm.PaymentDate;
+            var dueDate = expenseCreateVm.DueDate;
             const int recurringExpenseMaxYear = 3;
-            var endDate = paymentDate.AddYears(recurringExpenseMaxYear);
+            var endDate = dueDate.AddYears(recurringExpenseMaxYear);
 
-            while (paymentDate <= endDate)
+            while (dueDate <= endDate)
             {
-                paymentDate = NextPaymentDate(paymentDate, expenseCreateVm.Frequency);
+                dueDate = NextDueDate(dueDate, expenseCreateVm.Frequency);
 
-                if (paymentDate > endDate)
+                if (dueDate > endDate)
                 {
                     break;
                 }
@@ -170,7 +173,7 @@ namespace Kaching.Services
                 expenses.Add(new Expense
                 {
                     BuyerId = expenseCreateVm.BuyerId,
-                    PaymentDate = paymentDate,
+                    DueDate = dueDate,
                     Price = expenseCreateVm.Price,
                     PaymentType = expenseCreateVm.PaymentType,
                     ExpenseId = expenseCreateVm.ExpenseId,
@@ -182,9 +185,9 @@ namespace Kaching.Services
             _baseExpenseRepository.InsertBaseExpense(baseExpense);
             await _baseExpenseRepository.SaveAsync();
         }
-        private DateTime NextPaymentDate(DateTime currPaymentDate, Frequency frequency)
+        private DateTime NextDueDate(DateTime currDueDate, Frequency frequency)
         {
-            var dateTime = currPaymentDate;
+            var dateTime = currDueDate;
 
             switch (frequency)
             {

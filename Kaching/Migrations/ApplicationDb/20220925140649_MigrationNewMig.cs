@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Kaching.Migrations
+namespace Kaching.Migrations.ApplicationDb
 {
-    public partial class RefactoredMigration : Migration
+    public partial class MigrationNewMig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

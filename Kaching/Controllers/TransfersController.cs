@@ -56,7 +56,7 @@ namespace Kaching.Controllers
 
                 await _transferService.CreateTransfer(transferCreateViewModel);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             return View(transferCreateViewModel);
         }

@@ -33,10 +33,15 @@ public class GroupsController : Controller
     {
         try
         {
-            var personId = _personService.GetPersonByUsername(
-                GetCurrentUserName()).PersonId;
-            var groups = _groupService.GetPersonsGroups(personId);
-            return View(groups);
+            if (User.Identity.IsAuthenticated)
+            {
+                var personId = _personService.GetPersonByUsername(
+                    GetCurrentUserName()).PersonId;
+                var groups = _groupService.GetPersonsGroups(personId);
+                return View(groups);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
         catch
         {
