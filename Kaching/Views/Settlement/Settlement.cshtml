@@ -1,0 +1,19 @@
+﻿@model Kaching.ViewModels.SettlementVm
+
+@{  
+    ViewData["Title"] = "Index";
+}  
+  
+<h1>Settlement</h1>
+
+@foreach (var person in Model.Expenses)
+{
+    
+}
+
+@{
+    var expensesSum = Model.Expenses.Sum(x => x.Price);
+}
+
+@expensesSum
+

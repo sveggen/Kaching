@@ -251,14 +251,6 @@ namespace Kaching.Controllers
             return redirect;
         }
 
-        // GET: Groups/7/Settlement
-        [Route("/Groups/{groupId}/Settlement")]
-        public IActionResult Settlement()
-        {
-            
-            return View();
-        }
-
         private void RenderCategorySelectList()
         {
             ViewData["Category"] = new SelectList(

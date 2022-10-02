@@ -1,10 +1,10 @@
-﻿using Kaching.ViewModels.Settlements;
+﻿using Kaching.ViewModels;
 
 namespace Kaching.Services;
 
 public interface ISettlementService
 {
-    public SettlementVm GetSettlement(int month, int groupId);
+    public Task<SettlementVm> GetSettlement(int month, int year, int groupId);
     
     public List<SettlementVm> GetAllSettlements(int groupId);
 }

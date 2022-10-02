@@ -6,6 +6,8 @@ namespace Kaching.Repositories
     {
 
         public Task<List<Transfer>> GetTransfers(int groupId);
+        
+        public Task<List<Transfer>> GetTransfersByMonthYear(int month, int year, int groupId);
 
         public Task<List<Transfer>> GetPersonTransfers(int personId, int monthNumber);
 
