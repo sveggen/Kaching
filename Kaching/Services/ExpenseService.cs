@@ -118,10 +118,11 @@ namespace Kaching.Services
 
         public async Task UpdateExpense(ExpenseEditVm expenseEditVm)
         {
-            var expense = _mapper.Map<Expense>(expenseEditVm);
+            var expense = await _expenseRepository
+                .GetExpenseById(expenseEditVm.ExpenseId);
+            _mapper.Map(expenseEditVm, expense);
             _expenseRepository.UpdateExpense(expense);
-            _baseExpenseRepository.Save();
-            await _baseExpenseRepository.SaveAsync();
+            await _expenseRepository.SaveAsync();
         }
 
         public Task UpdateRecurringExpenses(ExpenseVm expenseVm)

@@ -6,14 +6,10 @@
   
 <h1>Settlement</h1>
 
-@foreach (var person in Model.Expenses)
+@foreach (var person in Model.GroupMembers)
 {
-    
+    @person.UserName;
+    <p>Expenses:</p> @person.Expenses.Sum(x => x.Price);
+    <p>Transfers:</p> @person.Transfers.Sum(x => x.Amount)
+
 }
-
-@{
-    var expensesSum = Model.Expenses.Sum(x => x.Price);
-}
-
-@expensesSum
-

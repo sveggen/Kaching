@@ -18,6 +18,8 @@ namespace Kaching.Repositories
         
         public List<Person> GetAllPersonsInGroup(int groupId);
 
+        public List<Person> GetPersonsForSettlement(int groupId);
+
         public void DeletePersonByUserId(string userId);
 
         public void Save();

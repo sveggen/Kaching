@@ -9,29 +9,27 @@ public class SettlementService : ISettlementService
 {
     private readonly IExpenseRepository _expenseRepository;
     private readonly ITransferRepository _transferRepository;
+    private readonly IPersonRepository _personRepository;
     private readonly IMapper _mapper;
 
     public SettlementService(
         IMapper mapper,
         ITransferRepository transferRepository,
-        IExpenseRepository expenseRepository)
+        IExpenseRepository expenseRepository,
+        IPersonRepository personRepository)
     {
         _mapper = mapper;
         _transferRepository = transferRepository;
         _expenseRepository = expenseRepository;
+        _personRepository = personRepository;
     }
 
     public async Task<SettlementVm> GetSettlement(int month, int year, int groupId)
     {
-        var expenses = await _expenseRepository
-            .GetGroupExpensesByMonth(month, year, groupId);
-        var transfers = await _transferRepository
-            .GetTransfersByMonthYear(month, year, groupId);
-
         var settlement = new SettlementVm
         {
-            Expenses = _mapper.Map<List<ExpenseVm>>(expenses),
-            Transfers = _mapper.Map<List<TransferVm>>(transfers),
+            GroupMembers = _mapper.Map<List<PersonVm>>
+                (_personRepository.GetPersonsForSettlement(groupId))
         };
 
         return settlement;

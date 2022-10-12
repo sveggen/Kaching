@@ -13,11 +13,8 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 <div class="col-md-4">
 <form asp-action="Edit" class="ui form">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    
-    <input type="hidden" asp-for="BaseExpenseId" />
-    <input type="hidden" asp-for="ResponsibleId" />
-
-      <div class="field">
+   <input type="hidden" asp-for="ExpenseId" />
+    <div class="field">
             <label class="ui label">Price</label>
             <div class="ui right labeled input">
                 <label for="amount" class="ui label">€</label>
@@ -41,18 +38,15 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             <label class="ui label">Responsible</label>
             <select asp-for="ResponsibleId" asp-items="ViewBag.PersonId"></select>
         </div>
-        <div class="field">
-            <label class="ui label">Description <i>: Not Required</i> </label>
-            <textarea asp-for="Comment"> </textarea>
-            <span asp-validation-for="Comment" class="text-danger"></span>
-        </div>
+   <div class="field">
+       <label class="ui label">Description <i>: Not Required</i> </label>
+       <textarea asp-for="Comment"> </textarea>
+       <span asp-validation-for="Comment" class="text-danger"></span>
+   </div>
+     <input type="submit" value="Edit" class="ui positive button" /> <br />
     </form>
 </div>
 <div>
-    <form asp-action="Edit">
-        <input type="hidden" asp-for="ExpenseId" />
-        <input type="submit" value="Edit" class="ui positive button" /> <br />
-    </form>
 </div>
 </div>
 
