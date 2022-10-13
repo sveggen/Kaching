@@ -7,51 +7,44 @@
     var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
-<h1>Details</h1>
-
+<h1>Expense details</h1>
 <div>
-    <h4>Expense</h4>
     <hr />
-
-<div class="row">
-    <div class="ui form">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="field">
-                    <label class="ui label">Price</label>
-                    <div class="ui right labeled input">
-                        <label for="amount" class="ui label">@Model.CurrencySymbol</label>
-                        <input asp-for="Price" disabled>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="ui label">Category</label>
-                    <input asp-for="CategoryName" disabled>
-                </div>
-                <div class="field">
-                    <label class="ui label">Transfer Status</label>
-                    <input asp-for="PaymentType" disabled>
-                </div>
-                <div class="field">
-                    <label class="ui label">Paid by</label>
-                    <input asp-for="Buyer.UserName" disabled>
-                </div>
-            <div class="field">
-                    <label class="ui label">Frequency</label>
-                    <input asp-for="Frequency" disabled>
-                </div>
-                <div class="field">
-                    <label class="ui label">Transfer Date</label>
-                    <input asp-for="PaymentDate" disabled>
-                </div>
-                <div class="field">
-                    <label class="ui label">Description <i>: Not Required</i> </label>
-                    <textarea asp-for="Comment" disabled rows="2"> </textarea>
-                </div>
+    
+    <div class="ui raised card">
+        <div class="content">
+            <div class="header">@Model.CurrencySymbol @Model.Price of @Model.CategoryName <em data-emoji="@Model.CategoryIcon"></em></div>
+            <div class="meta">
+                <span class="frequency">@Model.Frequency</span>
+            </div>
+            <br/>
+            <div class="content">
+                Paid:
+                @if (@Model.Paid)
+                {
+                    <em data-emoji="white_check_mark"></em>
+                }
+                else
+                {
+                    <em data-emoji="x"></em>
+                }
+                <br/>
+                Due date: @Model.DueDate
+            </div>
+            <div class="description">
+                <p>@Model.Comment</p>
             </div>
         </div>
-        <div>
-
-            @using (Html.BeginForm("Delete", "Expenses", FormMethod.Post))
+        <br/>
+        
+      <div class="extra content">
+        <div class="right floated author">
+          Responsible: @Model.Buyer.Avatar @Model.Buyer.UserName
+        </div>
+      </div>
+    </div>
+    <div>
+        @using (Html.BeginForm("Delete", "Expenses", FormMethod.Post))
                 {
                     @Html.Hidden("expenseId", Model.ExpenseId)
                     <input type="submit" class="ui red button" value="Delete"

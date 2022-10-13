@@ -23,13 +23,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
             </div>
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
-        <div class="field">
-            <label class="ui label">Category</label>
-        <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown"
-                asp-items="ViewBag.Category">
-        </select>
-        </div>
-        <div class="field">
+   <div class="field">
             <label class="ui label">Transfer Status</label>
             <select asp-for="PaymentType" asp-items="Html.GetEnumSelectList<PaymentType>()">
             </select>

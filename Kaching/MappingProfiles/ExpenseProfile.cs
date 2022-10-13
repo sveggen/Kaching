@@ -58,7 +58,7 @@ namespace Kaching.MappingProfiles
 
            // CreateMap<ExpenseCreateRecurringVM, BaseExpense>();
 
-            CreateMap<ExpenseEditVm, Expense>();
+           CreateMap<ExpenseEditVm, Expense>();
 
             CreateMap<Category, CategoryVm>();
 
