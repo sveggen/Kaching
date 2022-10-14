@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kaching.Controllers;
 
 [Authorize(Roles = "Administrator")]
+[Route("Admin")]
 public class AdminController : Controller
 {
 
@@ -17,7 +18,7 @@ public class AdminController : Controller
     }
     
     // GET: Admin/
-    [Route("Admin/")]
+    [Route("")]
     public async Task<IActionResult> Index()
     {
         return View();
@@ -25,7 +26,7 @@ public class AdminController : Controller
     
     
     // GET: Admin/Users
-    [Route("Admin/Users")]
+    [Route("Users")]
     public async Task<IActionResult> UsersIndex()
     {
         var persons = _personService.GetPersons();

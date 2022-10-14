@@ -49,7 +49,6 @@
                     @Html.Hidden("expenseId", Model.ExpenseId)
                     <input type="submit" class="ui red button" value="Delete"
                             onclick="return confirm('Are you sure you want to delete the expense?')">
-                                                                                                                                                       
                 }
             
             <a class="ui button" asp-controller="Expenses" asp-action="Edit" asp-route-groupId="@groupId" 
@@ -67,11 +66,6 @@
                            onclick="return confirm('Are you sure you want to delete all future occurrences of this expense?')">
                                                                                                                                                        
                 }
-
-                <a class="ui button" asp-controller="Expenses" asp-action="EditRecurring" asp-route-groupId="@groupId" 
-                   asp-route-id="@Model.ExpenseId">
-                    Edit all future occurences
-                </a>
             }
         </div>
 </div>

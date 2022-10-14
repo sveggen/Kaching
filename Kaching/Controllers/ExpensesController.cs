@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Kaching.Controllers
 {
     [Authorize]
+    [Route("Groups/{groupId}/Expenses")]
     public class ExpensesController : Controller
     {
         private readonly IExpenseService _expenseService;
@@ -25,7 +26,7 @@ namespace Kaching.Controllers
         }
         
         // GET: Groups/3/Expenses/March/2022
-        [Route("Groups/{groupId}/Expenses/{month}/{year}")]
+        [Route("{month}/{year}")]
         public async Task<IActionResult> Index(int groupId, string month, string year)
         {
             int monthNumber;
@@ -51,7 +52,7 @@ namespace Kaching.Controllers
         }
         
         // GET: Groups/3/Expenses/
-        [Route("Groups/{groupId}/Expenses/")]
+        [Route("")]
         public async Task<IActionResult> Index(int groupId)
         {
             var monthNumber = _dateHelper.GetCurrentMonthNumber();
@@ -67,7 +68,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/4/Expenses/Details/5
-        [Route("Groups/{groupId}/Expenses/Details/{expenseId}")]
+        [Route("Details/{expenseId}")]
         public async Task<IActionResult> Details(int groupId, int expenseId)
         {
             try
@@ -85,7 +86,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/7/Expenses/7/Create
-        [Route("Groups/{groupId}/Expenses/Create")]
+        [Route("Create")]
         public IActionResult Create(int groupId)
         {
             try
@@ -101,7 +102,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/7/Expenses/CreateRecurring
-        [Route("Groups/{groupId}/Expenses/CreateRecurring")]
+        [Route("CreateRecurring")]
         public IActionResult CreateRecurring(int groupId)
         {
             try
@@ -117,7 +118,7 @@ namespace Kaching.Controllers
         }
 
         // POST: Groups/7/Expenses/7/Create
-        [HttpPost("Groups/{groupId}/Expenses/Create")]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ExpenseCreateVm expenseCreateVm, int groupId)
         {
@@ -138,7 +139,7 @@ namespace Kaching.Controllers
         }
         
         // POST: Groups/7/Expenses/7/CreateRecurring
-        [HttpPost("Groups/{groupId}/Expenses/CreateRecurring")]
+        [HttpPost("CreateRecurring")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRecurring(ExpenseCreateVm expenseCreateVm, int groupId)
         {
@@ -159,7 +160,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/7/Expenses/Edit/5
-        [Route("Groups/{groupId}/Expenses/Edit/{id}")]
+        [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(int id, int groupId)
         {
             try
@@ -176,7 +177,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Expenses/EditRecurring/5
-        [Route("Groups/{groupId}/Expenses/EditRecurring/{id}")]
+        [Route("EditRecurring/{id}")]
         public async Task<IActionResult> EditRecurring(int groupId, int expenseId)
         {
             try
@@ -193,7 +194,7 @@ namespace Kaching.Controllers
         }
 
         // POST: Groups/6/Expenses/Edit/5
-        [HttpPost("Groups/{groupId}/Expenses/Edit/{id?}")]
+        [HttpPost("Edit/{id?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVm)
         {

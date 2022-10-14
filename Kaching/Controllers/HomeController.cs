@@ -2,10 +2,11 @@
 
 namespace Kaching.Controllers;
 
+[Route("Home")]
 public class HomeController : Controller
 {
     // GET: /
-    [Route("Home/")]
+    [Route("")]
     public IActionResult Index()
     {
         return View();

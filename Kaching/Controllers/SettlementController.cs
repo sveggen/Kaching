@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kaching.Controllers;
 
 [Authorize]
+[Route("Groups/{groupId}/Settlement")]
 public class SettlementController : Controller
 {
     private readonly ISettlementService _settlementService;
@@ -15,7 +16,7 @@ public class SettlementController : Controller
     }
     
     // GET: Groups/6/Settlement/
-    [Route("Groups/{groupId}/Settlement/")]
+    [Route("")]
     public IActionResult Index(int groupId)
     {
         var groups = _settlementService.GetAllSettlements(groupId);
@@ -23,7 +24,7 @@ public class SettlementController : Controller
     }
     
     // GET: Groups/7/Settlement/May/2022
-    [Route("Groups/{groupId}/Settlement/{monthNumber}/{year}")]
+    [Route("{monthNumber}/{year}")]
     public async Task<IActionResult> Settlement(int groupId, int monthNumber, int year)
     {
         var group = await _settlementService.GetSettlement(monthNumber, year, groupId);

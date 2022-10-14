@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Kaching.Models;
 using Kaching.Repositories;
 using Kaching.ViewModels;
 

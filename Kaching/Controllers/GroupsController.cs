@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Kaching.Controllers;
 
+[Route("Groups")]
 public class GroupsController : Controller
 {
     private readonly IGroupService _groupService;
@@ -20,7 +21,7 @@ public class GroupsController : Controller
     
     // GET: Groups/
     [Authorize(Roles = "Administrator")]
-    [Route("Groups/")]
+    [Route("")]
     public IActionResult Index()
     {
         var groups = _groupService.GetGroups();
@@ -49,21 +50,10 @@ public class GroupsController : Controller
         }
 
     }
-    
-    /*// GET: Groups/4
-    [Route("Groups/{groupId}")]
-    public IActionResult SelectedGroup(int groupId)
-    {
-        Response.Cookies.Append("group-id", groupId.ToString(), SetCookieOptions());
-        
-        return View();
-    }*/
-    
-    
 
     // GET: Groups/Create
     [Authorize(Roles = "Administrator")]
-    [Route("Groups/Create")]
+    [Route("Create")]
     public IActionResult Create()  
     {
         try
@@ -78,7 +68,7 @@ public class GroupsController : Controller
     }
     // POST: Groups/Create
     [Authorize(Roles = "Administrator")]
-    [HttpPost("Groups/Create")]
+    [HttpPost("Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(GroupCreateVm groupCreateVm)
     {
@@ -98,7 +88,7 @@ public class GroupsController : Controller
     
     
     // POST: Groups/Delete
-    [HttpPost("Groups/Delete"), ActionName("Delete")]
+    [HttpPost("Delete"), ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public IActionResult Delete(int groupId)
     {
