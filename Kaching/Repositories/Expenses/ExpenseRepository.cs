@@ -1,11 +1,10 @@
 ﻿using Kaching.Data;
 using Kaching.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Kaching.Repositories
 {
-    public class ExpenseRepository : IExpenseRepository, IDisposable
+    public class ExpenseRepository : IExpenseRepository
     {
         private readonly DataContext _context;
 
@@ -87,6 +86,19 @@ namespace Kaching.Repositories
                 .Sum(e => e.Price);
         }
 
+        public async Task<List<Expense>> GetGroupExpenses(int groupId)
+        {
+            return await _context.Expense
+                .Include(e => e.BaseExpense)
+                .Include(e => e.Buyer)
+                .Include(g => g.BaseExpense.Group)
+                .Include(g => g.BaseExpense.Category)
+                .Include(g => g.Currency)
+                .Where(p => p.BaseExpense.GroupId == groupId)
+                .OrderByDescending(e => e.DueDate)
+                .ToListAsync();
+        }
+
         public void InsertExpense(Expense expense)
         {
             _context.Add(expense);
@@ -105,26 +117,6 @@ namespace Kaching.Repositories
         public bool GetExpenseExistence(int id)
         {
             return _context.Expense.Any(e => e.ExpenseId == id);
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         public async Task SaveAsync()

@@ -37,7 +37,16 @@ Layout = "~/Views/Shared/_Layout.cshtml";
        <textarea asp-for="Comment"> </textarea>
        <span asp-validation-for="Comment" class="text-danger"></span>
    </div>
-     <input type="submit" value="Edit" class="ui positive button" /> <br />
+   @if (Model.Frequency != Frequency.Once)
+   {
+       <div class="field">
+            <div class="ui toggle checkbox">
+           <input type="checkbox" name="recurring">
+           <label>Edit all upcoming instances of this expense</label>
+            </div>
+        </div>
+   }
+   <input type="submit" value="Edit" class="ui positive button" /> <br />
     </form>
 </div>
 <div>

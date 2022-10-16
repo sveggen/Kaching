@@ -176,30 +176,20 @@ namespace Kaching.Controllers
             }
         }
 
-        // GET: Expenses/EditRecurring/5
-        [Route("EditRecurring/{id}")]
-        public async Task<IActionResult> EditRecurring(int groupId, int expenseId)
-        {
-            try
-            {
-                var expenseVm = await _expenseService.GetExpense(expenseId);
-                RenderSelectList(expenseVm);
-                RenderCategorySelectList();
-                return View(expenseVm);
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
-        }
-
         // POST: Groups/6/Expenses/Edit/5
         [HttpPost("Edit/{id?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVm)
         {
             if (!ModelState.IsValid) return NotFound();
-            await _expenseService.UpdateExpense(expenseEditVm);
+            if (Request.Form["recurring"] == "on")
+            {
+                await _expenseService.UpdateRecurringExpenses(expenseEditVm);
+            }
+            else
+            {
+                await _expenseService.UpdateExpense(expenseEditVm);
+            }
             var redirect = await RedirectToExpensesFromExpense(expenseEditVm.ExpenseId);
             return redirect;
         }
@@ -247,8 +237,8 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRecurringConfirmed(int expenseId)
         {
-            await _expenseService.DeleteRecurringExpense(expenseId);
             var redirect = await RedirectToExpensesFromExpense(expenseId);
+            await _expenseService.DeleteRecurringExpense(expenseId);
             return redirect;
         }
 

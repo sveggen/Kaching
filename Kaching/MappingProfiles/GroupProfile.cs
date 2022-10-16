@@ -16,5 +16,7 @@ public class GroupProfile : Profile
                     s => s.Members.Select(detail => detail.PersonId).ToList()
                 )
             );
+        CreateMap<Group, SettlementVm>();
+        CreateMap<SettlementVm, Group>();
     }
 }

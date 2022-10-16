@@ -1,4 +1,5 @@
 ﻿using Kaching.Services;
+using Kaching.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,17 +18,9 @@ public class SettlementController : Controller
     
     // GET: Groups/6/Settlement/
     [Route("")]
-    public IActionResult Index(int groupId)
+    public async Task<IActionResult> Index(int groupId)
     {
-        var groups = _settlementService.GetAllSettlements(groupId);
-        return View(groups);
-    }
-    
-    // GET: Groups/7/Settlement/May/2022
-    [Route("{monthNumber}/{year}")]
-    public async Task<IActionResult> Settlement(int groupId, int monthNumber, int year)
-    {
-        var group = await _settlementService.GetSettlement(monthNumber, year, groupId);
+        var group = await _settlementService.GetAllSettlements(groupId);
         return View(group);
     }
 }
