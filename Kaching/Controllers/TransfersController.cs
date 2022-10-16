@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Kaching.Controllers
 {
     [Authorize]
-    [Route("Group/{groupId}/Transfers")]
+    [Route("Groups/{groupId}/Transfers")]
     public class TransfersController : Controller
     {
         private readonly ITransferService _transferService;
@@ -21,7 +21,7 @@ namespace Kaching.Controllers
             _personService = personService;
         }
 
-        // GET: Group/4/Transfers/
+        // GET: Groups/4/Transfers/
         [Route("")]
         public async Task<IActionResult> Index(int groupId)
         {
@@ -29,7 +29,7 @@ namespace Kaching.Controllers
             return View(viewModel);
         }
 
-        // GET: Group/4/Transfers/Create
+        // GET: Groups/4/Transfers/Create
         [Route("Create")]
         public async Task<IActionResult> Create(int groupId)  
         {
@@ -45,7 +45,7 @@ namespace Kaching.Controllers
             }
         }
 
-        // POST: Group/4/Transfers/Create
+        // POST: Groups/4/Transfers/Create
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TransferCreateVM transferCreateViewModel)
