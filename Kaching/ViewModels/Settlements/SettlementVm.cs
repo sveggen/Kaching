@@ -6,7 +6,7 @@ public class SettlementVm
      
     public int GroupId { get; set; }
 
-    public List<PersonLightVm>? Members { get; set; }
+    public List<PersonVm>? Members { get; set; }
 
     public List<ExpenseVm>? Expenses { get; set; }
         

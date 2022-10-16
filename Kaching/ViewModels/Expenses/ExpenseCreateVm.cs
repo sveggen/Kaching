@@ -10,7 +10,7 @@ namespace Kaching.ViewModels
         public int GroupId { get; set; }
         
         public int CreatorId { get; set; }
-
+        
         public int ExpenseId { get; set; }
 
         public int CategoryId { get; set; }

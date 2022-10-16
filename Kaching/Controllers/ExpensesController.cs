@@ -73,8 +73,6 @@ namespace Kaching.Controllers
         {
             try
             {
-                // MISSING: check if user is part of group
-                
                 var expenseVm = await _expenseService.GetExpense(expenseId);
 
                 return View(expenseVm);

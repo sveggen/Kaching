@@ -140,6 +140,7 @@ namespace Kaching.Services
                 BuyerId = expenseCreateVm.BuyerId,
                 DueDate = expenseCreateVm.DueDate,
                 Price = expenseCreateVm.Price,
+                GroupId = expenseCreateVm.GroupId,
                 CurrencyId = 1,
                 PaymentType = expenseCreateVm.PaymentType,
                 ExpenseId = expenseCreateVm.ExpenseId
@@ -172,6 +173,7 @@ namespace Kaching.Services
                     BuyerId = expenseCreateVm.BuyerId,
                     DueDate = dueDate,
                     Price = expenseCreateVm.Price,
+                    GroupId = expenseCreateVm.GroupId,
                     PaymentType = expenseCreateVm.PaymentType,
                     ExpenseId = expenseCreateVm.ExpenseId,
                     CurrencyId = 1

@@ -2,6 +2,7 @@
 using Kaching.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Kaching.Repositories;
 
 public class GroupRepository : IGroupRepository
@@ -33,6 +34,7 @@ public class GroupRepository : IGroupRepository
     {
         return _context.Group
             .Include(x => x.Members)
+            .ThenInclude(y => y.Expenses)
             .Include(x => x.Expenses)
             .Include(x => x.Transfers)
             .FirstOrDefault(x => x.GroupId == groupId);

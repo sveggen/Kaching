@@ -24,7 +24,7 @@ namespace Kaching.Repositories
             return await _context.Expense
                 .Include(e => e.BaseExpense)
                 .Include(b => b.Buyer)
-                .Include(g => g.BaseExpense.Group)
+                .Include(g => g.Group)
                 .Include(g => g.BaseExpense.Category)
                 .Include(g => g.Currency)
                 .FirstOrDefaultAsync(m => m.ExpenseId == expenseId);
@@ -66,12 +66,12 @@ namespace Kaching.Repositories
             return await _context.Expense
                 .Include(e => e.BaseExpense)
                 .Include(e => e.Buyer)
-                .Include(g => g.BaseExpense.Group)
+                .Include(g => g.Group)
                 .Include(g => g.BaseExpense.Category)
                 .Include(g => g.Currency)
                 .Where(p => p.DueDate.Year == year)
                 .Where(p => p.DueDate.Month == monthNumber)
-                .Where(p => p.BaseExpense.GroupId == groupId)
+                .Where(p => p.GroupId == groupId)
                 .OrderByDescending(e => e.DueDate)
                 .ToListAsync();
         }
@@ -91,10 +91,10 @@ namespace Kaching.Repositories
             return await _context.Expense
                 .Include(e => e.BaseExpense)
                 .Include(e => e.Buyer)
-                .Include(g => g.BaseExpense.Group)
+                .Include(g => g.Group)
                 .Include(g => g.BaseExpense.Category)
                 .Include(g => g.Currency)
-                .Where(p => p.BaseExpense.GroupId == groupId)
+                .Where(p => p.GroupId == groupId)
                 .OrderByDescending(e => e.DueDate)
                 .ToListAsync();
         }

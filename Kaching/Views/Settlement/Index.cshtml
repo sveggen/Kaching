@@ -1,15 +1,59 @@
-﻿@model Kaching.ViewModels.SettlementVm
+﻿@using System.Globalization
+@model Kaching.ViewModels.SettlementVm
 
 
-Total Expenses: @Model.Expenses.Sum(X => X.Price)
+<partial name="/Views/Shared/_GroupNavbar.cshtml"/>
+
+<h1>Overall spendings</h1>
+<div class="ui inverted segment">
+    <div class="ui mini inverted horizontal statistic">
+        <div class="value">
+            €@Model.Expenses.Sum(x => x.Price)
+        </div>
+    </div>
+</div>
 
 
+ @{
+     foreach (var member in Model.Members)
+     {
+         <p>@member.UserName has spent €@member.Expenses.Where(g => g.GroupId == Model.GroupId).Sum(x => x.Price)</p>
+     }
+ }
 
 @{
-    var settlementPeriods = Model.Expenses
-        .Select(x => x.DueDate.ToString()).Distinct();
-    foreach (var x in settlementPeriods)
+    var yearMonth = @Model.Expenses
+        .GroupBy(p => new {p.DueDate.Year, p.DueDate.Month})
+        .Select(a => a.Key);
+}
+
+@{
+    foreach (var x in yearMonth)
     {
-        @x;
+
+        var periodExpenses = Model.Expenses
+            .Where(y => y.DueDate.Year == x.Year && y.DueDate.Month == x.Month);
+        
+
+        <h1>@CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[@x.Month - 1] @x.Year</h1>
+
+        <div class="ui inverted segment">
+            <div class="ui mini inverted horizontal statistic">
+                <div class="value">
+                    €@periodExpenses.Sum(t => t.Price)
+                </div>
+            </div>
+        </div>
+        
+        foreach (var member in Model.Members)
+        {
+            var memberExpenses = member.Expenses
+                .Where(g => g.GroupId == Model.GroupId
+                            && g.DueDate.Year == x.Year
+                            && g.DueDate.Month == x.Month);
+            
+            <p>@member.UserName has spent: €@memberExpenses.Sum(x => x.Price)</p>
+
+        }
     }
 }
