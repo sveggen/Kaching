@@ -9,6 +9,7 @@ public class GroupProfile : Profile
     public GroupProfile()
     {
         CreateMap<Group, GroupVm>();
+        CreateMap<GroupVm, Group>();
         CreateMap<GroupCreateVm, Group>()
             .ForMember(
                 d => d.Members, 
@@ -16,5 +17,6 @@ public class GroupProfile : Profile
                     s => s.Members.Select(detail => detail.PersonId).ToList()
                 )
             );
+        CreateMap<Group, SettlementVm>();
     }
 }

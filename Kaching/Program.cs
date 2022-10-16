@@ -44,6 +44,7 @@ builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<ITransferService, TransferService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<ISettlementService, SettlementService>();
 
 builder.Services
     .AddFluentEmail(builder.Configuration.GetConnectionString("MailgunSender"))

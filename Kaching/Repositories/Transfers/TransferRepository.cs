@@ -59,6 +59,19 @@ namespace Kaching.Repositories
                 .ToListAsync(); 
         }
 
+        public async Task<List<Transfer>> GetTransfersByMonthYear(int month, int year, int groupId)
+        {
+            return await _context.Transfer
+                .Include(e => e.Sender)
+                .Include(c => c.Currency)
+                .Include(f => f.Receiver)
+                .Include(e => e.Expense)
+                .Where(x => x.GroupId == groupId)
+                .Where(x => x.PaymentMonth.Month == month)
+                .Where(x => x.PaymentMonth.Year == year)
+                .ToListAsync();
+        }
+
         public Task<List<Transfer>> GetPersonTransfers(int personId, int monthNumber)
         {
             throw new NotImplementedException();

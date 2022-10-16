@@ -9,26 +9,17 @@ namespace Kaching.Services
     {
         private readonly IBaseExpenseRepository _baseExpenseRepository;
         private readonly IExpenseRepository _expenseRepository;
-        private readonly ITransferRepository _transferRepository;
-        private readonly IPersonRepository _personRepository;
-        private readonly IGroupRepository _groupRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
 
         public ExpenseService(
             IBaseExpenseRepository baseExpenseRepository,
             IExpenseRepository expenseRepository,
-            ITransferRepository transferRepository,
-            IPersonRepository personRepository,
-            IGroupRepository groupRepository,
             ICategoryRepository categoryRepository,
             IMapper mapper)
         {
             _baseExpenseRepository = baseExpenseRepository;
             _expenseRepository = expenseRepository;
-            _transferRepository = transferRepository;
-            _personRepository = personRepository;
-            _groupRepository = groupRepository;
             _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
@@ -38,15 +29,6 @@ namespace Kaching.Services
             var expenses = await _expenseRepository.GetGroupExpensesByMonth
                 (monthNumber, year, groupId);
             return _mapper.Map<List<ExpenseVm>>(expenses);
-        }
-
-        public async Task<List<ExpensePersonalVm>> GetPersonalExpensesByMonth
-            (int monthNumber, int year, int personId)
-        {
-            var personalGroup = _groupRepository.GetPersonalGroup(personId);
-            var expenses = await _expenseRepository.GetGroupExpensesByMonth
-                (monthNumber, year, personalGroup.GroupId);
-            return _mapper.Map<List<ExpensePersonalVm>>(expenses);
         }
 
         public async Task CreateExpense(ExpenseCreateVm expenseCreateVm)
@@ -80,7 +62,7 @@ namespace Kaching.Services
 
             foreach (var item in baseExpense.Expenses)
             {
-                if (item.DueDate > expense.DueDate )
+                if (item.DueDate >= expense.DueDate)
                 {
                     _expenseRepository.DeleteExpense(item);
                 }
@@ -118,15 +100,30 @@ namespace Kaching.Services
 
         public async Task UpdateExpense(ExpenseEditVm expenseEditVm)
         {
-            var expense = _mapper.Map<Expense>(expenseEditVm);
+            var expense = await _expenseRepository
+                .GetExpenseById(expenseEditVm.ExpenseId);
+            _mapper.Map(expenseEditVm, expense);
             _expenseRepository.UpdateExpense(expense);
-            _baseExpenseRepository.Save();
-            await _baseExpenseRepository.SaveAsync();
+            await _expenseRepository.SaveAsync();
         }
 
-        public Task UpdateRecurringExpenses(ExpenseVm expenseVm)
+        public async Task UpdateRecurringExpenses(ExpenseEditVm expenseEditVm)
         {
-            throw new NotImplementedException();
+            var expense = await _expenseRepository
+                .GetExpenseById(expenseEditVm.ExpenseId);
+            var expenseDueDate = expense.DueDate;
+            var relatedExpenses = expense.BaseExpense.Expenses;
+            
+            foreach(Expense upcomingExpense in relatedExpenses
+                        .FindAll(x => x.DueDate > expenseDueDate))
+            {
+                upcomingExpense.Price = expenseEditVm.Price;
+                upcomingExpense.Buyer.PersonId = expenseEditVm.ResponsibleId;
+                upcomingExpense.Comment = expenseEditVm.Comment;
+                upcomingExpense.PaymentType = expenseEditVm.PaymentType;
+                _expenseRepository.UpdateExpense(upcomingExpense);
+                await _expenseRepository.SaveAsync();
+            }
         }
 
         public List<CategoryVm> GetCategories()
@@ -143,6 +140,7 @@ namespace Kaching.Services
                 BuyerId = expenseCreateVm.BuyerId,
                 DueDate = expenseCreateVm.DueDate,
                 Price = expenseCreateVm.Price,
+                GroupId = expenseCreateVm.GroupId,
                 CurrencyId = 1,
                 PaymentType = expenseCreateVm.PaymentType,
                 ExpenseId = expenseCreateVm.ExpenseId
@@ -175,6 +173,7 @@ namespace Kaching.Services
                     BuyerId = expenseCreateVm.BuyerId,
                     DueDate = dueDate,
                     Price = expenseCreateVm.Price,
+                    GroupId = expenseCreateVm.GroupId,
                     PaymentType = expenseCreateVm.PaymentType,
                     ExpenseId = expenseCreateVm.ExpenseId,
                     CurrencyId = 1

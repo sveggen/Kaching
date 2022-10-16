@@ -17,12 +17,11 @@ namespace Kaching.Data
                 .Property(s => s.Created)
                 .HasDefaultValueSql("GETDATE()");
 
-            modelBuilder.Entity<BaseExpense>()
-                .HasOne(f => f.Creator)
+            modelBuilder.Entity<Expense>()
+                .HasOne(f => f.Buyer)
                 .WithMany(f => f.Expenses)
-                .HasForeignKey(g => g.CreatorId)
+                .HasForeignKey(g => g.BuyerId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
 
             modelBuilder.Entity<Expense>()
                 .Property(s => s.Updated)
@@ -39,7 +38,7 @@ namespace Kaching.Data
                 .WithMany(f => f.TransfersReceived)
                 .HasForeignKey(g => g.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             modelBuilder.Entity<Group>()
                 .Property(s => s.Created)
                 .HasDefaultValueSql("GETDATE()");

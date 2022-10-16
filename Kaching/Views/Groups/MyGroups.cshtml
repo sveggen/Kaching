@@ -7,7 +7,7 @@
 <h1>My Groups</h1>
 <div class="ui cards">
         @foreach (var group in Model) {
-        <div class="ui card">
+        <div class="ui card" style="background-color: @group.ColorCode">
             <div class="content">
                 <div class="header">@group.Name</div>
                 <div class="meta">

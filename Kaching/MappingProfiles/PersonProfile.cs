@@ -13,6 +13,8 @@ namespace Kaching.MappingProfiles
             CreateMap<PersonLightVm, Person>();
 
             CreateMap<Person, PersonAdminVm>();
+
+            CreateMap<Person, PersonVm>();
         }
     }
 }

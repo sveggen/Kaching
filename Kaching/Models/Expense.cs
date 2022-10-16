@@ -28,10 +28,14 @@ namespace Kaching.Models
         public PaymentType PaymentType { get; set; }
 
         public DateTime PaymentDate { get; set; }
-
+        
         public DateTime DueDate { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime Updated { get; set; }
+        
+        public int GroupId { get; set; }
+        
+        public Group? Group { get; set; }
     }
 }

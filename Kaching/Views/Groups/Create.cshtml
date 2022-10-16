@@ -16,10 +16,14 @@
             <div class="ui segment">
             <div class="ui four wide column aligned left aligned grid">
                 <div class="column">
-                        <div class="field">
-                            <input asp-for="Name" placeholder="Name">
-                                <span asp-validation-for="Name" style="color: red"></span>
-                        </div>
+                    <div class="field">
+                        <input asp-for="Name" placeholder="Name">
+                        <span asp-validation-for="Name" style="color: red"></span>
+                    </div>
+                       <div class="field">
+                        <input type="color" asp-for="ColorCode">
+                            <span asp-validation-for="ColorCode" style="color: red"></span>
+                    </div>
                     <div class="field">
                         <div class="ui label">
                             Add Members
@@ -33,13 +37,7 @@
                        </div>
                        <span asp-validation-for="MaxMembers" style="color: red"></span>
                         </div>
-                       <div class="field">
-                           <div class="ui right labeled input">
-                               <input asp-for="ColorCode" placeholder="Color Code">
-                          </div>
-                          <span asp-validation-for="MaxMembers" style="color: red"></span>
-                           </div>
-                        <div class="field">
+                    <div class="field">
                             <input type="submit" value="Create" class="ui button"/>
                         </div>
                     </div>

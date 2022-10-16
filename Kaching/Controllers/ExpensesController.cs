@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Kaching.Controllers
 {
     [Authorize]
+    [Route("Groups/{groupId}/Expenses")]
     public class ExpensesController : Controller
     {
         private readonly IExpenseService _expenseService;
@@ -25,7 +26,7 @@ namespace Kaching.Controllers
         }
         
         // GET: Groups/3/Expenses/March/2022
-        [Route("Groups/{groupId}/Expenses/{month}/{year}")]
+        [Route("{month}/{year}")]
         public async Task<IActionResult> Index(int groupId, string month, string year)
         {
             int monthNumber;
@@ -51,7 +52,7 @@ namespace Kaching.Controllers
         }
         
         // GET: Groups/3/Expenses/
-        [Route("Groups/{groupId}/Expenses/")]
+        [Route("")]
         public async Task<IActionResult> Index(int groupId)
         {
             var monthNumber = _dateHelper.GetCurrentMonthNumber();
@@ -67,13 +68,11 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/4/Expenses/Details/5
-        [Route("Groups/{groupId}/Expenses/Details/{expenseId}")]
+        [Route("Details/{expenseId}")]
         public async Task<IActionResult> Details(int groupId, int expenseId)
         {
             try
             {
-                // MISSING: check if user is part of group
-                
                 var expenseVm = await _expenseService.GetExpense(expenseId);
 
                 return View(expenseVm);
@@ -85,7 +84,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/7/Expenses/7/Create
-        [Route("Groups/{groupId}/Expenses/Create")]
+        [Route("Create")]
         public IActionResult Create(int groupId)
         {
             try
@@ -101,7 +100,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/7/Expenses/CreateRecurring
-        [Route("Groups/{groupId}/Expenses/CreateRecurring")]
+        [Route("CreateRecurring")]
         public IActionResult CreateRecurring(int groupId)
         {
             try
@@ -117,7 +116,7 @@ namespace Kaching.Controllers
         }
 
         // POST: Groups/7/Expenses/7/Create
-        [HttpPost("Groups/{groupId}/Expenses/Create")]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ExpenseCreateVm expenseCreateVm, int groupId)
         {
@@ -138,7 +137,7 @@ namespace Kaching.Controllers
         }
         
         // POST: Groups/7/Expenses/7/CreateRecurring
-        [HttpPost("Groups/{groupId}/Expenses/CreateRecurring")]
+        [HttpPost("CreateRecurring")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRecurring(ExpenseCreateVm expenseCreateVm, int groupId)
         {
@@ -159,7 +158,7 @@ namespace Kaching.Controllers
         }
 
         // GET: Groups/7/Expenses/Edit/5
-        [Route("Groups/{groupId}/Expenses/Edit/{id}")]
+        [Route("Edit/{id}")]
         public async Task<IActionResult> Edit(int id, int groupId)
         {
             try
@@ -175,30 +174,20 @@ namespace Kaching.Controllers
             }
         }
 
-        // GET: Expenses/EditRecurring/5
-        [Route("Groups/{groupId}/Expenses/EditRecurring/{id}")]
-        public async Task<IActionResult> EditRecurring(int groupId, int expenseId)
-        {
-            try
-            {
-                var expenseVm = await _expenseService.GetExpense(expenseId);
-                RenderSelectList(expenseVm);
-                RenderCategorySelectList();
-                return View(expenseVm);
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
-        }
-
         // POST: Groups/6/Expenses/Edit/5
-        [HttpPost("Groups/{groupId}/Expenses/Edit/{id?}")]
+        [HttpPost("Edit/{id?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ExpenseEditVm expenseEditVm)
         {
             if (!ModelState.IsValid) return NotFound();
-            await _expenseService.UpdateExpense(expenseEditVm);
+            if (Request.Form["recurring"] == "on")
+            {
+                await _expenseService.UpdateRecurringExpenses(expenseEditVm);
+            }
+            else
+            {
+                await _expenseService.UpdateExpense(expenseEditVm);
+            }
             var redirect = await RedirectToExpensesFromExpense(expenseEditVm.ExpenseId);
             return redirect;
         }
@@ -246,17 +235,9 @@ namespace Kaching.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRecurringConfirmed(int expenseId)
         {
-            await _expenseService.DeleteRecurringExpense(expenseId);
             var redirect = await RedirectToExpensesFromExpense(expenseId);
+            await _expenseService.DeleteRecurringExpense(expenseId);
             return redirect;
-        }
-
-        // GET: Groups/7/Settlement
-        [Route("/Groups/{groupId}/Settlement")]
-        public IActionResult Settlement()
-        {
-            
-            return View();
         }
 
         private void RenderCategorySelectList()

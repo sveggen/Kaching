@@ -42,6 +42,16 @@ namespace Kaching.Repositories
                 .ToList();
         }
 
+        public List<Person> GetPersonsForSettlement(int groupId)
+        {
+            var group = _context.Group.FirstOrDefault(x => x.GroupId == groupId);
+            
+            return _context.Person
+                .Include(x => x.Expenses)
+                .Where(x => x.Groups.Contains(group))
+                .ToList();
+        }
+
         private void DeletePerson(Person person)
         {
             _context.Person

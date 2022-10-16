@@ -17,6 +17,8 @@ namespace Kaching.Repositories
         public Task<List<Expense>> GetGroupExpensesByMonth(int monthNumber, int year, int groupId);
 
         public decimal GetSumOfPersonExpensesByMonth(int personId, int monthNumber);
+        
+        public Task<List<Expense>> GetGroupExpenses(int groupId);
 
         public void InsertExpense(Expense expense);
 

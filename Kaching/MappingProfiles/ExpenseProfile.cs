@@ -20,27 +20,23 @@ namespace Kaching.MappingProfiles
                 .ForMember(m
                     => m.CategoryName, d
                     => d.MapFrom(k
-                    => k.BaseExpense.Category.Name))
+                        => k.BaseExpense.Category.Name))
                 .ForMember(m
                     => m.CategoryIcon, d
                     => d.MapFrom(k
-                    => k.BaseExpense.Category.Icon))
+                        => k.BaseExpense.Category.Icon))
                 .ForMember(m
                     => m.CategoryId, d
                     => d.MapFrom(k
-                    => k.BaseExpense.Category.CategoryId))
+                        => k.BaseExpense.Category.CategoryId))
                 .ForMember(m
                     => m.BaseExpenseId, d
                     => d.MapFrom(k
-                    => k.BaseExpense.BaseExpenseId))
+                        => k.BaseExpense.BaseExpenseId))
                 .ForMember(m
                     => m.Frequency, d
                     => d.MapFrom(k
-                    => k.BaseExpense.Frequency))
-                .ForMember(m
-                    => m.GroupId, d
-                    => d.MapFrom(k
-                    => k.BaseExpense.GroupId));
+                        => k.BaseExpense.Frequency));
 
             CreateMap<Expense, PersonLightVm>();
             
@@ -55,8 +51,6 @@ namespace Kaching.MappingProfiles
                     => m.EndDate, d
                     => d.MapFrom(k
                     => k.PaymentDate));
-
-           // CreateMap<ExpenseCreateRecurringVM, BaseExpense>();
 
             CreateMap<ExpenseEditVm, Expense>();
 

@@ -1,11 +1,10 @@
 ﻿using Kaching.Data;
 using Kaching.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Kaching.Repositories
 {
-    public class ExpenseRepository : IExpenseRepository, IDisposable
+    public class ExpenseRepository : IExpenseRepository
     {
         private readonly DataContext _context;
 
@@ -25,7 +24,7 @@ namespace Kaching.Repositories
             return await _context.Expense
                 .Include(e => e.BaseExpense)
                 .Include(b => b.Buyer)
-                .Include(g => g.BaseExpense.Group)
+                .Include(g => g.Group)
                 .Include(g => g.BaseExpense.Category)
                 .Include(g => g.Currency)
                 .FirstOrDefaultAsync(m => m.ExpenseId == expenseId);
@@ -67,12 +66,12 @@ namespace Kaching.Repositories
             return await _context.Expense
                 .Include(e => e.BaseExpense)
                 .Include(e => e.Buyer)
-                .Include(g => g.BaseExpense.Group)
+                .Include(g => g.Group)
                 .Include(g => g.BaseExpense.Category)
                 .Include(g => g.Currency)
                 .Where(p => p.DueDate.Year == year)
                 .Where(p => p.DueDate.Month == monthNumber)
-                .Where(p => p.BaseExpense.GroupId == groupId)
+                .Where(p => p.GroupId == groupId)
                 .OrderByDescending(e => e.DueDate)
                 .ToListAsync();
         }
@@ -85,6 +84,19 @@ namespace Kaching.Repositories
                 .Where(p => p.DueDate.Month == monthNumber)
                 .Where(e => e.BuyerId == personId)
                 .Sum(e => e.Price);
+        }
+
+        public async Task<List<Expense>> GetGroupExpenses(int groupId)
+        {
+            return await _context.Expense
+                .Include(e => e.BaseExpense)
+                .Include(e => e.Buyer)
+                .Include(g => g.Group)
+                .Include(g => g.BaseExpense.Category)
+                .Include(g => g.Currency)
+                .Where(p => p.GroupId == groupId)
+                .OrderByDescending(e => e.DueDate)
+                .ToListAsync();
         }
 
         public void InsertExpense(Expense expense)
@@ -105,26 +117,6 @@ namespace Kaching.Repositories
         public bool GetExpenseExistence(int id)
         {
             return _context.Expense.Any(e => e.ExpenseId == id);
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         public async Task SaveAsync()

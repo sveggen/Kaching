@@ -1,0 +1,99 @@
+﻿@using System.Globalization
+@model Kaching.ViewModels.SettlementVm
+
+
+<partial name="/Views/Shared/_GroupNavbar.cshtml"/>
+
+<h1 class="ui primary header">Total Spendings</h1>
+<div class="ui inverted segment">
+    <div class="ui mini inverted horizontal statistic">
+        <div class="value">
+            €@Model.Expenses.Sum(x => x.Price)
+        </div>
+    </div>
+</div>
+
+<table class="ui very basic collapsing celled table">
+    <thead>
+    <tr>
+        <th>Person</th>
+        <th>Total Spendings</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var member in Model.Members)
+    {
+        <tr>
+            <td>
+                <h4 class="ui image header">
+                    <!-- <img src="" class="ui mini rounded image">-->
+                    <div class="content">
+                        @member.UserName
+                        <div class="sub header">
+                        </div>
+                    </div>
+                </h4>
+            </td>
+            <td>
+                €@member.Expenses.Where(g => g.GroupId == Model.GroupId).Sum(x => x.Price)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<div class="ui divider"></div>
+@{
+    var yearMonth = @Model.Expenses
+        .GroupBy(p => new {p.DueDate.Year, p.DueDate.Month})
+        .Select(a => a.Key);
+    
+    foreach (var x in yearMonth.OrderBy(x => x.Year).ThenBy(y=> y.Month))
+    {
+        var periodExpenses = Model.Expenses
+            .Where(y => y.DueDate.Year == x.Year && y.DueDate.Month == x.Month);
+
+        <h1>@CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[@x.Month - 1] @x.Year</h1>
+
+        <div class="ui inverted segment">
+            <div class="ui mini inverted horizontal statistic">
+                <div class="value">
+                    €@periodExpenses.Sum(t => t.Price)
+                </div>
+            </div>
+        </div>
+        <table class="ui very basic collapsing celled table">
+            <thead>
+            <tr>
+                <th>Person</th>
+                <th>Spendings</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var member in Model.Members)
+            {
+                var memberExpenses = member.Expenses
+                    .Where(g => g.GroupId == Model.GroupId
+                                && g.DueDate.Year == x.Year
+                                && g.DueDate.Month == x.Month); 
+                <tr>
+                    <td>
+                        <h4 class="ui image header">
+                            <!-- <img src="" class="ui mini rounded image">-->
+                            <div class="content">
+                                @member.UserName
+                                <div class="sub header">
+                                </div>
+                            </div>
+                        </h4>
+                    </td>
+                    <td>
+                        €@memberExpenses.Sum(x => x.Price)
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div class="ui divider"></div>
+    }
+}

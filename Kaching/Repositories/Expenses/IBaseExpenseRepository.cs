@@ -18,8 +18,6 @@ namespace Kaching.Repositories
 
         public void UpdateBaseExpense(BaseExpense baseExpense);
 
-        public void Save();
-
         public Task SaveAsync();
     }
 }

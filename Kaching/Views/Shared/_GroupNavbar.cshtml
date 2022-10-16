@@ -1,21 +1,24 @@
-﻿
-@{
+﻿@{
     var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
 <section class="ui container">
-<nav class="ui labeled icon menu">
-    <a class="item" asp-area="" asp-controller="Expenses" asp-action="Index" asp-route-groupId="@groupId">
-        <i class="money bill alternate outline icon"></i>
-        Expenses
-    </a>
-    <a class="item" asp-area="" asp-controller="Expenses" asp-action="Create" asp-route-groupId="@groupId">
-        <i class="plus square outline icon"></i>
-        New Expense
-    </a>
-    <a class="item" asp-area="" asp-controller="Transfers" asp-action="Index" asp-route-groupId="@groupId">
-        <i class="hand holding usd icon"></i>
-        Transfers
-    </a>
-</nav>
+    <nav class="ui labeled icon menu">
+        <a class="item" asp-area="" asp-controller="Expenses" asp-action="Index" asp-route-groupId="@groupId">
+            <i class="money bill alternate outline icon"></i>
+            Expenses
+        </a>
+        <a class="item" asp-area="" asp-controller="Expenses" asp-action="Create" asp-route-groupId="@groupId">
+            <i class="plus square outline icon"></i>
+            New Expense
+        </a>
+        <a class="item" asp-area="" asp-controller="Transfers" asp-action="Index" asp-route-groupId="@groupId">
+            <i class="hand holding usd icon"></i>
+            Transfers
+        </a>
+        <a class="item" asp-area="" asp-controller="Settlement" asp-action="Index" asp-route-groupId="@groupId">
+            <i class="calculator icon"></i>
+            Summary
+        </a>
+    </nav>
 </section>

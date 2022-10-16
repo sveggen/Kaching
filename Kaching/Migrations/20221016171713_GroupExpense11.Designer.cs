@@ -4,6 +4,7 @@ using Kaching.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaching.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221016171713_GroupExpense11")]
+    partial class GroupExpense11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,6 +64,9 @@ namespace Kaching.Migrations
                     b.Property<int>("Frequency")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -70,6 +75,8 @@ namespace Kaching.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("BaseExpense");
                 });
@@ -312,10 +319,14 @@ namespace Kaching.Migrations
                         .IsRequired();
 
                     b.HasOne("Kaching.Models.Person", "Creator")
-                        .WithMany()
+                        .WithMany("Expenses")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Kaching.Models.Group", null)
+                        .WithMany("Expenses")
+                        .HasForeignKey("GroupId");
 
                     b.Navigation("Category");
 
@@ -331,9 +342,9 @@ namespace Kaching.Migrations
                         .IsRequired();
 
                     b.HasOne("Kaching.Models.Person", "Buyer")
-                        .WithMany("Expenses")
+                        .WithMany()
                         .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Kaching.Models.Currency", "Currency")
@@ -343,7 +354,7 @@ namespace Kaching.Migrations
                         .IsRequired();
 
                     b.HasOne("Kaching.Models.Group", "Group")
-                        .WithMany("Expenses")
+                        .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
