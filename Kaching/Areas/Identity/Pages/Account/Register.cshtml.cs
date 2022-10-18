@@ -29,8 +29,6 @@ namespace Kaching.Areas.Identity.Pages.Account
         private readonly IPersonRepository _personRepository;
         // Custom - Role assigner
         private readonly RoleManager<IdentityRole> _roleManager;
-        // Custom - Group hook
-        private readonly IGroupRepository _groupRepository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -39,8 +37,7 @@ namespace Kaching.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IPersonRepository personRepository, 
-            RoleManager<IdentityRole> roleManager,
-            IGroupRepository groupRepository)
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -51,7 +48,6 @@ namespace Kaching.Areas.Identity.Pages.Account
             // Custom
             _personRepository = personRepository;
             _roleManager = roleManager;
-            _groupRepository = groupRepository;
         }
 
         /// <summary>
@@ -157,20 +153,7 @@ namespace Kaching.Areas.Identity.Pages.Account
                     var userName = await _userManager.GetUserNameAsync(user);
                     var person = new Person { UserId = userId, UserName = userName };
                     _personRepository.CreateNewPerson(person);
-                    var member = new List<Person>();
-                    member.Add(person);
-                    _groupRepository.InsertGroup(new Group
-                    {
-                        Name = person.UserName + "'s Expenses",
-                        Avatar = person.Avatar,
-                        ColorCode = person.ColorCode,
-                        MaxMembers = 1,
-                        Members = member,
-                        Personal = true
-                    });
-                    _groupRepository.Save();
-
-
+                    
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
