@@ -3,14 +3,14 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
     var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
 <h1>Expense details</h1>
 <div>
-    <hr />
-    
+    <hr/>
+
     <div class="ui raised card">
         <div class="content">
             <div class="header">@Model.CurrencySymbol @Model.Price of @Model.CategoryName <em data-emoji="@Model.CategoryIcon"></em></div>
@@ -29,45 +29,43 @@
                     <em data-emoji="x"></em>
                 }
                 <br/>
-                Due date: @Model.DueDate
+                Due: @Model.DueDate.Date.ToString("dd.MM.yyyy")
             </div>
             <div class="description">
                 <p>@Model.Comment</p>
             </div>
         </div>
         <br/>
-        
-      <div class="extra content">
-        <div class="right floated author">
-          Responsible: @Model.Buyer.Avatar @Model.Buyer.UserName
+
+        <div class="extra content">
+            <div class="right floated author">
+                Responsible: @Model.Buyer.Avatar @Model.Buyer.UserName
+            </div>
         </div>
-      </div>
     </div>
     <div>
         @using (Html.BeginForm("Delete", "Expenses", FormMethod.Post))
-                {
-                    @Html.Hidden("expenseId", Model.ExpenseId)
-                    <input type="submit" class="ui red button" value="Delete"
-                            onclick="return confirm('Are you sure you want to delete the expense?')">
-                }
-            
-            <a class="ui button" asp-controller="Expenses" asp-action="Edit" asp-route-groupId="@groupId" 
-               asp-route-id="@Model.ExpenseId">
-                Edit
-            </a>
-            
-            @if (Model.Frequency != Frequency.Once)
-            {
+        {
+            @Html.Hidden("expenseId", Model.ExpenseId)
+            <input type="submit" class="ui red button" value="Delete"
+                   onclick="return confirm('Are you sure you want to delete the expense?')">
+        }
 
-                @using (Html.BeginForm("DeleteRecurring", "Expenses", FormMethod.Post))
-                {
-                    @Html.Hidden("expenseId", Model.ExpenseId)
-                    <input type="submit" class="ui red button" value="Delete future expenses"
-                           onclick="return confirm('Are you sure you want to delete all future occurrences of this expense?')">
-                                                                                                                                                       
-                }
+        <a class="ui button" asp-controller="Expenses" asp-action="Edit" asp-route-groupId="@groupId"
+           asp-route-id="@Model.ExpenseId">
+            Edit
+        </a>
+
+        @if (Model.Frequency != Frequency.Once)
+        {
+            @using (Html.BeginForm("DeleteRecurring", "Expenses", FormMethod.Post))
+            {
+                @Html.Hidden("expenseId", Model.ExpenseId)
+                <input type="submit" class="ui red button" value="Delete future expenses"
+                       onclick="return confirm('Are you sure you want to delete all future occurrences of this expense?')">
             }
-        </div>
+        }
+    </div>
 </div>
 <div>
 </div>

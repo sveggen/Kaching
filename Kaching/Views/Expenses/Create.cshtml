@@ -3,76 +3,76 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
     var groupId = ViewContext.RouteData.Values["groupId"];
 }
 
 <h1>Add expense</h1>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" class="ui form">
             <div asp-validation-summary="ModelOnly" style="color: red"></div>
+            <div class="ui text container">
+                <div class="ui two item menu">
+                    <a class="item active" asp-controller="Expenses" asp-action="Create" asp-route-groupId="@groupId">
+                        <strong>Single expense</strong>
+                    </a>
+                    <a class="item" asp-controller="Expenses" asp-action="CreateRecurring" asp-route-groupId="@groupId">
+                        Recurring expense
+                    </a>
+                </div>
 
-            <div class="ui two item menu">
-                <a class="item active" asp-controller="Expenses" asp-action="Create" asp-route-groupId="@groupId">
-                    <strong>One-Time expense</strong>
-                </a>
-                <a class="item" asp-controller="Expenses" asp-action="CreateRecurring" asp-route-groupId="@groupId">
-                    Recurring expense
-                </a>
-            </div>
-
-            <div class="ui segment">
-                <div class="ui four wide column aligned left aligned grid">
-                    <div class="column">
-                        <div class="field">
-                            <div class="ui right labeled input">
-                                <label for="amount" class="ui label">€</label>
-                                <input asp-for="Price" placeholder="Price">
-                                <div class="ui basic label">.00</div>
+                <div class="ui segment">
+                    <div class="ui four wide column aligned left aligned grid">
+                        <div class="column">
+                            <div class="field">
+                                <div class="ui left labeled input">
+                                    <label for="Price" class="ui label">€</label>
+                                    <input asp-for="Price" placeholder="Price">
+                                </div>
+                                <span asp-validation-for="Price" style="color: red"></span>
                             </div>
-                            <span asp-validation-for="Price" style="color: red"></span>
-                        </div>
 
-                        <div class="field">
-                            <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown"
-                                    asp-items="ViewBag.Category">
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown"
-                                    asp-items="Html.GetEnumSelectList<PaymentType>()">
-                            </select>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui pointing below label">
-                                Paid by/Responsible
+                            <div class="field">
+                                <select asp-for="CategoryId" id="categorydropdown" class="ui search selection dropdown"
+                                        asp-items="ViewBag.Category">
+                                </select>
                             </div>
-                            <select asp-for="BuyerId" id="buyerdropdown" class="ui selection dropdown"
-                                    asp-items="ViewBag.PersonId">
-                            </select>
-                        </div>
-                        <div class="field">
-                            <div class="ui calendar" id="date_calendar">
-                                <div class="ui input left icon">
-                                    <i class="calendar icon"></i>
-                                    <input asp-for="DueDate" type="text" placeholder="Due date/Purchase date">
-                                    <span asp-validation-for="DueDate" class="text-danger"></span>
+
+                            <div class="field">
+                                <select asp-for="PaymentType" id="paymentstatusdropdown" class="ui selection dropdown"
+                                        asp-items="Html.GetEnumSelectList<PaymentType>()">
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <div class="ui pointing below label">
+                                    Paid by/Responsible
+                                </div>
+                                <select asp-for="BuyerId" id="buyerdropdown" class="ui selection dropdown"
+                                        asp-items="ViewBag.PersonId">
+                                </select>
+                            </div>
+                            <div class="field">
+                                <div class="ui calendar" id="date_calendar">
+                                    <div class="ui input left icon">
+                                        <i class="calendar icon"></i>
+                                        <input asp-for="DueDate" type="text" placeholder="Due date/Purchase date">
+                                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui pointing below label">
-                                <i>Optional: Description</i>
+                            <div class="field">
+                                <div class="ui pointing below label">
+                                    <i>Optional: Description</i>
+                                </div>
+                                <textarea asp-for="Comment" rows="3" placeholder="Comments..."> </textarea>
+                                <span asp-validation-for="Comment" style="color: red"></span>
                             </div>
-                            <textarea asp-for="Comment" rows="3" placeholder="Comments..."> </textarea>
-                            <span asp-validation-for="Comment" style="color: red"></span>
-                        </div>
-                        <div class="field">
-                            <input type="submit" value="Create" class="ui button"/>
+                            <div class="field">
+                                <input type="submit" value="Create" class="ui button"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -82,11 +82,10 @@
 </div>
 
 
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

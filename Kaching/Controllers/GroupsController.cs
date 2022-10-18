@@ -74,19 +74,13 @@ public class GroupsController : Controller
     {
         if (ModelState.IsValid)
         {
-            var intList = new List<int>();
-            intList.Add(1);
-            intList.Add(3);
-            groupCreateVm.MemberIds = intList;
             groupCreateVm.Personal = false;
             _groupService.AddGroup(groupCreateVm);
-
             return RedirectToAction(nameof(Index));
         }
         return View();
     }
-    
-    
+
     // POST: Groups/Delete
     [HttpPost("Delete"), ActionName("Delete")]
     [ValidateAntiForgeryToken]
@@ -95,8 +89,7 @@ public class GroupsController : Controller
         _groupService.DeleteGroup(groupId);
         return RedirectToAction(nameof(Index));
     }
-    
-    
+
     private void RenderSelectListWithoutYourself()
     {
         var yourself = _personService.GetPersonByUsername(GetCurrentUserName());

@@ -20,16 +20,5 @@ namespace Kaching.Services
                 .Body(message, true)
                 .SendAsync();
         }
-
-        public async Task SendRazor(string to, string name)
-        {
-            var template = "Dear @Model.Name, You are totally @Model.Compliment.";
-
-            await _fluentEmail
-                .To(to)
-                .Subject("Test email")
-                .UsingTemplate(template, new { Name = name, Compliment = "Awesome" })
-                .SendAsync();
-        }
     }
 }

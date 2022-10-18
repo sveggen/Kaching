@@ -8,7 +8,7 @@ namespace Kaching.Models
         
         public int BaseExpenseId { get; set; } 
 
-        public BaseExpense? BaseExpense { get; set; }
+        public BaseExpense BaseExpense { get; set; }
 
         public int BuyerId { get; set; }
 

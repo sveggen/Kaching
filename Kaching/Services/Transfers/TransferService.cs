@@ -20,12 +20,7 @@ namespace Kaching.Services
             _currencyRepository = currencyRepository;
             _mapper = mapper;
         }
-
-        public Task<List<TransferVm>> GetTransfersByMonth(int groupId, string month)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public async Task CreateTransfer(TransferCreateVM transferVM)
         {
             var payment = _mapper.Map<Transfer>(transferVM);
@@ -42,12 +37,6 @@ namespace Kaching.Services
         {
             var currencies = await _currencyRepository.GetAllCurrencies();
             return _mapper.Map<List<CurrencyVm>>(currencies);
-            
-        }
-
-        public async Task<TransferVm> GetTransfer(int transferId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<List<TransferVm>> GetTransfers(int groupId)
